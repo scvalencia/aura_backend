@@ -37,7 +37,7 @@ public class PatientController extends Controller {
         JsonNode j = Controller.request().body().asJson();
         Patient p = Patient.bind(j);
         p.save();
-        return ok(Json.toJson(p));
+        return ok(Json.toJson(p.cleverMute()));
     }
 
     public static Result read(long id) {
@@ -52,7 +52,7 @@ public class PatientController extends Controller {
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
             if(who.equals("DOC")) {
-                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
+                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
                         return ok(Json.toJson(p.cleverMute()));
@@ -75,7 +75,7 @@ public class PatientController extends Controller {
 
         }
 
-        return ok("El paciente no existe");
+        return ok("AUTH ERROR");
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -110,8 +110,23 @@ public class PatientController extends Controller {
     }
 
     public static Result get() {
-        List<Patient> Patients = new Model.Finder(String.class, Patient.class).all();
-        return ok(Json.toJson(Patients));
+        String who = request().getHeader("who");
+        String requestId = request().getHeader("id");
+        String token = request().getHeader("auth-token");
+        String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+
+        if(who.equals("DOC")) {
+            Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
+            if(doc != null) {
+                if(authToken.equals(doc.getToken())) {
+                    List<Patient> Patients = new Model.Finder(String.class, Patient.class).all();
+                    return ok(Json.toJson(Patients));
+                }
+            } else {
+                return ok("AUTH ERROR");
+            }
+        }
+        return ok("AUTH ERROR");
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -245,7 +260,7 @@ public class PatientController extends Controller {
             }
 
         }
-        return ok("El paciente no existe");
+        return ok("AUTH ERROR");
     }
 
     public static Result getEpisode(long id1, long id2) throws Exception {

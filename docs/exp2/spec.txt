@@ -1,0 +1,21 @@
+DOCTOR:
+    create: No hay necesidad de headers, no se retorna algún header especial
+    read: Va el token encriptado del doctor, no retorna algún header relevante
+    update: Va el token (auth-toke) encriptado del doctor, no se retorna ningún header relevante
+    authenticate: Van las credenciales en json (id, pswd), el header contiene el token en el descriptor auth-token
+    logout: Va el token encriptado
+
+PACIENTE:
+    create: La petición no requiere headers especiales, no de retorna algún heared especial
+    read:
+        Si quien quiere la información, es el mismo paciente, se debe mandar la cabecera con la siguiente info
+        who: PAC, es decri, quien quiere la info es el paciente
+        id: xxxxx, el id de quien quiere ver la info
+        auth-token: el token del paciente identificado con token xxxxx, encriptado con el algoritmo de Claudia
+        Si quien quiere la información es el doctor, se debe mandar en la cabecera la misma información anterior
+        pero del doctor, es decir:
+        who : DOC
+        id : xxxxx
+        auth-token : el token encriptado del doctor
+    episode:
+        igual que read o que create según el caso
