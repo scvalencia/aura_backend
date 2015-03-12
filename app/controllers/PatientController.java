@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.*;
+import views.html.unauthorizedAccess;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -58,7 +59,7 @@ public class PatientController extends Controller {
                         return ok(Json.toJson(p.cleverMute()));
                     }
                 } else {
-                    return ok("AUTH ERROR");
+                    return ok(unauthorizedAccess.render(""));
                 }
             }
             else {
@@ -66,7 +67,7 @@ public class PatientController extends Controller {
                     if(authToken.equals(p.getToken())) {
                         return ok(Json.toJson(p.cleverMute()));
                     } else {
-                        return ok("AUTH ERROR");
+                        return ok(unauthorizedAccess.render(""));
                     }
                 }
 
@@ -75,7 +76,7 @@ public class PatientController extends Controller {
 
         }
 
-        return ok("AUTH ERROR");
+        return ok(unauthorizedAccess.render(""));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -123,10 +124,10 @@ public class PatientController extends Controller {
                     return ok(Json.toJson(Patients));
                 }
             } else {
-                return ok("AUTH ERROR");
+                return ok(unauthorizedAccess.render(""));
             }
         }
-        return ok("AUTH ERROR");
+        return ok(unauthorizedAccess.render(""));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -172,7 +173,7 @@ public class PatientController extends Controller {
 
                 return Results.created(Json.toJson(e.getNotification()));
             } else {
-                return ok("AUTH ERROR");
+                return ok(unauthorizedAccess.render(""));
             }
 
         }
@@ -198,7 +199,7 @@ public class PatientController extends Controller {
                         return ok(Json.toJson(es));
                     }
                 } else {
-                    return ok("AUTH ERROR");
+                    return ok(unauthorizedAccess.render(""));
                 }
             }
             else {
@@ -207,7 +208,7 @@ public class PatientController extends Controller {
                         List<Episode> es = p.getEpisodes();
                         return ok(Json.toJson(es));
                     } else {
-                        return ok("AUTH ERROR");
+                        return ok(unauthorizedAccess.render(""));
                     }
                 }
 
@@ -245,13 +246,65 @@ public class PatientController extends Controller {
                         return ok(Json.toJson(ans));
                     }
                 } else {
-                    return ok("AUTH ERROR");
+                    return ok(unauthorizedAccess.render(""));
                 }
             }
             else {
                 if(requestId.equals(id + "")) {
                     if(authToken.equals(p.getToken())) {
                         return ok(Json.toJson(ans));
+                    } else {
+                        return ok(unauthorizedAccess.render(""));
+                    }
+                }
+
+            }
+
+        }
+        return ok(unauthorizedAccess.render(""));
+    }
+
+    public static Result getEpisode(long id1, long id2) throws Exception {
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id1);
+        ObjectNode result = Json.newObject();
+        if(p == null)
+            return ok(Json.toJson(result));
+        else {
+            String who = request().getHeader("who");
+            String requestId = request().getHeader("id");
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+
+            if(who.equals("DOC")) {
+                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
+                if(doc != null) {
+                    if(authToken.equals(doc.getToken())) {
+                        Episode e = (Episode) new Model.Finder(Long.class, Episode.class).byId(id2);
+                        if(e == null)
+                            return ok(Json.toJson(result));
+                        else {
+                            if(e.getVoiceEpisode() == null) {
+                                return ok(Json.toJson(e.plainUnbind()));
+                            }
+                            return ok(Json.toJson(e));
+                        }
+                    }
+                } else {
+                    return ok("AUTH ERROR");
+                }
+            }
+            else {
+                if(requestId.equals(p.getId() + "")) {
+                    if(authToken.equals(p.getToken())) {
+                        Episode e = (Episode) new Model.Finder(Long.class, Episode.class).byId(id2);
+                        if(e == null)
+                            return ok(Json.toJson(result));
+                        else {
+                            if(e.getVoiceEpisode() == null) {
+                                return ok(Json.toJson(e.plainUnbind()));
+                            }
+                            return ok(Json.toJson(e));
+                        }
                     } else {
                         return ok("AUTH ERROR");
                     }
@@ -261,24 +314,7 @@ public class PatientController extends Controller {
 
         }
         return ok("AUTH ERROR");
-    }
 
-    public static Result getEpisode(long id1, long id2) throws Exception {
-        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id1);
-        ObjectNode result = Json.newObject();
-        if(p == null)
-            return ok(Json.toJson(result));
-        else {
-            Episode e = (Episode) new Model.Finder(Long.class, Episode.class).byId(id2);
-            if(e == null)
-                return ok(Json.toJson(result));
-            else {
-                if(e.getVoiceEpisode() == null) {
-                    return ok(Json.toJson(e.plainUnbind()));
-                }
-                return ok(Json.toJson(e));
-            }
-        }
     }
 
     private static Date parseDate(String representation) {
@@ -505,9 +541,15 @@ public class PatientController extends Controller {
     public static Result logout(long id) {
         Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
         if(patientObject != null) {
-            patientObject.setToken(null);
-            patientObject.save();
-            return ok();
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(patientObject.getToken())) {
+                patientObject.setToken(null);
+                patientObject.save();
+                return ok();
+            }
+            return ok("AUTH ERROR");
+
         }
         else
             return ok("ERROR");
