@@ -10,6 +10,7 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.libs.Json;
+import views.html.unauthorizedAccess;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -46,7 +47,7 @@ public class DoctorController extends Controller {
             if(authToken.equals(doctor.getToken())) {
                 return ok(Json.toJson(doctor.cleverMute()));
             }
-            return ok("AUTH ERROR");
+            return ok(unauthorizedAccess.render(""));
         }
     }
 
@@ -67,7 +68,7 @@ public class DoctorController extends Controller {
                 oldDoctor.save();
                 return ok(Json.toJson(oldDoctor.cleverMute()));
             }
-            return ok("AUTH ERROR");
+            return ok(unauthorizedAccess.render(""));
         }
     }
 
@@ -83,7 +84,7 @@ public class DoctorController extends Controller {
                 doctor.delete();
                 return ok(Json.toJson(doctor.cleverMute()));
             }
-            return ok("AUTH ERROR");
+            return ok(unauthorizedAccess.render(""));
         }
     }
 
@@ -103,7 +104,7 @@ public class DoctorController extends Controller {
                 doctor.save();
                 return ok(Json.toJson(doctor.cleverMute()));
             }
-            return ok("AUTH ERROR");
+            return ok(unauthorizedAccess.render(""));
         }
     }
 
@@ -125,6 +126,7 @@ public class DoctorController extends Controller {
             doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
             doctorObject.save();
             response().setHeader("auth-token", auth.auraEncrypt(doctorObject.getToken()));
+            session().put(id.toString(), auth.auraEncrypt(doctorObject.getToken()));
             return ok(Json.toJson(doctorObject.cleverMute()));
         }
         return ok(Json.toJson(result));
@@ -140,7 +142,7 @@ public class DoctorController extends Controller {
                 doctorObject.save();
                 return ok();
             }
-            return ok("AUTH ERROR");
+            return ok(unauthorizedAccess.render(""));
         }
         else
             return ok("ERROR");
