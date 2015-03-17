@@ -3,49 +3,55 @@
 # ~~~~
 
 # Home page
-GET           /                                       controllers.Application.index()
+GET            /                                          controllers.Application.index()
 
 
 ########################################################################################################################
 # Doctor
 
 # Creates a new doctor
-POST          /api/doctor                             controllers.DoctorController.create()
+POST           /api/doctor                                controllers.DoctorController.create()
 # Gets information on a single doctor
-GET           /api/doctor/:id                         controllers.DoctorController.read(id : Long)
+GET            /api/doctor/:id                            controllers.DoctorController.read(id : Long)
 # Updates the information of a single doctor
-PUT           /api/doctor/:id                         controllers.DoctorController.update(id : Long)
+PUT            /api/doctor/:id                            controllers.DoctorController.update(id : Long)
 # Deletes a single doctor given the ID
-DELETE        /api/doctor/:id                         controllers.DoctorController.delete(id : Long)
+DELETE         /api/doctor/:id                            controllers.DoctorController.delete(id : Long)
 # Gets every single doctor in the database
-GET           /api/doctor                             controllers.DoctorController.get()
+GET            /api/doctor                                controllers.DoctorController.get()
 # Adds an info link to a doctor
-POST          /api/doctor/:id/link                    controllers.DoctorController.addLink(id : Long)
+POST           /api/doctor/:id/link                       controllers.DoctorController.addLink(id : Long)
 ########################################################################################################################
 # patient
 
 # Cretes a new Patient with no episodes
-POST          /api/patient                            controllers.PatientController.create()
+POST           /api/patient                               controllers.PatientController.create()
 # Gets information on a single patient
-GET           /api/patient/:id                        controllers.PatientController.read(id : Long)
+GET            /api/patient/:id                           controllers.PatientController.read(id : Long)
 # Updates the information of a single patient
-PUT           /api/patient/:id                        controllers.PatientController.update(id : Long)
+PUT            /api/patient/:id                           controllers.PatientController.update(id : Long)
 # Removes a single patient given the ID
-DELETE        /api/patient/:id                        controllers.PatientController.delete(id : Long)
+DELETE         /api/patient/:id                           controllers.PatientController.delete(id : Long)
 # Gets every single patient in the database
-GET           /api/patient                            controllers.PatientController.get()
+GET            /api/patient                               controllers.PatientController.get()
 # Adds an episode to a patient
-POST          /api/patient/:id/episode                controllers.PatientController.createEpisode(id : Long)
+POST           /api/patient/:id/episode                   controllers.PatientController.createEpisode(id : Long)
 # Gets the episodes of a patient
-GET           /api/patient/:id/episode                controllers.PatientController.getEpisodes(id : Long)
+GET            /api/patient/:id/episode                   controllers.PatientController.getEpisodes(id : Long)
 # Gets a single episode of a patient
-GET           /api/patient/:id1/episode/:id2          controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
+GET            /api/patient/:id1/episode/:id2             controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
 # Gets the episodes of a patient in a range of dates (yyyy-mm-dd)
-GET           /api/patient/:id/episode/:f1/:f2        controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
+GET            /api/patient/:id/episode/:f1/:f2           controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
+# Gets the first analysis (Sleep hours) in Json format, semantics is given at the presentation layer
+GET            /api/patient/:idP/analysis1/:f1/:f2        controllers.PatientController.getAnalysisSleepHpurs(idP : Long, f1 : String, f2 : String)
+# Gets analysis of episodes and medicines in Json format
+GET            /api/patient/:id/analysis2/:f1/:f2         controllers.PatientController.getAnalysisMedicines(id : Long, f1 : String, f2 : String)
+# Gets analysis of episodes and food in Json format
+GET            /api/patient/:id/analysis3/:f1/:f2         controllers.PatientController.getAnalysisFood(id : Long, f1 : String, f2 : String)
+# Gets analysis of episodes and sports in Json format
+GET            /api/patient/:id/analysis4/:f1/:f2         controllers.PatientController.getAnalysisSports(id : Long, f1 : String, f2 : String)
 ########################################################################################################################
 
-
-
-
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file                           controllers.Assets.at(path="/public", file)
+GET            /assets/*file                              controllers.Assets.at(path="/public", file)
+OPTIONS        /*path                                     controllers.Application.token(path: String)
