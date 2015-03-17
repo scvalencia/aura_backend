@@ -1,6 +1,7 @@
 package controllers;
 
 
+import actions.CorsComposition;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Doctor;
@@ -12,6 +13,7 @@ import play.libs.Json;
 
 import java.util.List;
 
+@CorsComposition.Cors
 public class DoctorController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
