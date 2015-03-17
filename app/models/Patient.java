@@ -39,9 +39,6 @@ public class Patient extends Model {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Episode> episodes;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Medicine> medicines;
-
     public static Finder find = new Finder(Long.class, Patient.class);
 
     public Patient() {
@@ -110,14 +107,6 @@ public class Patient extends Model {
 
     public void addEpisode(Episode episode) {
         this.episodes.add(episode);
-    }
-
-    public List<Medicine> getMedicines() {
-        return medicines;
-    }
-
-    public void addMedicine(Medicine medicine) {
-        this.medicines.add(medicine);
     }
 
     public static Patient bind(JsonNode j) {

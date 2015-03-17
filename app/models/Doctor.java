@@ -116,8 +116,6 @@ public class Doctor extends Model {
     }
 
     public static Doctor bind(JsonNode j) {
-
-
         Long docIdentidad = Long.parseLong(j.findPath("id").asText());
         String nombre = j.findPath("name").asText();
         String email=j.findPath("email").asText();

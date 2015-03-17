@@ -194,7 +194,7 @@ public class Episode extends Model {
             sleep = "Sus horas de sueño son muy bajas y causan que tenga migraña.";
         }
         if(this.stress) {
-            stress = "El estres produce dolores de cabeza muy fuertes, y es posible que esto le cause migrañas";
+            stress = "El estrés produce dolores de cabeza muy fuertes, y es posible que ésto le cause migrañas";
         }
         else {
             stress = "";

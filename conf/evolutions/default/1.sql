@@ -97,12 +97,6 @@ create table patient_episode (
   episode_id                     bigint not null,
   constraint pk_patient_episode primary key (patient_id, episode_id))
 ;
-
-create table patient_medicine (
-  patient_id                     bigint not null,
-  medicine_id                    bigint not null,
-  constraint pk_patient_medicine primary key (patient_id, medicine_id))
-;
 create sequence doctor_seq;
 
 create sequence episode_seq;
@@ -140,10 +134,6 @@ alter table patient_episode add constraint fk_patient_episode_patient_01 foreign
 
 alter table patient_episode add constraint fk_patient_episode_episode_02 foreign key (episode_id) references episode (id);
 
-alter table patient_medicine add constraint fk_patient_medicine_patient_01 foreign key (patient_id) references patient (id);
-
-alter table patient_medicine add constraint fk_patient_medicine_medicine_02 foreign key (medicine_id) references medicine (id);
-
 # --- !Downs
 
 drop table if exists doctor cascade;
@@ -165,8 +155,6 @@ drop table if exists medicine cascade;
 drop table if exists patient cascade;
 
 drop table if exists patient_episode cascade;
-
-drop table if exists patient_medicine cascade;
 
 drop table if exists sport cascade;
 
