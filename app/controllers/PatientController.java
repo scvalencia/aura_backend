@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.CorsComposition;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by scvalencia on 3/9/15.
  */
+@CorsComposition.Cors
 public class PatientController extends Controller {
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -95,7 +97,6 @@ public class PatientController extends Controller {
 
             for(JsonNode medicine : medicines) {
                 Medicine medicneObject = Medicine.bind(medicine);
-                p.addMedicine(Medicine.bind(medicine));
                 e.addMedicine(medicneObject);
             }
 
@@ -165,5 +166,64 @@ public class PatientController extends Controller {
         }
         return fecha;
     }
+
+    public static List<Episode> episodesInRange(long id, String f1, String f2) {
+        Date date1, date2;
+        date1 = parseDate(f1);
+        date2 = parseDate(f2);
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        List<Episode> es = p.getEpisodes();
+        List<Episode> ans = new ArrayList<Episode>();
+        for(Episode e : es)
+            if(e.getPubDate().after(date1) && e.getPubDate().before(date2))
+                ans.add(e);
+        return ans;
+    }
+
+    public static Result getAnalysisSleepHpurs(Long idP, String f1, String f2){
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
+        List<Analysis> fin = new ArrayList<Analysis>();
+
+        if(p == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        }
+        else {
+
+            List<Episode> es = p.getEpisodes();
+            List<Episode> ans = new ArrayList<Episode>();
+
+            Date d1 = parseDate(f1), d2 = parseDate(f2);
+
+            for(Episode e : es) {
+                if(e.getPubDate().after(d1) && e.getPubDate().before(d2))
+                    ans.add(e);
+            }
+
+            for(Episode e : ans) {
+                int intensity = e.getIntensity();
+                int hours = e.getSllepHours();
+                Date date = e.getPubDate();
+                Analysis temp = new Analysis(intensity, date, hours);
+                fin.add(temp);
+            }
+        }
+
+        return ok(Json.toJson(fin));
+    }
+
+    public static Result getAnalysisMedicines(Long idP, String f1, String f2) {
+        return TODO;
+    }
+
+    public static Result getAnalysisFood(Long idP, String f1, String f2) {
+        return TODO;
+    }
+
+    public static Result getAnalysisSports(Long idP, String f1, String f2) {
+        return TODO;
+    }
+
+
 
 }
