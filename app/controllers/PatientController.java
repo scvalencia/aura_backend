@@ -224,6 +224,4 @@ public class PatientController extends Controller {
         return TODO;
     }
 
-
-
 }

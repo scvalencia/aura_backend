@@ -19,7 +19,6 @@ public class Doctor extends Model {
     private static final int NEUROLOGIST = 0;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private int gender;
@@ -40,12 +39,12 @@ public class Doctor extends Model {
 
     public static Doctor create(String emailP, String nombreP, int especialidadP, String passwordP, Long docIdentidadP, Date bDate, int genderP) {
         Doctor d  = new Doctor();
-        //d.id = docIdentidadP;
+        d.id = docIdentidadP;
         d.name = nombreP;
         d.gender = genderP;
         d.email = emailP;
         d.date = bDate;
-        d.password = passwordP; //d.password = BCrypt.hashpw(passwordP, BCrypt.gensalt());
+        d.password = BCrypt.hashpw(passwordP, BCrypt.gensalt());
         d.discipline= especialidadP;
         return d;
     }

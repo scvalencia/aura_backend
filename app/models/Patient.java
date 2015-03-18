@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.mindrot.jbcrypt.BCrypt;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -22,7 +23,6 @@ public class Patient extends Model {
     private static final int FEMENINO = 1;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -46,9 +46,9 @@ public class Patient extends Model {
 
     public static Patient create(String name, String password, Date date, String email, int gender, Long idP) {
         Patient p = new Patient();
-        //p.id = idP;
+        p.id = idP;
         p.name = name;
-        p.password = password;
+        p.password = BCrypt.hashpw(password, BCrypt.gensalt()); // BCrypt.checkpw(password, passwordHash) to Verify
         p.date = date;
         p.email = email;
         p.gender = gender;
@@ -110,8 +110,6 @@ public class Patient extends Model {
     }
 
     public static Patient bind(JsonNode j) {
-
-
         Long id = Long.parseLong(j.findPath("id").asText());
         String name = j.findPath("name").asText();
         String email=j.findPath("email").asText();
