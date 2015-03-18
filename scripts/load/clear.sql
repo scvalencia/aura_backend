@@ -1,0 +1,12 @@
+DELETE FROM doctor;
+DELETE FROM episode_medicine;
+DELETE FROM episode_sport;
+DELETE FROM episode_symptom;
+DELETE FROM episode_food;
+DELETE FROM food;
+DELETE FROM medicine;
+DELETE FROM sport;
+DELETE FROM symptom;
+DELETE FROM episode;
+DELETE FROM patient_episode;
+DELETE FROM patient;
