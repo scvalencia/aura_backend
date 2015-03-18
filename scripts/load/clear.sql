@@ -7,6 +7,6 @@ DELETE FROM food;
 DELETE FROM medicine;
 DELETE FROM sport;
 DELETE FROM symptom;
-DELETE FROM episode;
 DELETE FROM patient_episode;
+DELETE FROM episode;
 DELETE FROM patient;
