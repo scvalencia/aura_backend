@@ -2,6 +2,7 @@ package controllers;
 
 import actions.CorsComposition;
 import play.*;
+import play.data.Form.*;
 import play.mvc.*;
 
 import views.html.*;
@@ -16,5 +17,6 @@ public class Application extends Controller {
     public static Result token(String path) {
         return ok("");
     }
-
 }
+
+

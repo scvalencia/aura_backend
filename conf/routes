@@ -52,6 +52,7 @@ GET            /api/patient/:id/analysis3/:f1/:f2         controllers.PatientCon
 GET            /api/patient/:id/analysis4/:f1/:f2         controllers.PatientController.getAnalysisSports(id : Long, f1 : String, f2 : String)
 ########################################################################################################################
 
+
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)
 OPTIONS        /*path                                     controllers.Application.token(path: String)
