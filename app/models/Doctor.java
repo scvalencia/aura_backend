@@ -153,5 +153,16 @@ public class Doctor extends Model {
         this.setDate(newDoctor.date);
         this.setGender(newDoctor.gender);
     }
+
+    public static boolean checkPassword(String candidate, String encryptedPassword) {
+        if (candidate == null) {
+            return false;
+        }
+        if (encryptedPassword == null) {
+            return false;
+        }
+
+        return BCrypt.checkpw(candidate, encryptedPassword);
+    }
 }
 

@@ -141,4 +141,15 @@ public class Patient extends Model {
         this.setName(newPatient.name);
         this.setPassword(newPatient.password);
     }
+
+    public static boolean checkPassword(String candidate, String encryptedPassword) {
+        if (candidate == null) {
+            return false;
+        }
+        if (encryptedPassword == null) {
+            return false;
+        }
+
+        return BCrypt.checkpw(candidate, encryptedPassword);
+    }
 }
