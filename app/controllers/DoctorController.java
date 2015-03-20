@@ -86,9 +86,10 @@ public class DoctorController extends Controller {
         Long id = j.path("id").asLong();
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
         boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
+        System.out.println(authentication);
         ObjectNode result = Json.newObject();
         if(authentication) {
-            ok(Json.toJson(doctorObject));
+            return ok(Json.toJson(doctorObject));
         }
         return ok(Json.toJson(result));
     }
