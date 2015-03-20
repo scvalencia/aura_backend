@@ -1,3 +1,4 @@
 if (window.console) {
-  console.log("Welcome to your Play application's JavaScript!");
+  console.log("Bienvenido a Aura. Esperamos poderte ayudar todo lo posible.");
+
 }
