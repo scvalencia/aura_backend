@@ -82,12 +82,17 @@ public class DoctorController extends Controller {
     @BodyParser.Of(BodyParser.Json.class)
     public static Result authenticateDoctor() {
         JsonNode j = Controller.request().body().asJson();
+        ObjectNode result = Json.newObject();
         String password = j.path("password").asText();
         Long id = j.path("id").asLong();
+
+
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
+        if(doctorObject == null) {
+            return ok(Json.toJson(result));
+        }
         boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
-        System.out.println(authentication);
-        ObjectNode result = Json.newObject();
+
         if(authentication) {
             return ok(Json.toJson(doctorObject));
         }

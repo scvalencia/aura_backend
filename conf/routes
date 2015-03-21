@@ -53,9 +53,9 @@ GET            /api/patient/:id/analysis4/:f1/:f2         controllers.PatientCon
 ########################################################################################################################
 GET            /doctor/login                              controllers.Application.login()
 
-POST           /doctor/login                              controllers.DoctorController.authenticateDoctor()
+POST           /doctor/authenticate                       controllers.DoctorController.authenticateDoctor()
 
-GET            /test                                      controllers.Application.test()
+GET            /test/*session                                      controllers.Application.test(session: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)

@@ -28,9 +28,9 @@ public class Application extends Controller {
         return ok(login.render(""));
     }
 
-    public static Result test() {
+    public static Result test(String session) {
         return ok(
-                test.render(""));
+                test.render(session));
     }
 
 }

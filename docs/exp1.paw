@@ -714,7 +714,7 @@
     <object type="LMREQUEST" id="z155">
         <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"16437683164 \\",\\"password\\":\\"POZXG4LK\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">E1B26626-1A43-4EED-B899-3205F8406C93</attribute>
-        <attribute name="url" type="string">http://localhost:9000/doctor/login</attribute>
+        <attribute name="url" type="string">http://localhost:9000/doctor/authenticate</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>

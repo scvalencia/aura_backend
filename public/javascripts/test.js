@@ -1,8 +1,17 @@
 $(document).ready(function(){
 var idPacienteActual;
+var idDoctorActual=window.location.pathname.split("/")[2];
+$.get('/api/doctor/'+idDoctorActual,function(data) {
+
+    $('.nameDr').append(data.name);
+});
+
+
+
 
 $('.divName').hide();
 $('.divInfoEpisodio').hide();
+
 
 
 //mostrarListaepisodios(episodes);
@@ -42,7 +51,7 @@ $('.findByID').click(function(){
             $.get(
                 path,
                 function(data) {
-                    alert(JSON.stringify(data));
+                    //alert(JSON.stringify(data));
                     if (data.name==null)
                     {
                         $('.errorBusquedaID' ).empty();
