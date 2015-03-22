@@ -2,11 +2,10 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.mindrot.jbcrypt.BCrypt;
 import play.db.ebean.Model;
-
+import play.libs.Json;
 import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,9 +122,12 @@ public class Patient extends Model {
         return p;
     }
 
-    public JsonElement plainUnbind() {
-        JsonElement plainUnbind = new Gson().toJsonTree(this);
-        return plainUnbind;
+    public ObjectNode plainUnbind() throws  Exception {
+        JsonNode e = Json.toJson(this);
+        ObjectNode o = (ObjectNode) e;
+        o.remove("password");
+        o.remove("episodes");
+        return o;
     }
 
     private static Date parseDate(String representation) {
