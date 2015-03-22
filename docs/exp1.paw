@@ -598,7 +598,7 @@
         <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z140"></relationship>
     </object>
     <object type="LMREQUEST" id="z146">
-        <attribute name="body" type="string">[{"data":{"json":"{\\"name\\":\\"Mauricio\\",\\"surname\\":\\"Gomez\\",\\"address\\":\\"Calle 42 #18\\",\\"age\\":20,\\"telephone\\":\\"7659675\\",\\"cellphone\\":\\"3002345436\\",\\"city\\":\\"Bogota\\",\\"country\\":\\"Colombia\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{},"identifier":"com.luckymarmot.FileContentDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">0CF3E294-77BF-4FDB-B82A-ED0EBF0229E8</attribute>
         <attribute name="url" type="string">http://localhost:8080/competitors</attribute>
         <attribute name="storecookies" type="bool">1</attribute>

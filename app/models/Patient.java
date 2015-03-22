@@ -2,6 +2,8 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.mindrot.jbcrypt.BCrypt;
 import play.db.ebean.Model;
 
@@ -119,6 +121,11 @@ public class Patient extends Model {
 
         Patient p = Patient.create(name, password, date, email, gen, id);
         return p;
+    }
+
+    public JsonElement plainUnbind() {
+        JsonElement plainUnbind = new Gson().toJsonTree(this);
+        return plainUnbind;
     }
 
     private static Date parseDate(String representation) {

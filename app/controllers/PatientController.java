@@ -224,4 +224,23 @@ public class PatientController extends Controller {
         return TODO;
     }
 
+    @BodyParser.Of(BodyParser.Json.class)
+    public static Result authenticate() {
+        JsonNode j = Controller.request().body().asJson();
+        ObjectNode result = Json.newObject();
+        String password = j.path("password").asText();
+        Long id = j.path("id").asLong();
+
+        Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        if(patientObject == null) {
+            return ok(Json.toJson(result));
+        }
+        boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
+
+        if(authentication) {
+            return ok(Json.toJson(patientObject));
+        }
+        return ok(Json.toJson(result));
+    }
+
 }

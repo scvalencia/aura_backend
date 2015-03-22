@@ -50,12 +50,14 @@ GET            /api/patient/:id/analysis2/:f1/:f2         controllers.PatientCon
 GET            /api/patient/:id/analysis3/:f1/:f2         controllers.PatientController.getAnalysisFood(id : Long, f1 : String, f2 : String)
 # Gets analysis of episodes and sports in Json format
 GET            /api/patient/:id/analysis4/:f1/:f2         controllers.PatientController.getAnalysisSports(id : Long, f1 : String, f2 : String)
+# Authentication service for a single Patient, if credentials are correct, it should return a simple Patient Object, otherwise, it should return an empty object
+POST           /api/patient/authenticate                  controllers.PatientController.authenticate()
 ########################################################################################################################
 GET            /doctor/login                              controllers.Application.login()
 
-POST           /doctor/authenticate                       controllers.DoctorController.authenticateDoctor()
+POST           /doctor/authenticate                       controllers.DoctorController.authenticate()
 
-GET            /test/*session                                      controllers.Application.test(session: String)
+GET            /test/*session                             controllers.Application.test(session: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)
