@@ -51,6 +51,13 @@ create table patient (
   constraint pk_patient primary key (id))
 ;
 
+create table s3file (
+  id                        varchar(40) not null,
+  bucket                    varchar(255),
+  name                      varchar(255),
+  constraint pk_s3file primary key (id))
+;
+
 create table sport (
   id                        bigint not null,
   description               integer,
@@ -155,6 +162,8 @@ drop table if exists medicine cascade;
 drop table if exists patient cascade;
 
 drop table if exists patient_episode cascade;
+
+drop table if exists s3file cascade;
 
 drop table if exists sport cascade;
 
