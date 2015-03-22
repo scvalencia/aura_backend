@@ -243,4 +243,19 @@ public class PatientController extends Controller {
         return ok(Json.toJson(result));
     }
 
+    public static Result plainPatient(Long id) {
+        Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        ObjectNode result = Json.newObject();
+
+        if(patientObject == null)
+            return ok(Json.toJson(result));
+
+        try {
+            ObjectNode e = patientObject.plainUnbind();
+            return ok(Json.toJson(e));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ok(Json.toJson(result));
+    }
 }
