@@ -13,5 +13,5 @@ libraryDependencies ++= Seq(
   javaWs,
   "org.mindrot" % "jbcrypt" % "0.3m",
   "postgresql" % "postgresql" % "9.1-901.jdbc4",
-  "com.google.code.gson" % "gson" % "2.2"
+  "com.amazonaws" % "aws-java-sdk" % "1.3.11"
 )
