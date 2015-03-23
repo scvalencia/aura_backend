@@ -22,7 +22,7 @@ import sys
 db_name = 'load.db'
 connection = sqlite3.connect(db_name)
 
-remote_url = 'https://aura-prod.herokuapp.com/'
+remote_url = 'http://aura-app.herokuapp.com/'
 local_url = 'http://localhost:9000/'
 
 def print_info():
