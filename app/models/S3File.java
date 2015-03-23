@@ -24,7 +24,7 @@ public class S3File extends Model {
     public String name;
 
     @Transient
-    private File file;
+    public File file;
 
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
