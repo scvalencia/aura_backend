@@ -5,12 +5,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
 import models.Patient;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import play.db.ebean.Model;
 import play.libs.Json;
-import play.mvc.BodyParser;
-import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Results;
+import play.mvc.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,6 +115,7 @@ public class PatientController extends Controller {
             return Results.created(Json.toJson(e.getNotification()));
         }
     }
+
 
     public static Result getEpisodes(long id) {
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
@@ -255,6 +260,39 @@ public class PatientController extends Controller {
             return ok(Json.toJson(e));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return ok(Json.toJson(result));
+    }
+
+    public static Result createVoiceEpisode(long id) {
+
+        Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        ObjectNode result = Json.newObject();
+
+        if(patientObject != null) {
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            Http.MultipartFormData.FilePart uploadFilePartBody = body.getFile("upload");
+            if(uploadFilePartBody == null)
+                return ok(Json.toJson(result));
+
+            String url = "http://aura-voice.herokuapp.com/upload/" + id;
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url);
+
+            FileBody uploadFilePart = new FileBody(uploadFilePartBody.getFile());
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addPart("upload", uploadFilePart);
+            httpPost.setEntity(builder.build());
+
+            try {
+                HttpResponse response = httpclient.execute(httpPost);
+                String json = EntityUtils.toString(response.getEntity());
+                return ok(json);
+            } catch(Exception e) {
+
+            }
+            patientObject.save();
+            return ok(Json.toJson(result));
         }
         return ok(Json.toJson(result));
     }
