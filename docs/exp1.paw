@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>90B2834D-91EB-4CB8-AA3E-71E4F0CDB48C</UUID>
-        <nextObjectID>163</nextObjectID>
+        <nextObjectID>169</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -107,7 +107,7 @@
     </object>
     <object type="LMREQUESTGROUP" id="z158">
         <attribute name="uuid" type="string">EFD7A488-9589-4FB3-8088-BBC8AB57395E</attribute>
-        <attribute name="order" type="int64">1</attribute>
+        <attribute name="order" type="int64">3</attribute>
         <attribute name="name" type="string">DoctorCRUD</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z156"></relationship>
@@ -117,10 +117,10 @@
     </object>
     <object type="LMREQUESTGROUP" id="z159">
         <attribute name="uuid" type="string">733CB026-CDCF-4854-983F-602AA32DA7B5</attribute>
-        <attribute name="order" type="int64">0</attribute>
+        <attribute name="order" type="int64">2</attribute>
         <attribute name="name" type="string">EpisodeCRUD</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z162 z160"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z160 z162"></relationship>
         <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
         <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
         <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
@@ -176,5 +176,75 @@
         <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z162"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z164">
+        <attribute name="uuid" type="string">DAD1A771-8585-489C-9057-4D73DCECE8E5</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/patient/54026617159/analysis2/2000-09-09/2020-09-09</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">GetAnalysis1</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z165"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z166"></relationship>
+    </object>
+    <object type="LMREQUESTGROUP" id="z165">
+        <attribute name="uuid" type="string">66B3D2EC-B311-4D30-8F48-C929E755FCA4</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">Analysis</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z164"></relationship>
+        <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z166">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z164"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z167">
+        <attribute name="uuid" type="string">78CD5052-36E0-42E9-9F8C-2C4B9EDF0ABA</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/patient</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">GetPatients</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z169"></relationship>
+    </object>
+    <object type="LMREQUESTGROUP" id="z168">
+        <attribute name="uuid" type="string">8316F139-D088-4EE9-B8C1-541B02053AD4</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">PatientCRUD</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z167"></relationship>
+        <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z169">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z167"></relationship>
     </object>
 </database>
