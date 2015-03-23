@@ -1,6 +1,7 @@
 package controllers;
 
 import actions.CorsComposition;
+import com.amazonaws.util.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
@@ -17,9 +18,7 @@ import play.libs.Json;
 import play.mvc.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by scvalencia on 3/9/15.
@@ -185,7 +184,7 @@ public class PatientController extends Controller {
         return ans;
     }
 
-    public static Result getAnalysisSleepHpurs(Long idP, String f1, String f2){
+    public static Result getAnalysisSleepHours(Long idP, String f1, String f2){
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
         List<Analysis> fin = new ArrayList<Analysis>();
 
@@ -217,16 +216,79 @@ public class PatientController extends Controller {
         return ok(Json.toJson(fin));
     }
 
-    public static Result getAnalysisMedicines(Long idP, String f1, String f2) {
-        return TODO;
+    public static Result getAnalysisIntensity(Long idP, String f1, String f2) {
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
+        HashMap<String, HashMap<Integer, Integer>> fin = new HashMap<String, HashMap<Integer, Integer>>();
+
+        if(p == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        }
+        else {
+
+            List<Episode> es = p.getEpisodes();
+            List<Episode> ans = new ArrayList<Episode>();
+
+            Date d1 = parseDate(f1), d2 = parseDate(f2);
+
+            for(Episode e : es) {
+                if(e.getPubDate().after(d1) && e.getPubDate().before(d2))
+                    ans.add(e);
+            }
+
+            for(Episode e : ans) {
+                Date date = e.getPubDate();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String key = cal.get(Calendar.YEAR) + " " + cal.get(Calendar.MONTH);
+                int intensity = e.getIntensity();
+                if(!fin.containsKey(key)) {
+                    HashMap<Integer, Integer> val = new HashMap<Integer, Integer>();
+                    val.put(intensity, 1);
+                    fin.put(key, val);
+                }
+                else {
+                    HashMap<Integer, Integer> value = fin.get(key);
+                    if(!value.containsKey(intensity)) {
+                        value.put(intensity, 1);
+                    }
+                    else {
+                        value.put(intensity, value.get(intensity) + 1);
+                    }
+                }
+            }
+        }
+
+        return ok(Json.toJson(fin));
     }
 
-    public static Result getAnalysisFood(Long idP, String f1, String f2) {
-        return TODO;
-    }
+    public static Result getAnalysisSpot(Long idP, String f1, String f2) {
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
+        HashMap<Integer, Integer> fin = new HashMap<Integer, Integer>();
 
-    public static Result getAnalysisSports(Long idP, String f1, String f2) {
-        return TODO;
+        if(p == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        }
+        else {
+
+            List<Episode> es = p.getEpisodes();
+            List<Episode> ans = new ArrayList<Episode>();
+
+            Date d1 = parseDate(f1), d2 = parseDate(f2);
+
+            for(Episode e : es) {
+                if(e.getPubDate().after(d1) && e.getPubDate().before(d2))
+                    ans.add(e);
+            }
+
+            for(Episode e : ans) {
+                int spot = e.getLocation();
+
+            }
+        }
+
+        return ok(Json.toJson(fin));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -267,7 +329,7 @@ public class PatientController extends Controller {
     public static Result createVoiceEpisode(long id) {
 
         Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
-        Episode episode = new Episode();
+
         ObjectNode result = Json.newObject();
 
         if(patientObject != null) {
@@ -290,15 +352,24 @@ public class PatientController extends Controller {
             s3File.file = uploadFilePartBody.getFile();
             s3File.save();
 
-            episode.setIntensity(10);
-            episode.setVoiceEpisode(s3File);
 
-            patientObject.addEpisode(episode);
-            patientObject.save();
+
+
 
             try {
                 HttpResponse response = httpclient.execute(httpPost);
                 String json = EntityUtils.toString(response.getEntity());
+                JSONObject j = new JSONObject(json);
+                Episode episode = new Episode();
+
+                episode.setUrlId(Long.parseLong(j.get("url").toString()));
+                episode.setIntensity(10);
+                episode.setVoiceEpisode(s3File);
+                episode.setPubDate(new Date());
+
+                patientObject.addEpisode(episode);
+                patientObject.save();
+
                 return ok(json);
             } catch(Exception e) {
                 return badRequest("File upload error");
