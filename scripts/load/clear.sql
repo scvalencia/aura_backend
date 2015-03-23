@@ -9,4 +9,5 @@ DELETE FROM sport;
 DELETE FROM symptom;
 DELETE FROM patient_episode;
 DELETE FROM episode;
+DELETE FROM s3file;
 DELETE FROM patient;
