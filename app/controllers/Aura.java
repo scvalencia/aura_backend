@@ -13,7 +13,7 @@ import views.html.login;
 import views.html.test;
 
 @CorsComposition.Cors
-public class Application extends Controller {
+public class Aura extends Controller {
 
 
     public static Result index() {
