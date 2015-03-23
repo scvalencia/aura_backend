@@ -36,8 +36,6 @@ public class Episode extends Model {
 
     private boolean stress;
 
-    private S3File voiceFile;
-
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Symptom> symptoms;
 
@@ -134,14 +132,6 @@ public class Episode extends Model {
 
     public List<Symptom> getSymptoms() {
         return symptoms;
-    }
-
-    public S3File getVoiceFile() {
-        return voiceFile;
-    }
-
-    public void setVoiceFile(S3File voiceFile) {
-        this.voiceFile = voiceFile;
     }
 
     public void addSymptom(Symptom symptom) {
