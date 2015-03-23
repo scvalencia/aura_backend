@@ -36,6 +36,9 @@ public class Episode extends Model {
 
     private boolean stress;
 
+    @OneToOne
+    private S3File voiceEpisode;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Symptom> symptoms;
 
@@ -66,6 +69,7 @@ public class Episode extends Model {
         e.foods = new ArrayList<Food>();
         e.sports = new ArrayList<Sport>();
         e.medicines = new ArrayList<Medicine>();
+        e.voiceEpisode = null;
         return e;
     }
 
@@ -128,6 +132,14 @@ public class Episode extends Model {
 
     public void setStress(boolean stress) {
         this.stress = stress;
+    }
+
+    public S3File getVoiceEpisode() {
+        return voiceEpisode;
+    }
+
+    public void setVoiceEpisode(S3File voiceEpisode) {
+        this.voiceEpisode = voiceEpisode;
     }
 
     public List<Symptom> getSymptoms() {
