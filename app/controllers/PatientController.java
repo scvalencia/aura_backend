@@ -267,6 +267,7 @@ public class PatientController extends Controller {
     public static Result createVoiceEpisode(long id) {
 
         Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        Episode episode = new Episode();
         ObjectNode result = Json.newObject();
 
         if(patientObject != null) {
@@ -284,16 +285,25 @@ public class PatientController extends Controller {
             builder.addPart("upload", uploadFilePart);
             httpPost.setEntity(builder.build());
 
+            S3File s3File = new S3File();
+            s3File.name = uploadFilePartBody.getFilename();
+            s3File.file = uploadFilePartBody.getFile();
+            s3File.save();
+
+            episode.setIntensity(10);
+            episode.setVoiceEpisode(s3File);
+
+            patientObject.addEpisode(episode);
+            patientObject.save();
+
             try {
                 HttpResponse response = httpclient.execute(httpPost);
                 String json = EntityUtils.toString(response.getEntity());
                 return ok(json);
             } catch(Exception e) {
-
+                return badRequest("File upload error");
             }
-            patientObject.save();
-            return ok(Json.toJson(result));
         }
-        return ok(Json.toJson(result));
+        return badRequest("File upload error");
     }
 }
