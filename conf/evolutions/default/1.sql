@@ -24,6 +24,7 @@ create table episode (
   regular_sleep             boolean,
   location                  integer,
   stress                    boolean,
+  voice_episode_id          varchar(40),
   constraint pk_episode primary key (id))
 ;
 
@@ -118,6 +119,8 @@ create sequence sport_seq;
 
 create sequence symptom_seq;
 
+alter table episode add constraint fk_episode_voiceEpisode_1 foreign key (voice_episode_id) references s3file (id);
+create index ix_episode_voiceEpisode_1 on episode (voice_episode_id);
 
 
 
