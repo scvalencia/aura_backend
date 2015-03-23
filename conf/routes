@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET            /                                          controllers.Application.index()
+GET            /                                          controllers.Aura.index()
 
 
 ########################################################################################################################
@@ -54,13 +54,15 @@ GET            /api/patient/:id/analysis4/:f1/:f2         controllers.PatientCon
 POST           /api/patient/authenticate                  controllers.PatientController.authenticate()
 # Plain old JSON of a Patient
 GET            /api/pojo_patient/:id                      controllers.PatientController.plainPatient(id : Long)
+# Creates a recorded episode, it expects an mp3 file. mp3 checking is up to the client
+POST           /api/patient/:id/voice_episode             controllers.PatientController.createVoiceEpisode(id : Long)
 ########################################################################################################################
-GET            /doctor/login                              controllers.Application.login()
+GET            /doctor/login                              controllers.Aura.login()
 
 POST           /doctor/authenticate                       controllers.DoctorController.authenticate()
 
-GET            /test/*session                             controllers.Application.test(session: String)
+GET            /test/*session                             controllers.Aura.test(session: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)
-OPTIONS        /*path                                     controllers.Application.token(path: String)
+OPTIONS        /*path                                     controllers.Aura.token(path: String)
