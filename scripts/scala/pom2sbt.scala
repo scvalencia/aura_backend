@@ -8,6 +8,8 @@ import scala.xml._
   val classifier = (dependency \ "classifier").text
   val artifactValName: String = artifactId.replaceAll("[-\\.]", "_")
 
+
+
   print("val %s = \"%s\" %% \"%s\" %% \"%s\"".format(artifactValName, groupId, artifactId, version))
   scope match {
     case "" => print("\n")
