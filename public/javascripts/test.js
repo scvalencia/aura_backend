@@ -232,11 +232,10 @@ function mostrarFecha(fechaP)
 
 function mostrarComida(foodP)
 {
-    alert(JSON.stringify(foodP));
     $('.food').empty();
     var str = '<h5>Food: </h5><ul class="list-group">';
     $.each(foodP, function(i,comidaActual) {
-        str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;"><span class="badge">'+foodP[i].quentity+'</span>'+foodP[i].name+'</li>';
+        str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;"><span class="badge">'+foodP[i].quantity+'</span>'+foodP[i].name+'</li>';
     });
     str = str+'</ul>';
     $('.food').append(str);
