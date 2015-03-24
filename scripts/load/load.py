@@ -348,7 +348,7 @@ def generate_curl_episodes(bound, local):
 
 		def __init__(self):
 			self.name = random.choice(foods)
-			self.quentity = random.choice(range(1, 11))
+			self.quantity = random.choice(range(1, 11))
 
 	class Medicine(object):
 

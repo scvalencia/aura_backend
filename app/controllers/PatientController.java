@@ -259,6 +259,12 @@ public class PatientController extends Controller {
             }
         }
 
+        
+
+        /*
+            {'año' : 2015, 'mes' : 02, 'frecuencias' : [{'intensidad' : 4}, {'frecuancia' : 5}, ... ]
+         */
+
         return ok(Json.toJson(fin));
     }
 
@@ -351,10 +357,6 @@ public class PatientController extends Controller {
             s3File.name = uploadFilePartBody.getFilename();
             s3File.file = uploadFilePartBody.getFile();
             s3File.save();
-
-
-
-
 
             try {
                 HttpResponse response = httpclient.execute(httpPost);
