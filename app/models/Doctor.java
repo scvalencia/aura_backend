@@ -162,6 +162,7 @@ public class Doctor extends Model {
         this.setDiscipline(newDoctor.discipline);
         this.setDate(newDoctor.date);
         this.setGender(newDoctor.gender);
+        this.setLink(newDoctor.link);
     }
 
     public static boolean checkPassword(String candidate, String encryptedPassword) {

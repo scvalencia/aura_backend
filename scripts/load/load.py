@@ -383,7 +383,7 @@ def generate_curl_episodes(bound, local):
 			
 			soundCloud = random.choice([True, False])
 
-			if soundCloud:
+			if False:
 				sound_url = ''.join(random.choice(string.digits) for _ in range(8))
 				intensity = 10
 				sleep = ''

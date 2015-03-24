@@ -20,8 +20,13 @@ public class DoctorController extends Controller {
     public static Result create() throws Exception {
         JsonNode j = Controller.request().body().asJson();
         Doctor d = Doctor.bind(j);
-        d.save();
-        return ok(Json.toJson(d));
+        Doctor doctor = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(d.getId());
+        if(doctor != null)
+            return ok("El doctor con número de identificación " + d.getId() + " ya existe en Aura.");
+        else {
+            d.save();
+            return ok(Json.toJson(d));
+        }
     }
 
     public static Result read(long id) {
@@ -37,11 +42,12 @@ public class DoctorController extends Controller {
     public static Result update(long id) {
         JsonNode j = Controller.request().body().asJson();
         Doctor oldDoctor = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
-        Doctor newDoctor = Doctor.bind(j);
         ObjectNode result = Json.newObject();
         if(oldDoctor == null)
             return ok(Json.toJson(result));
         else {
+            Doctor newDoctor = Doctor.bind(j);
+            newDoctor.setLink(oldDoctor.getLink());
             oldDoctor.updateDoctor(newDoctor);
             oldDoctor.save();
             return ok(Json.toJson(oldDoctor));
