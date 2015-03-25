@@ -259,18 +259,13 @@ public class PatientController extends Controller {
             }
         }
 
-        
-
-        /*
-            {'año' : 2015, 'mes' : 02, 'frecuencias' : [{'intensidad' : 4}, {'frecuancia' : 5}, ... ]
-         */
-
         return ok(Json.toJson(fin));
     }
 
     public static Result getAnalysisSpot(Long idP, String f1, String f2) {
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
         HashMap<Integer, Integer> fin = new HashMap<Integer, Integer>();
+        ArrayList<Analysis3> finalAns = new ArrayList<Analysis3>();
 
         if(p == null) {
             ObjectNode result = Json.newObject();
@@ -290,11 +285,24 @@ public class PatientController extends Controller {
 
             for(Episode e : ans) {
                 int spot = e.getLocation();
+                if(!fin.containsKey(spot))
+                    fin.put(spot, 1);
+                else
+                    fin.put(spot, fin.get(spot) + 1);
 
+            }
+
+            Iterator it = fin.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                int spot = (Integer) pair.getKey();
+                int freq = (Integer) pair.getValue();
+                Analysis3 add = new Analysis3(spot, freq);
+                finalAns.add(add);
             }
         }
 
-        return ok(Json.toJson(fin));
+        return ok(Json.toJson(finalAns));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -378,5 +386,32 @@ public class PatientController extends Controller {
             }
         }
         return badRequest("File upload error");
+    }
+}
+
+class Analysis3 {
+
+    int spot;
+    int frequency;
+
+    Analysis3(int spot, int frequency) {
+        this.spot = spot;
+        this.frequency = frequency;
+    }
+
+    public int getSpot() {
+        return spot;
+    }
+
+    public void setSpot(int spot) {
+        this.spot = spot;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 }
