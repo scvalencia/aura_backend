@@ -10,14 +10,15 @@ import play.mvc.*;
 
 import views.html.index;
 import views.html.login;
-import views.html.test;
+import views.html.search;
+import views.html.info;
 
 @CorsComposition.Cors
 public class Aura extends Controller {
 
 
     public static Result index() {
-        return ok(index.render("Your new application is ready."));
+        return ok(login.render(""));
     }
 
     public static Result token(String path) {
@@ -28,9 +29,14 @@ public class Aura extends Controller {
         return ok(login.render(""));
     }
 
-    public static Result test(String session) {
+    public static Result search(String session) {
         return ok(
-                test.render(session));
+                search.render(session));
+    }
+
+    public static Result info(String session) {
+        return ok(
+                info.render(session));
     }
 
 }

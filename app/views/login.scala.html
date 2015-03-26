@@ -1,5 +1,4 @@
 @(title: String)
-
 <!DOCTYPE html>
 
 
@@ -7,6 +6,9 @@
 <head>
     <title>Login</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/login.css")">
     <!--bootstrap css-->
     <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
@@ -77,33 +79,31 @@
                     <!--Nombre div-->
                     <div class="col-md-6 column">
                         <h5>First Name</h5>
-                        <input type="text" placeholder="Enter First Name" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" placeholder="Enter First Name" class="form-control" aria-describedby="basic-addon1" id="firstName">
                     </div>
                     <!--Apellido div-->
                     <div class="col-md-6 column">
                         <h5>Last Name</h5>
-                        <input type="text" placeholder="Enter Last Name" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" placeholder="Enter Last Name" class="form-control" aria-describedby="basic-addon1" id="lastName">
                     </div>
                 </div>
                 <!--Email div-->
                 <div class="row clearfix">
                     <div class="col-md-12 column">
                         <h5>Email</h5>
-                        <input type="email" placeholder="Enter Email" class="form-control" aria-describedby="basic-addon1">
+                        <input type="email" placeholder="Enter Email" class="form-control" aria-describedby="basic-addon1" id="email">
                     </div>
                 </div>
                 <div class="row clearfix">
                     <!--ID Number div-->
                     <div class="col-md-6 column">
                         <h5>ID Number</h5>
-                        <input type="text" placeholder="Enter ID Number" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" placeholder="Enter ID Number" class="form-control" aria-describedby="basic-addon1"  id="id">
                     </div>
                     <!--Speciality div-->
                     <div class="col-md-6 column">
-                        <h5>Speciality</h5>
-                        <select class="selectpicker">
-                            <option value="cardiologist">Cardiologist</option>
-                            <option value="radiologist">Radiologist</option>
+                        <h5>Discipline</h5>
+                        <select class="selectpicker" id ="discipline">
                         </select>
                     </div>
                 </div>
@@ -111,33 +111,41 @@
                     <!--Fecha nacimiento div-->
                     <div class="col-md-6 column">
                         <h5>Birth Date</h5>
-                        <input data-provide="datepicker">
+                        <input type="text" class="datepicker">
                     </div>
                     <!--Genero div-->
                     <div class="col-md-6 column">
                         <h5>Gender</h5>
                         <div class="col-md-6 column">
-                            <h7><input type="radio" name="sex" value="male" checked> Male</h7>
+                            <h7><input type="radio" name="sex" value="0" checked> Male</h7>
                         </div>
                         <div class="col-md-6 column">
-                            <h7><input type="radio" name="sex" value="female"> Female</h7>
+                            <h7><input type="radio" name="sex" value="1"> Female</h7>
                         </div>
                     </div>
                 </div>
                 <!--Password div-->
                 <div class="row clearfix">
-                    <div class="col-md-12 column">
+                    <div class="col-md-6 column">
                         <h5>Password</h5>
-                        <input type="password" placeholder="Enter Password" class="form-control" aria-describedby="basic-addon1">
+                        <input type="password" placeholder="Enter Password" class="form-control" aria-describedby="basic-addon1" id="password1">
+                    </div>
+                    <div class="col-md-6 column">
                         <h5>Confirm Password</h5>
-                        <input type="text" placeholder="Re enter ID Number" class="form-control" aria-describedby="basic-addon1">
+                        <input type="password" placeholder="Re enter Password" class="form-control" aria-describedby="basic-addon1" id="password2">
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <h5>Linkedin URL</h5>
+                        <input type="text" placeholder="Enter URL-Might be empty" class="form-control" aria-describedby="basic-addon1" id="linkedin">
                     </div>
                 </div>
                 <br>
                 <!--Buttom Sign up div-->
                 <div class="row clearfix">
                     <div class="col-md-12 column">
-                        <button type="button" class="btn btn-info">Sign Up</button>
+                        <button type="button" class="btn btn-info btnCreate">Sign Up</button>
                     </div>
                 </div>
             </div>

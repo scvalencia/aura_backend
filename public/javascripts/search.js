@@ -1,0 +1,635 @@
+$(document).ready(function(){
+var sports = ["No activity","American Football","Baseball","Basketball","Bowling","Football","Dancing","Football","Golf","Hockey","Ping-Pong","Rugby","Running","Swimming","Tennis","Volleyball","Walking","Other"];
+var climate = ["sunny.svg","partly_sunny.svg","cloudy.svg","raining.svg","thunderstorm.svg","snowing.svg"];
+var locationImg = ["sinus.svg","tension.svg","cluster_left.svg","cluster_right.svg","migraine_left.svg","migraine_right.svg"];
+var location = ["Sinus","Tension","Cluster Left","Cluster Right","Migraine Left","Migraine Right"];
+var signs =["Aura","Depression, ittitability, or excitement","Lack of restful sleep","Stuffy nose or watery eyes","Cravings","Throbbing pain on one or both sides of the head","Eye pain","Neck pain","Frequent urination","Yawning","Numbness or tingling","Nausea or vomiting","Light, noise, or smells worsen pain"];
+$(function() {
+    $( ".datepickerFrom" ).datepicker({dateFormat: "yy-mm-dd"});
+    $( ".datepickerTo" ).datepicker({dateFormat: "yy-mm-dd"});
+    $( ".datepickerFromAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
+    $( ".datepickerToAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
+  });
+var idPacienteActual;
+var idDoctorActual=window.location.pathname.split("/")[2];
+$.get('/api/doctor/'+idDoctorActual,function(data) {
+
+    $('.nameDr').append(data.name);
+});
+
+
+$('.divName').hide();
+$('.divInfoEpisodio').hide();
+$('.divAnalysisAfuera').hide();
+$('.divAnalysis').hide();
+$('#container1').hide();
+$('#container2').hide();
+$('#container3').hide();
+
+//mostrarListaepisodios(episodes);
+$('.divEpisodios').hide();
+
+$('.byName').click(function(){
+        $('.byIDLi').removeClass('active');
+        $('.byNameLi').addClass('active');
+        $('.errorBusquedaID' ).empty();
+        $('.divID').hide();
+        $('.divName').show();
+    });
+
+$('.byID').click(function(){
+        $('.byNameLi').removeClass('active');
+        $('.byIDLi').addClass('active');
+        $('.errorBusquedaID').empty();
+        $('.divName').hide();
+        $('.divID').show();
+	});
+
+$('.analysis').click(function(){
+        $('.episodeLi').removeClass('active');
+        $('.analysisLi').addClass('active');
+        $('.divEpisodiosAfuera').hide();
+        $('.divAnalysisAfuera').show();
+    });
+
+$('.episode').click(function(){
+        $('.analysisLi').removeClass('active');
+        $('.episodeLi').addClass('active');
+        $('.divAnalysisAfuera').hide();
+        $('.divEpisodiosAfuera').show();
+	});
+
+$('.findByID').click(function(){
+        $('.infoPaciente').empty();
+        $('.nombrePaciente').empty();
+        var idPaciente = parseInt($('.idPacienteTxt').val());
+        if (isNaN(idPaciente))
+        {
+            $('.errorBusquedaID' ).empty();
+            $('.errorBusquedaID' ).append("Patient's ID must be a number");
+        }
+        else
+        {
+            var path = '/api/patient/'+idPaciente;
+            $.get(
+                path,
+                function(data) {
+                    //alert(JSON.stringify(data));
+                    if (data.name==null)
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        $('.errorBusquedaID' ).append("Patient not found");
+                        $('.divEpisodios').hide();
+                        $('.divAnalysis').hide();
+                    }
+                    else
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
+                        $('.divInfoEpisodio').show();
+                        mostrarListaepisodios(data.episodes);
+                        $('.divEpisodios').show();
+                        $('.divAnalysis').show();
+                    }
+                }
+
+            );
+        }
+	});
+
+$('.btnFilter').click(function(){
+    var dateFrom = $( ".datepickerFrom" ).datepicker( "getDate" );
+    var dateTo = $( ".datepickerTo" ).datepicker( "getDate" );
+    if (dateFrom > dateTo)
+    {
+        $('.errorFechas').empty();
+        $('.errorFechas').append("Invalid period");
+        vaciarInfoEpisodio();
+        $('.listaEpisodios').empty();
+    }
+    else
+    {
+        $('.errorFechas').empty();
+        var path = '/api/patient/'+idPacienteActual+'/episode/'+$('.datepickerFrom').val()+'/'+$('.datepickerTo').val();
+        $.get(
+            path,
+            function(data) {
+                //alert(JSON.stringify(data))
+                mostrarListaepisodios(data);
+            }
+        );
+    }
+
+	});
+
+$('.btnFilterAnalysis').click(function(){
+    var dateFrom = $( ".datepickerFromAnalysis" ).datepicker( "getDate" );
+    var dateTo = $( ".datepickerToAnalysis" ).datepicker( "getDate" );
+    var chartMeses = [];
+    if (dateFrom > dateTo)
+    {
+        $('.errorFechasAnalysis').empty();
+        $('.errorFechasAnalysis').append("Invalid period");
+        $('#container1').hide();
+        $('#container2').hide();
+        $('#container3').hide();
+        //TODO borrar graficas
+    }
+    else
+    {
+        $('.errorFechasAnalysis').empty();
+        var path1 = '/api/patient/'+idPacienteActual+'/analysis1/'+$('.datepickerFromAnalysis').val()+'/'+$('.datepickerToAnalysis').val();
+        var path2 = '/api/patient/'+idPacienteActual+'/analysis2/'+$('.datepickerFromAnalysis').val()+'/'+$('.datepickerToAnalysis').val();
+        var path3 = '/api/patient/'+idPacienteActual+'/analysis3/'+$('.datepickerFromAnalysis').val()+'/'+$('.datepickerToAnalysis').val();
+        $.get(
+            path2,
+            function(data) {
+                if (JSON.stringify(data) != '{}')
+                {
+                    var meses = JSON.stringify(data).split('},');
+                    for (var i = 0; i < meses.length; i++)
+                    {
+                        var chartMes = ['',0,0,0,0,0,0,0,0,0,0];
+                        meses[i]=meses[i].split("\"").join("");
+                        meses[i]=meses[i].split("{").join("");
+                        meses[i]=meses[i].split("}").join("");
+                        var datos = meses[i].split(",");
+                        var dato = datos[0].split(':');
+                        var anio = dato[0].split(" ")[0];
+                        var mes = parseInt(dato[0].split(" ")[1])+1;
+                        chartMes[0]=anio+"-"+mes;
+                        //alert(dato[0].replace(' ','-'));
+                        chartMes[dato[1]] = dato[2];
+                        for (var j = 1; j < datos.length; j++)
+                        {
+                            dato = datos[j].split(':');
+                            chartMes[dato[0]] = dato[1];
+                        }
+                        chartMeses.push(chartMes);
+                    }
+                    mostrarAnalisis1(chartMeses);
+                }
+            }
+        );
+        $.get(
+             path1,
+             function(data) {
+                 if (JSON.stringify(data) != '{}')
+                 {
+                    //alert(JSON.stringify(data));
+                    var matrizHorasIntensidad = [];
+                    for (var i = 0; i < 10; i++)
+                    {
+                        matrizHorasIntensidad[i]=[];
+                        for (var j = 0; j < 13; j++)
+                        {
+                            matrizHorasIntensidad[i][j] = 0;
+                        }
+                    }
+                    $.each(data, function(i,datoActual) {
+                        var x = parseInt(data[i].intensity)-1;
+                        var y = parseInt(data[i].hours);
+                        matrizHorasIntensidad[x][y]=matrizHorasIntensidad[x][y]+1;
+                    });
+                    mostrarAnalisis2(matrizHorasIntensidad);
+                 }
+             }
+        );
+        $.get(
+              path3,
+              function(data) {
+                  if (JSON.stringify(data) != '{}')
+                  {
+                    var datos = [0,0,0,0,0,0];
+                    $.each(data, function(i,datoActual) {
+                        datos[data[i].spot]=data[i].frequency;
+                    });
+                    mostrarAnalisis3(datos);
+                  }
+              }
+        );
+
+    }
+
+	});
+
+$('.btn_sign_out').click(function(){
+    window.location.href="/doctor/login";
+});
+
+$('.myAccountLink').click(function(){
+    window.location.href="/info/"+idDoctorActual;
+});
+
+
+function mostrarIntensidad(inte)
+{
+    var colorI = "green";
+    if (inte>=4)
+        {colorI = "orange";}
+    if (inte>=8)
+        {colorI = "red";}
+    var i = inte*100/10;
+    $('.intensity').empty();
+    //$('.intensity').append('<div class="progress" style="border-radius:10px"><span class="'+colorI+'" style="width: '+i+'%;"><span>5</span></span></div>');
+    $('.intensity').append('<h5>Intensity: </h5><div class="progress" style="border-radius:10px; height:18px;"><span class="'+colorI+'" style="width: '+i+'%;"><span>'+inte+'</span></span></div>');
+};
+
+function mostrarHorasSueno(horasP)
+{
+    var oMas = "";
+    var colorI = "red";
+    if (horasP>=8)
+    {
+        horasP=8;
+        oMas=" o más";
+    }
+    if (horasP>=4)
+        {colorI = "orange";}
+    if (horasP>=6)
+        {colorI = "green";}
+    var i = horasP*100/8;
+    $('.sleepHours').empty();
+    //$('.intensity').append('<div class="progress" style="border-radius:10px"><span class="'+colorI+'" style="width: '+i+'%;"><span>5</span></span></div>');
+    $('.sleepHours').append('<h5>Sleep Hours: </h5><div class="progress" style="border-radius:10px; height:18px;"><span class="'+colorI+'" style="width: '+i+'%;"><span>'+horasP+oMas+'</span></span></div>');
+};
+
+function mostrarSuenoRegular(suenoP)
+{
+    $('.regularSleep').empty();
+    if (suenoP==true)
+    {
+        $('.regularSleep').append('<h5>Regular Sleep: </h5><div class="switch" style="margin-top: 0px; margin-bottom: 10px;"><input type="radio" class="switch-input" id="YES"><label class="switch-label switch-label-off" style="color:black;">YES</label><input type="radio" class="switch-input" id="NO"><label for="NO" class="switch-label switch-label-on" style="color:black;">NO</label><span class="switch-selection"></span></div>');
+    }
+    else
+    {
+        $('.regularSleep').append('<h5>Regular Sleep: </h5><div class="switch switch-blue" style="margin-top: 0px; margin-bottom: 10px;"><input type="radio" class="switch-input" id="YES" checked><label class="switch-label switch-label-on" style="color:black;">YES</label><input type="radio" class="switch-input" id="NO"><label for="NO" class="switch-label switch-label-off" style="color:black;">NO</label><span class="switch-selection"></span></div>');
+    }
+};
+
+function mostrarEstres(estresP)
+{
+    $('.stress').empty();
+    if (estresP==true)
+    {
+        $('.stress').append('<h5>Stress: </h5><div class="switch switch-blue" style="margin-top: 0px; margin-bottom: 10px;"><input type="radio" class="switch-input" id="YES"><label class="switch-label switch-label-off" style="color:black;">YES</label><input type="radio" class="switch-input" id="NO"><label for="NO" class="switch-label switch-label-on" style="color:black;">NO</label><span class="switch-selection"></span></div>');
+    }
+    else
+    {
+        $('.stress').append('<h5>Stress: </h5><div class="switch" style=" margin-top: 0px;margin-bottom: 10px;"><input type="radio" class="switch-input" id="YES" checked><label class="switch-label switch-label-on" style="color:black;">YES</label><input type="radio" class="switch-input" id="NO"><label for="NO" class="switch-label switch-label-off" style="color:black;">NO</label><span class="switch-selection"></span></div>');
+    }
+};
+
+function mostrarLugar(lugarP)
+{
+    $('.location').empty();
+    $('.location').append('<h5>Location: </h5>');
+    $('.location').append('<h6>'+location[parseInt(lugarP)]+'</h6>');
+    $('.location').append('<img src="/assets/images/'+locationImg[parseInt(lugarP)]+'" height="100" width="100">');
+};
+
+function mostrarFecha(fechaP)
+{
+    $('.date').empty();
+    $('.date').append('<h4>Date: '+fechaP+'</h4>');
+};
+
+function mostrarComida(foodP)
+{
+    $('.food').empty();
+    var str = '<h5>Food: </h5><ul class="list-group">';
+    $.each(foodP, function(i,comidaActual) {
+        str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;"><span class="badge">'+foodP[i].quantity+'</span>'+foodP[i].name+'</li>';
+    });
+    str = str+'</ul>';
+    $('.food').append(str);
+};
+
+function mostrarMedicinas(medicinesP)
+{
+    $('.medicines').empty();
+
+    var str = '<h5>Medicines: </h5><table class="table"><thead><tr><th style="padding-top: 0px; padding-bottom: 0px;">Medicine</th><th style="padding-top: 0px; padding-bottom: 0px;">Hours Ago</th></tr></thead><tbody>';
+    $.each(medicinesP, function(i,medicinaActual) {
+            str = str+'<tr><td style="padding-top: 0px; padding-bottom: 0px;">'+medicinesP[i].name+'</th><th style="padding-top: 0px; padding-bottom: 0px;">'+medicinesP[i].hoursAgo+'</td></tr>';
+    });
+    str = str+'<tbody></table>'
+
+    $('.medicines').append(str);
+};
+
+function mostrarDeportes(deportesP)
+{
+    $('.sports').empty();
+
+    var str = '<h5>Sports and Activities: </h5><table class="table"><thead><tr><th style="padding-top: 0px; padding-bottom: 0px;">Activity</th><th style="padding-top: 0px; padding-bottom: 0px;">Intensity</th><th style="padding-top: 0px; padding-bottom: 0px;">Weather</th><th style="padding-top: 0px; padding-bottom: 0px;">Hydration</th></tr></thead><tbody>';
+    $.each(deportesP, function(i,medicinaActual) {
+            str = str+'<tr>';
+            str = str+'<td style="padding-top: 0px; padding-bottom: 0px;">'+sports[parseInt(deportesP[i].description)]+'</th>';
+            //str = str+'<th style="padding-top: 0px; padding-bottom: 0px;">'+deportesP[i].intensity+'</td>';
+            var j = deportesP[i].intensity*100/10;
+            str = str+'<th style="padding-top: 0px; padding-bottom: 0px;"><div class="progress" style="border-radius:10px; height:18px;"><span class="blue" style="width: '+j+'%;"><span>'+deportesP[i].intensity+'</span></span></div></td>';
+            //str = str+'<th style="padding-top: 0px; padding-bottom: 0px;"><img src="@routes.Assets.at('+climate[parseInt(deportesP[i].climate)]+') height="50" width="50"></td>';
+            str = str+'<th style="padding-top: 0px; padding-bottom: 0px;"><img src="/assets/images/'+climate[parseInt(deportesP[i].climate-1)]+'" height="40" width="40"></td>';
+            if (deportesP[i].hydration)
+            {
+                str = str+'<th style="padding-top: 0px; padding-bottom: 0px;">YES</td>';
+            }
+            else
+            {
+                str = str+'<th style="padding-top: 0px; padding-bottom: 0px;">NO</td>';
+            }
+            str = str+'</tr>';
+    });
+    str = str+'<tbody></table>'
+
+    $('.sports').append(str);
+};
+
+function mostrarSintomas(sintomasP)
+{
+    $('.symptoms').empty();
+    var str = '<h5>Symptoms: </h5><ul class="list-group">';
+        //alert(JSON.stringify(sintomasP));
+        //$.each(sintomasP, function(i,sintomaActual) {
+            //str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parserInt(sintomasP[i].symptom)]+'</li>';
+            //str=str+parserInt(sintomasP[i].symptom);
+        //});
+    $.each(sintomasP, function(i,sintomaActual) {
+           str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parseInt(sintomasP[i].symptom)]+'</li>';
+    });
+    str = str+'</ul>';
+        //alert(str);
+    $('.symptoms').append(str);
+};
+
+function mostrarAudio(audio)
+{
+    $('.audio').empty();
+    //var link = 'http://api.soundcloud.com/tracks/197197916/stream?client_id='+audio;
+    if (audio != 0)
+    {
+        $('.audio').append('<audio controls><source src="http://api.soundcloud.com/tracks/'+audio+'/stream?client_id=07fe9e7f76d4ac14db7bed65c2241a9d" type="audio/mpeg"></audio>');
+    }
+};
+
+
+function mostrarListaepisodios(episodesP)
+{
+    $('.listaEpisodios').empty();
+    vaciarInfoEpisodio();
+    $.each(episodesP, function(i,episodioActualI) {
+        var select = "";
+        if (i==0)
+        {
+            select ='selected="selected"';
+            mostrarFecha(episodesP[i].pubDate);
+            mostrarIntensidad(episodesP[i].intensity);
+            mostrarHorasSueno(episodesP[i].sllepHours);
+            mostrarSuenoRegular(episodesP[i].regularSleep);
+            mostrarEstres(episodesP[i].stress);
+            mostrarLugar(episodesP[i].location);
+            mostrarComida(episodesP[i].foods);
+            mostrarMedicinas(episodesP[i].medicines);
+            mostrarDeportes(episodesP[i].sports);
+            mostrarSintomas(episodesP[i].symptoms);
+            mostrarAudio(episodesP[i].urlId);
+
+        }
+        $('.listaEpisodios').append('<option value="'+episodesP[i].id+'" '+select+'>'+episodesP[i].pubDate+'</option>');
+    });
+}
+
+function vaciarInfoEpisodio()
+{
+    $('.date').empty();
+    $('.intensity').empty();
+    $('.sleepHours').empty();
+    $('.regularSleep').empty();
+    $('.stress').empty();
+    $('.location').empty();
+     $('.food').empty();
+     $('.medicines').empty();
+     $('.sports').empty();
+     $('.symptoms').empty();
+     $('.audio').empty();
+};
+
+function mostrarInfoPaciente(nombre,docID,email,fechaNacimiento,generoN)
+{
+    idPacienteActual = docID;
+    $('.infoPaciente').empty();
+    $('.nombrePaciente').empty();
+    $('.nombrePaciente').append('<h3>'+nombre+'</h3>');
+    $('.infoPaciente').append('<h4>ID: '+docID+'</h4>');
+    $('.infoPaciente').append('<h4>Email: '+email+'</h4>');
+    $('.infoPaciente').append('<h4>Birth date: '+fechaNacimiento+'</h4>');
+    var genero = "M";
+    if (generoN == 1)
+        genero='F';
+    $('.infoPaciente').append('<h4>Gender: '+genero+'</h4>');
+};
+
+
+$('.listaEpisodios').change(function(){
+    var episodioActual = $('.listaEpisodios').val();
+    var path = '/api/patient/'+idPacienteActual+"/episode/"+episodioActual;
+    $.get(
+        path,
+        function(data) {
+            mostrarFecha(data.pubDate);
+            mostrarHorasSueno(data.sllepHours);
+            mostrarIntensidad(data.intensity);
+            mostrarSuenoRegular(data.regularSleep);
+            mostrarEstres(data.stress);
+            mostrarLugar(data.location);
+            mostrarComida(data.foods);
+            mostrarMedicinas(data.medicines);
+            mostrarDeportes(data.sports);
+            mostrarSintomas(data.symptoms);
+            mostrarAudio(data.urlId);
+        }
+
+
+    );
+});
+
+function mostrarAnalisis1(chartMeses)
+{
+    var txtCategories = [];
+    var datos1 = [];
+    var datos2 = [];
+    var datos3 = [];
+    var datos4 = [];
+    var datos5 = [];
+    var datos6 = [];
+    var datos7 = [];
+    var datos8 = [];
+    var datos9 = [];
+    var datos10 = [];
+
+    for (var i = 0; i < chartMeses.length; i++)
+    {
+        txtCategories.push(chartMeses[i][0]);
+        datos1.push(parseInt(chartMeses[i][1]));
+        datos2.push(parseInt(chartMeses[i][2]));
+        datos3.push(parseInt(chartMeses[i][3]));
+        datos4.push(parseInt(chartMeses[i][4]));
+        datos5.push(parseInt(chartMeses[i][5]));
+        datos6.push(parseInt(chartMeses[i][6]));
+        datos7.push(parseInt(chartMeses[i][7]));
+        datos8.push(parseInt(chartMeses[i][8]));
+        datos9.push(parseInt(chartMeses[i][9]));
+        datos10.push(parseInt(chartMeses[i][10]));
+    }
+
+    $('#container1').show();
+    $('#container1').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Episodes\' Intensity'
+            },
+            xAxis: {
+                categories: txtCategories
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total episodes'
+                }
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: '10',
+                data: [datos10[0],datos10[1]]
+            }, {
+                name: '9',
+                data: datos9
+            }, {
+                name: '8',
+                data: datos8
+            }, {
+                name: '7',
+                data: datos7
+            }, {
+                name: '6',
+                data: datos6
+            }, {
+                name: '5',
+                data: datos5
+            }, {
+                name: '4',
+                data: datos4
+            }, {
+                name: '3',
+                data: datos3
+            }, {
+                name: '2',
+                data: datos2
+            }, {
+                name: '1',
+                data: datos1
+            }]
+        });
+};
+
+function mostrarAnalisis2(matrizHorasIntensidad)
+{
+
+    var datos = [];
+    for (var i = 0; i < 10; i++)
+    {
+        for (var j = 0; j < 13; j++)
+        {
+            var horas = j;
+            var intensidad = i+1;
+            var cantidad = matrizHorasIntensidad[i][j];
+            if (cantidad!=0)
+            {
+                datos.push([horas,intensidad,cantidad]);
+            }
+        }
+    }
+    $('#container2').show();
+    $('#container2').highcharts({
+
+            chart: {
+                type: 'bubble',
+                zoomType: 'xy'
+            },
+
+            title: {
+                text: 'Sleep Hours vs Intensity'
+            },
+
+            series: [{
+                data: datos
+            }]
+        });
+
+};
+
+function mostrarAnalisis3(datos)
+{
+    $('#container3').show();
+    $('#container3').highcharts({
+
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+
+            title: {
+                text: 'Migraine Locations',
+                x: -80
+            },
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: location,
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            series: [{
+                name: 'Location',
+                data: datos,
+                pointPlacement: 'on'
+            }]
+
+        });
+};
+
+
+
+});

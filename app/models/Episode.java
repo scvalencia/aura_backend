@@ -185,6 +185,13 @@ public class Episode extends Model {
         return e;
     }
 
+    public ObjectNode plainUnbind() throws  Exception {
+        JsonNode e = Json.toJson(this);
+        ObjectNode o = (ObjectNode) e;
+        o.remove("voiceEpisode");
+        return o;
+    }
+
     public ObjectNode getNotification() {
         String intensity, sleep, stress, message;
         if(this.intensity > 7){

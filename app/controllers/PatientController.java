@@ -144,7 +144,7 @@ public class PatientController extends Controller {
         return ok(Json.toJson(ans));
     }
 
-    public static Result getEpisode(long id1, long id2) {
+    public static Result getEpisode(long id1, long id2) throws Exception {
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id1);
         ObjectNode result = Json.newObject();
         if(p == null)
@@ -153,8 +153,12 @@ public class PatientController extends Controller {
             Episode e = (Episode) new Model.Finder(Long.class, Episode.class).byId(id2);
             if(e == null)
                 return ok(Json.toJson(result));
-            else
+            else {
+                if(e.getVoiceEpisode() == null) {
+                    return ok(Json.toJson(e.plainUnbind()));
+                }
                 return ok(Json.toJson(e));
+            }
         }
     }
 
