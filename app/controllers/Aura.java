@@ -27,7 +27,6 @@ public class Aura extends Controller {
             java.util.List<String> tokenId=new java.util.ArrayList<String>(tokenP);
             String id = tokenId.get(0);
             String token = session().get(id);
-            System.out.println("id:"+id+"-token:"+token);
             return ok(search.render(id+"--TOKEN--"+token));
         }
 
@@ -35,7 +34,8 @@ public class Aura extends Controller {
 
     public static Result unauthorizedAccess() {
 
-        return ok(unauthorizedAccess.render(""));
+        //return ok(unauthorizedAccess.render(""));
+        return ok();
     }
 
     public static Result token(String path) {
@@ -48,23 +48,18 @@ public class Aura extends Controller {
         return ok(login.render(""));
     }
 
-    public static Result search(String session) {
+    public static Result info() {
+        java.util.Set<String> tokenP = session().keySet();
 
-        String token = session().get(session);
-        if (token != null) {
-            //TODO verificar token
-            return ok(search.render(session));
-        } else {
-            return ok(unauthorizedAccess.render(""));
+        if(tokenP.isEmpty()) {
+            return ok(login.render(""));
+        }
+        else {
+            java.util.List<String> tokenId=new java.util.ArrayList<String>(tokenP);
+            String id = tokenId.get(0);
+            String token = session().get(id);
+            return ok(info.render(id+"--TOKEN--"+token));
         }
     }
 
-    public static Result info(String session) {
-        session().clear();
-        return ok(
-                info.render(session));
-    }
-
 }
-
-

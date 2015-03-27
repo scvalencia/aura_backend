@@ -15,6 +15,7 @@ $(function() {
     $( ".datepickerTo" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerFromAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerToAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
+<<<<<<< HEAD
     var idToken = $('.hiddenId').html().split("--TOKEN--");
     idDoctorActual = idToken[0];
     tokenDoctorActual = idToken[1];
@@ -30,12 +31,34 @@ $(function() {
              }
           });
 
+||||||| merged common ancestors
+=======
+    var idToken = $('.hiddenId').html().split("--TOKEN--");
+    idDoctorActual = idToken[0];
+    tokenDoctorActual = idToken[1];
+    tokenDoctorActualEncriptado = encriptar(tokenDoctorActual);
+    $.ajax({
+             url: "/api/doctor/"+idDoctorActual,
+             type: "GET",
+             beforeSend: function(xhr){xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);},
+             success: function(data) {
+                $('.nameDr').append(data.name);
+             }
+          });
+
+>>>>>>> f7c155bfc5300cbdfdaf6933d6ad4c0386305a9f
   });
 var idPacienteActual;
 
 
+<<<<<<< HEAD
 //$('.hiddenId').append($('.hiddenId').html());
 //$('.hiddenId').hide();
+||||||| merged common ancestors
+=======
+//$('.hiddenId').append($('.hiddenId').html());
+$('.hiddenId').hide();
+>>>>>>> f7c155bfc5300cbdfdaf6933d6ad4c0386305a9f
 $('.divName').hide();
 $('.divInfoEpisodio').hide();
 $('.divAnalysisAfuera').hide();
@@ -88,6 +111,7 @@ $('.findByID').click(function(){
         }
         else
         {
+<<<<<<< HEAD
             var path = '/api/patient/'+idPaciente;
 
             $.ajax({
@@ -142,8 +166,66 @@ $('.findByID').click(function(){
                         $('.divAnalysis').show();
                     }
                 }
+||||||| merged common ancestors
+            var path = '/api/patient/'+idPaciente;
+            $.get(
+                path,
+                function(data) {
+                    //alert(JSON.stringify(data));
+                    if (data.name==null)
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        $('.errorBusquedaID' ).append("Patient not found");
+                        $('.divEpisodios').hide();
+                        $('.divAnalysis').hide();
+                    }
+                    else
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
+                        $('.divInfoEpisodio').show();
+                        mostrarListaepisodios(data.episodes);
+                        $('.divEpisodios').show();
+                        $('.divAnalysis').show();
+                    }
+                }
+=======
+>>>>>>> f7c155bfc5300cbdfdaf6933d6ad4c0386305a9f
 
+<<<<<<< HEAD
             );*/
+||||||| merged common ancestors
+            );
+=======
+            $.ajax({
+                    url: "/api/patient/"+idPaciente,
+                    type: "GET",
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+                        xhr.setRequestHeader('who', 'DOC');
+                        xhr.setRequestHeader('id', idDoctorActual);
+                    },
+                    success: function(data) {
+                        if (data.name==null)
+                        {
+                             $('.errorBusquedaID' ).empty();
+                             $('.errorBusquedaID' ).append("Patient not found");
+                             $('.divEpisodios').hide();
+                             $('.divAnalysis').hide();
+                             }
+                        else
+                        {
+                             $('.errorBusquedaID' ).empty();
+                             mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
+                             $('.divInfoEpisodio').show();
+                             mostrarListaepisodios(data.episodes);
+                             $('.divEpisodios').show();
+                             $('.divAnalysis').show();
+                        }
+                       //$('.nameDr').append(data.name);
+                    }
+                 });
+>>>>>>> f7c155bfc5300cbdfdaf6933d6ad4c0386305a9f
         }
 	});
 
@@ -161,13 +243,19 @@ $('.btnFilter').click(function(){
     {
         $('.errorFechas').empty();
         var path = '/api/patient/'+idPacienteActual+'/episode/'+$('.datepickerFrom').val()+'/'+$('.datepickerTo').val();
-        $.get(
-            path,
-            function(data) {
-                //alert(JSON.stringify(data))
-                mostrarListaepisodios(data);
-            }
-        );
+
+        $.ajax({
+             url: "/api/patient/"+idPacienteActual+'/episode/'+$('.datepickerFrom').val()+'/'+$('.datepickerTo').val(),
+             type: "GET",
+             beforeSend: function(xhr){
+                  xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+                  xhr.setRequestHeader('who', 'DOC');
+                  xhr.setRequestHeader('id', idDoctorActual);
+             },
+             success: function(data) {
+                  mostrarListaepisodios(data);
+             }
+             });
     }
 
 	});
@@ -208,7 +296,6 @@ $('.btnFilterAnalysis').click(function(){
                         var anio = dato[0].split(" ")[0];
                         var mes = parseInt(dato[0].split(" ")[1])+1;
                         chartMes[0]=anio+"-"+mes;
-                        //alert(dato[0].replace(' ','-'));
                         chartMes[dato[1]] = dato[2];
                         for (var j = 1; j < datos.length; j++)
                         {
@@ -226,7 +313,6 @@ $('.btnFilterAnalysis').click(function(){
              function(data) {
                  if (JSON.stringify(data) != '{}')
                  {
-                    //alert(JSON.stringify(data));
                     var matrizHorasIntensidad = [];
                     for (var i = 0; i < 10; i++)
                     {
@@ -264,11 +350,21 @@ $('.btnFilterAnalysis').click(function(){
 	});
 
 $('.btn_sign_out').click(function(){
-    window.location.href="/doctor/login";
+   $.ajax({
+            url: '/doctor/logout/'+idDoctorActual,
+            type: "PUT",
+            beforeSend: function(xhr){
+                 xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+            },
+            success: function(data) {
+                 window.location.href="/";
+            }
+       });
+
 });
 
 $('.myAccountLink').click(function(){
-    window.location.href="/info/"+idDoctorActual;
+    window.location.href="/info";
 });
 
 
@@ -400,16 +496,10 @@ function mostrarSintomas(sintomasP)
 {
     $('.symptoms').empty();
     var str = '<h5>Symptoms: </h5><ul class="list-group">';
-        //alert(JSON.stringify(sintomasP));
-        //$.each(sintomasP, function(i,sintomaActual) {
-            //str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parserInt(sintomasP[i].symptom)]+'</li>';
-            //str=str+parserInt(sintomasP[i].symptom);
-        //});
     $.each(sintomasP, function(i,sintomaActual) {
            str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parseInt(sintomasP[i].symptom)]+'</li>';
     });
     str = str+'</ul>';
-        //alert(str);
     $('.symptoms').append(str);
 };
 
@@ -484,24 +574,29 @@ function mostrarInfoPaciente(nombre,docID,email,fechaNacimiento,generoN)
 $('.listaEpisodios').change(function(){
     var episodioActual = $('.listaEpisodios').val();
     var path = '/api/patient/'+idPacienteActual+"/episode/"+episodioActual;
-    $.get(
-        path,
-        function(data) {
-            mostrarFecha(data.pubDate);
-            mostrarHorasSueno(data.sllepHours);
-            mostrarIntensidad(data.intensity);
-            mostrarSuenoRegular(data.regularSleep);
-            mostrarEstres(data.stress);
-            mostrarLugar(data.location);
-            mostrarComida(data.foods);
-            mostrarMedicinas(data.medicines);
-            mostrarDeportes(data.sports);
-            mostrarSintomas(data.symptoms);
-            mostrarAudio(data.urlId);
-        }
 
-
-    );
+    $.ajax({
+         url: '/api/patient/'+idPacienteActual+"/episode/"+episodioActual,
+         type: "GET",
+         beforeSend: function(xhr){
+              xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+              xhr.setRequestHeader('who', 'DOC');
+              xhr.setRequestHeader('id', idDoctorActual);
+         },
+         success: function(data) {
+              mostrarFecha(data.pubDate);
+              mostrarHorasSueno(data.sllepHours);
+              mostrarIntensidad(data.intensity);
+              mostrarSuenoRegular(data.regularSleep);
+              mostrarEstres(data.stress);
+              mostrarLugar(data.location);
+              mostrarComida(data.foods);
+              mostrarMedicinas(data.medicines);
+              mostrarDeportes(data.sports);
+              mostrarSintomas(data.symptoms);
+              mostrarAudio(data.urlId);
+         }
+    });
 });
 
 function mostrarAnalisis1(chartMeses)
@@ -680,6 +775,7 @@ function mostrarAnalisis3(datos)
         });
 };
 
+<<<<<<< HEAD
 function  cambiarLetras(w)
 	{
 		//alert(w);
@@ -728,6 +824,56 @@ function encriptar(w) {
     return moduloPalabra(r);
 }
 
+||||||| merged common ancestors
+=======
+function  cambiarLetras(w)
+	{
+		var wr="";
+		var arr=w.split('');
+		var arrresp=[arr.length];
+		if(w!=""){
+			for( i= 0; i<arr.length;i++)
+			{
+				var a=letras[arr[i]];
+				arrresp[i]=a;
+			}
+
+			for( i= 0; i<arrresp.length;i++)
+			{
+				wr+=arrresp[i];
+			}
+
+		}
+		return wr;
+	}
+
+function moduloPalabra( w)
+	{
+		var r=w.split('');
+		var respuesta= [w.length];
+		var resp="";
+		if(w!=""){
+
+			for( i= 0; i<w.length-1;i++)
+			{
+				respuesta[i]=r[i+1];
+			}
+			respuesta[w.length-1]=r[0];
+			for( i= 0; i<respuesta.length;i++)
+			{
+				resp+=respuesta[i];
+			}
+
+		}
+		return resp;
+	}
+
+function encriptar(w) {
+    var r = cambiarLetras(w);
+    return moduloPalabra(r);
+}
+
+>>>>>>> f7c155bfc5300cbdfdaf6933d6ad4c0386305a9f
 
 
 });

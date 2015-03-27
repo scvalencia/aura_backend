@@ -91,7 +91,7 @@ $(function() {
                 $.ajax({
                     type: 'POST',
                     url: path,
-                    data: JSON.stringify (toSend),
+                    data: JSON.stringify (toSend),ijs
                     success: function(data) {
                     if (JSON.stringify(data)=="{}")
                     {
@@ -99,7 +99,7 @@ $(function() {
                     }
                     else
                     {
-                        window.location.href="/search/"+data.id;
+                        window.location.href="/";
                     }
                     },
                     contentType: "application/json",
