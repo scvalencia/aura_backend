@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by scvalencia on 4/17/15.
  */
-@With(HttpsRequired.class)
+
 public class AuraAuthManager {
 
     public final static String CAESAR_CIPHER = "CAESAR_CIPHER";
