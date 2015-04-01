@@ -33,7 +33,7 @@ import com.stormpath.sdk.client.Client;
  * Created by scvalencia on 3/9/15.
  */
 @CorsComposition.Cors
-public class PatientController extends Controller {
+public class PatientController extends HttpsController{
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");

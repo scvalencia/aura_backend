@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.security.SecureRandom;
 
 @CorsComposition.Cors
-public class DoctorController extends Controller {
+public class DoctorController extends HttpsController {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
