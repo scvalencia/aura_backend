@@ -58,6 +58,7 @@ POST           /api/patient/:id/voice_episode             controllers.PatientCon
 GET            /doctor/login                              controllers.Aura.login()
 
 POST           /doctor/authenticate                       controllers.DoctorController.authenticate()
+POST           /patient/authenticate                      controllers.PatientController.authenticate()
 
 GET            /search/*session                             controllers.Aura.search(session: String)
 GET            /info/*session                               controllers.Aura.info(session: String)
