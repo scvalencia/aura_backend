@@ -12,6 +12,7 @@ import play.mvc.Result;
 import play.libs.Json;
 
 import java.util.List;
+import java.util.UUID;
 
 @CorsComposition.Cors
 public class DoctorController extends Controller {
@@ -96,9 +97,11 @@ public class DoctorController extends Controller {
         if(doctorObject == null) {
             return ok(Json.toJson(result));
         }
+
         boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
         if(authentication) {
+            doctorObject.setToken(UUID.randomUUID().toString());
             return ok(Json.toJson(doctorObject));
         }
         return ok(Json.toJson(result));

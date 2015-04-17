@@ -12,6 +12,7 @@ create table doctor (
   password                  varchar(255),
   discipline                integer,
   link                      varchar(255),
+  token                     varchar(255),
   constraint pk_doctor primary key (id))
 ;
 
@@ -49,6 +50,7 @@ create table patient (
   date                      timestamp,
   email                     varchar(255),
   gender                    integer,
+  token                     varchar(255),
   constraint pk_patient primary key (id))
 ;
 

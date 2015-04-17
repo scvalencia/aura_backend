@@ -38,6 +38,8 @@ public class Doctor extends Model {
 
     private String link;
 
+    private String token;
+
     public Doctor() { }
 
     public static Doctor create(String emailP, String nombreP, int especialidadP, String passwordP, Long docIdentidadP, Date bDate, int genderP) {
@@ -49,6 +51,7 @@ public class Doctor extends Model {
         d.date = bDate;
         d.password = BCrypt.hashpw(passwordP, BCrypt.gensalt());
         d.discipline= especialidadP;
+        d.token = null;
         return d;
     }
 
@@ -115,6 +118,14 @@ public class Doctor extends Model {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = BCrypt.hashpw(token, BCrypt.gensalt());
     }
 
     public static Doctor bind(JsonNode j) {

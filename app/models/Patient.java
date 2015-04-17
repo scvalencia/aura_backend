@@ -37,6 +37,8 @@ public class Patient extends Model {
 
     private int gender;
 
+    private String token;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Episode> episodes;
 
@@ -54,6 +56,7 @@ public class Patient extends Model {
         p.email = email;
         p.gender = gender;
         p.episodes = new ArrayList<Episode>();
+        p.token = null;
         return p;
     }
 
@@ -100,6 +103,14 @@ public class Patient extends Model {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public List<Episode> getEpisodes() {
