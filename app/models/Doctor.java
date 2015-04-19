@@ -125,7 +125,7 @@ public class Doctor extends Model {
     }
 
     public void setToken(String token) {
-        this.token = BCrypt.hashpw(token, BCrypt.gensalt());
+        this.token = token;
     }
 
     public static Doctor bind(JsonNode j) {
@@ -152,6 +152,16 @@ public class Doctor extends Model {
         o.remove("password");
         return o;
     }
+
+    public ObjectNode cleverMute() {
+        JsonNode e = Json.toJson(this);
+        ObjectNode o = (ObjectNode) e;
+        o.remove("token");
+        o.remove("password");
+        return o;
+
+    }
+
 
     private static Date parseDate(String representation) {
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
@@ -183,8 +193,17 @@ public class Doctor extends Model {
         if (encryptedPassword == null) {
             return false;
         }
+        System.out.println(candidate);
 
         return BCrypt.checkpw(candidate, encryptedPassword);
+    }
+
+    public static boolean checkToken(String candidate, String encryptedToken) {
+        if (candidate == null || encryptedToken == null)
+            return false;
+
+        return false;
+
     }
 }
 

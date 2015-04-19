@@ -141,6 +141,15 @@ public class Patient extends Model {
         return o;
     }
 
+    public ObjectNode cleverMute() {
+        JsonNode e = Json.toJson(this);
+        ObjectNode o = (ObjectNode) e;
+        o.remove("token");
+        o.remove("password");
+        return o;
+
+    }
+
     private static Date parseDate(String representation) {
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 

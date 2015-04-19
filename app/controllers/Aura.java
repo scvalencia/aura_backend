@@ -18,7 +18,8 @@ public class Aura extends Controller {
 
 
     public static Result index() {
-        return ok(login.render(""));
+        return unauthorized("you must log in to use this function");
+
     }
 
     public static Result token(String path) {

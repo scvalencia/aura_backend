@@ -18,7 +18,7 @@ PUT            /api/doctor/:id                            controllers.DoctorCont
 # Deletes a single doctor given the ID
 DELETE         /api/doctor/:id                            controllers.DoctorController.delete(id : Long)
 # Gets every single doctor in the database
-GET            /api/doctor                                controllers.DoctorController.get()
+#GET            /api/doctor                                controllers.DoctorController.get()
 # Adds an info link to a doctor
 POST           /api/doctor/:id/link                       controllers.DoctorController.addLink(id : Long)
 ########################################################################################################################
@@ -57,7 +57,12 @@ POST           /api/patient/:id/voice_episode             controllers.PatientCon
 ########################################################################################################################
 GET            /doctor/login                              controllers.Aura.login()
 
+PUT            /patient/logout/:id                        controllers.PatientController.logout(id : Long)
+
+PUT            /doctor/logout/:id                         controllers.DoctorController.logout(id : Long)
+
 POST           /doctor/authenticate                       controllers.DoctorController.authenticate()
+
 POST           /patient/authenticate                      controllers.PatientController.authenticate()
 
 GET            /search/*session                           controllers.Aura.search(session: String)

@@ -16,6 +16,9 @@ import org.apache.http.util.EntityUtils;
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.*;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,6 +28,9 @@ import java.util.*;
  */
 @CorsComposition.Cors
 public class PatientController extends Controller {
+
+    private static SecureRandom random = new SecureRandom();
+    private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result create() throws Exception {
@@ -39,8 +45,37 @@ public class PatientController extends Controller {
         ObjectNode result = Json.newObject();
         if(p == null)
             return ok(Json.toJson(result));
-        else
-            return ok(Json.toJson(p));
+        else {
+            String who = request().getHeader("who");
+            String requestId = request().getHeader("id");
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+
+            if(who.equals("DOC")) {
+                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
+                if(doc != null) {
+                    if(authToken.equals(doc.getToken())) {
+                        return ok(Json.toJson(p.cleverMute()));
+                    }
+                } else {
+                    return ok("AUTH ERROR");
+                }
+            }
+            else {
+                if(requestId.equals(id + "")) {
+                    if(authToken.equals(p.getToken())) {
+                        return ok(Json.toJson(p.cleverMute()));
+                    } else {
+                        return ok("AUTH ERROR");
+                    }
+                }
+
+            }
+
+
+        }
+
+        return ok("El paciente no existe");
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -52,10 +87,15 @@ public class PatientController extends Controller {
         if(oldPatient == null)
             return ok(Json.toJson(result));
         else {
-            oldPatient.updatePatient(newPatient);
-            oldPatient.save();
-            return ok(Json.toJson(oldPatient));
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(oldPatient.getToken())) {
+                oldPatient.updatePatient(newPatient);
+                oldPatient.save();
+                return ok(Json.toJson(oldPatient.cleverMute()));
+            }
         }
+        return ok("El paciente no existe");
     }
 
     public static Result delete(long id) {
@@ -82,36 +122,44 @@ public class PatientController extends Controller {
         if(p == null)
             return ok(Json.toJson(result));
         else {
-            Episode e = Episode.bind(j);
-            JsonNode symptoms = j.findValues("symptoms").get(0);
-            JsonNode foods = j.findValues("foods").get(0);
-            JsonNode medicines = j.findValues("medicines").get(0);
-            JsonNode sports = j.findValues("sports").get(0);
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            for(JsonNode symptom : symptoms) {
-                Symptom symptomObject = Symptom.bind(symptom);
-                e.addSymptom(symptomObject);
+            if(authToken.equals(p.getToken())) {
+                Episode e = Episode.bind(j);
+                JsonNode symptoms = j.findValues("symptoms").get(0);
+                JsonNode foods = j.findValues("foods").get(0);
+                JsonNode medicines = j.findValues("medicines").get(0);
+                JsonNode sports = j.findValues("sports").get(0);
+
+                for(JsonNode symptom : symptoms) {
+                    Symptom symptomObject = Symptom.bind(symptom);
+                    e.addSymptom(symptomObject);
+                }
+
+                for(JsonNode food : foods) {
+                    Food foodObject = Food.bind(food);
+                    e.addFood(foodObject);
+                }
+
+                for(JsonNode medicine : medicines) {
+                    Medicine medicneObject = Medicine.bind(medicine);
+                    e.addMedicine(medicneObject);
+                }
+
+                for(JsonNode sport : sports) {
+                    Sport sportObject = Sport.bind(sport);
+                    e.addSport(sportObject);
+                }
+
+                p.addEpisode(e);
+                p.save();
+
+                return Results.created(Json.toJson(e.getNotification()));
+            } else {
+                return ok("AUTH ERROR");
             }
 
-            for(JsonNode food : foods) {
-                Food foodObject = Food.bind(food);
-                e.addFood(foodObject);
-            }
-
-            for(JsonNode medicine : medicines) {
-                Medicine medicneObject = Medicine.bind(medicine);
-                e.addMedicine(medicneObject);
-            }
-
-            for(JsonNode sport : sports) {
-                Sport sportObject = Sport.bind(sport);
-                e.addSport(sportObject);
-            }
-
-            p.addEpisode(e);
-            p.save();
-
-            return Results.created(Json.toJson(e.getNotification()));
         }
     }
 
@@ -122,9 +170,35 @@ public class PatientController extends Controller {
         if(p == null)
             return ok(Json.toJson(result));
         else {
-            List<Episode> es = p.getEpisodes();
-            return ok(Json.toJson(es));
+            String who = request().getHeader("who");
+            String requestId = request().getHeader("id");
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+
+            if(who.equals("DOC")) {
+                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
+                if(doc != null) {
+                    if(authToken.equals(doc.getToken())) {
+                        List<Episode> es = p.getEpisodes();
+                        return ok(Json.toJson(es));
+                    }
+                } else {
+                    return ok("AUTH ERROR");
+                }
+            }
+            else {
+                if(requestId.equals(id + "")) {
+                    if(authToken.equals(p.getToken())) {
+                        List<Episode> es = p.getEpisodes();
+                        return ok(Json.toJson(es));
+                    } else {
+                        return ok("AUTH ERROR");
+                    }
+                }
+
+            }
         }
+        return ok(Json.toJson(result));
     }
 
     public static Result getEpisodesInRange(long id, String f1, String f2) {
@@ -136,12 +210,42 @@ public class PatientController extends Controller {
             ObjectNode result = Json.newObject();
             return ok(Json.toJson(result));
         }
-        List<Episode> es = p.getEpisodes();
-        List<Episode> ans = new ArrayList<Episode>();
-        for(Episode e : es)
-                if(e.getPubDate().after(date1) && e.getPubDate().before(date2))
-                    ans.add(e);
-        return ok(Json.toJson(ans));
+        else {
+
+            List<Episode> es = p.getEpisodes();
+            List<Episode> ans = new ArrayList<Episode>();
+            for(Episode e : es)
+                    if(e.getPubDate().after(date1) && e.getPubDate().before(date2))
+                        ans.add(e);
+
+            String who = request().getHeader("who");
+            String requestId = request().getHeader("id");
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+
+            if(who.equals("DOC")) {
+                Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
+                if(doc != null) {
+                    if(authToken.equals(doc.getToken())) {
+                        return ok(Json.toJson(ans));
+                    }
+                } else {
+                    return ok("AUTH ERROR");
+                }
+            }
+            else {
+                if(requestId.equals(id + "")) {
+                    if(authToken.equals(p.getToken())) {
+                        return ok(Json.toJson(ans));
+                    } else {
+                        return ok("AUTH ERROR");
+                    }
+                }
+
+            }
+
+        }
+        return ok("El paciente no existe");
     }
 
     public static Result getEpisode(long id1, long id2) throws Exception {
@@ -173,19 +277,6 @@ public class PatientController extends Controller {
             e.printStackTrace();
         }
         return fecha;
-    }
-
-    public static List<Episode> episodesInRange(long id, String f1, String f2) {
-        Date date1, date2;
-        date1 = parseDate(f1);
-        date2 = parseDate(f2);
-        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
-        List<Episode> es = p.getEpisodes();
-        List<Episode> ans = new ArrayList<Episode>();
-        for(Episode e : es)
-            if(e.getPubDate().after(date1) && e.getPubDate().before(date2))
-                ans.add(e);
-        return ans;
     }
 
     public static Result getAnalysisSleepHours(Long idP, String f1, String f2){
@@ -323,7 +414,10 @@ public class PatientController extends Controller {
         boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
 
         if(authentication) {
-            return ok(Json.toJson(patientObject));
+            patientObject.setToken(new BigInteger(130, random).toString(32).toString());
+            patientObject.save();
+            response().setHeader(ETAG, auth.auraEncrypt(patientObject.getToken()));
+            return ok(Json.toJson(patientObject.cleverMute()));
         }
         return ok(Json.toJson(result));
     }
@@ -393,6 +487,16 @@ public class PatientController extends Controller {
     }
 
 
+    public static Result logout(long id) {
+        Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+        if(patientObject != null) {
+            patientObject.setToken(null);
+            patientObject.save();
+            return ok();
+        }
+        else
+            return ok("ERROR");
+    }
 }
 
 class Analysis3 {

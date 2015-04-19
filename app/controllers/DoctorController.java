@@ -11,11 +11,16 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.libs.Json;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
+import java.security.SecureRandom;
 
 @CorsComposition.Cors
 public class DoctorController extends Controller {
+
+    private static SecureRandom random = new SecureRandom();
+    private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result create() throws Exception {
@@ -26,7 +31,7 @@ public class DoctorController extends Controller {
             return ok("El doctor con número de identificación " + d.getId() + " ya existe en Aura.");
         else {
             d.save();
-            return ok(Json.toJson(d));
+            return ok(Json.toJson(d.cleverMute()));
         }
     }
 
@@ -35,8 +40,14 @@ public class DoctorController extends Controller {
         ObjectNode result = Json.newObject();
         if(doctor == null)
             return ok(Json.toJson(result));
-        else
-            return ok(Json.toJson(doctor));
+        else {
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(doctor.getToken())) {
+                return ok(Json.toJson(doctor.cleverMute()));
+            }
+            return ok("AUTH ERROR");
+        }
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -47,11 +58,16 @@ public class DoctorController extends Controller {
         if(oldDoctor == null)
             return ok(Json.toJson(result));
         else {
-            Doctor newDoctor = Doctor.bind(j);
-            newDoctor.setLink(oldDoctor.getLink());
-            oldDoctor.updateDoctor(newDoctor);
-            oldDoctor.save();
-            return ok(Json.toJson(oldDoctor));
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(oldDoctor.getToken())) {
+                Doctor newDoctor = Doctor.bind(j);
+                newDoctor.setLink(oldDoctor.getLink());
+                oldDoctor.updateDoctor(newDoctor);
+                oldDoctor.save();
+                return ok(Json.toJson(oldDoctor.cleverMute()));
+            }
+            return ok("AUTH ERROR");
         }
     }
 
@@ -61,14 +77,14 @@ public class DoctorController extends Controller {
         if(doctor == null)
             return ok(Json.toJson(result));
         else {
-            doctor.delete();
-            return ok(Json.toJson(doctor));
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(doctor.getToken())) {
+                doctor.delete();
+                return ok(Json.toJson(doctor.cleverMute()));
+            }
+            return ok("AUTH ERROR");
         }
-    }
-
-    public static Result get() {
-        List<Doctor> doctors = new Model.Finder(String.class, Doctor.class).all();
-        return ok(Json.toJson(doctors));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -79,10 +95,16 @@ public class DoctorController extends Controller {
         if(doctor == null)
             return ok(Json.toJson(result));
         else {
-            String link = Doctor.bindLink(j);
-            doctor.setLink(link);
-            doctor.save();
-            return ok(Json.toJson(doctor));
+            String token = request().getHeader("auth-token");
+            System.out.println(token);
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(doctor.getToken())) {
+                String link = Doctor.bindLink(j);
+                doctor.setLink(link);
+                doctor.save();
+                return ok(Json.toJson(doctor.cleverMute()));
+            }
+            return ok("AUTH ERROR");
         }
     }
 
@@ -101,9 +123,23 @@ public class DoctorController extends Controller {
         boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
         if(authentication) {
-            doctorObject.setToken(UUID.randomUUID().toString());
-            return ok(Json.toJson(doctorObject));
+            System.out.println("dsfsdf");
+            doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
+            doctorObject.save();
+            response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));
+            return ok(Json.toJson(doctorObject.cleverMute()));
         }
         return ok(Json.toJson(result));
+    }
+
+    public static Result logout(long id) {
+        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
+        if(doctorObject != null) {
+            doctorObject.setToken(null);
+            doctorObject.save();
+            return ok();
+        }
+        else
+            return ok("ERROR");
     }
 }
