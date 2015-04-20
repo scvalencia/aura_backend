@@ -96,7 +96,6 @@ public class DoctorController extends Controller {
             return ok(Json.toJson(result));
         else {
             String token = request().getHeader("auth-token");
-            System.out.println(token);
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
             if(authToken.equals(doctor.getToken())) {
                 String link = Doctor.bindLink(j);
@@ -123,10 +122,9 @@ public class DoctorController extends Controller {
         boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
         if(authentication) {
-            System.out.println("dsfsdf");
             doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
             doctorObject.save();
-            response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));
+            response().setHeader("auth-token", auth.auraEncrypt(doctorObject.getToken()));
             return ok(Json.toJson(doctorObject.cleverMute()));
         }
         return ok(Json.toJson(result));
@@ -135,9 +133,14 @@ public class DoctorController extends Controller {
     public static Result logout(long id) {
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
         if(doctorObject != null) {
-            doctorObject.setToken(null);
-            doctorObject.save();
-            return ok();
+            String token = request().getHeader("auth-token");
+            String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
+            if(authToken.equals(doctorObject.getToken())) {
+                doctorObject.setToken(null);
+                doctorObject.save();
+                return ok();
+            }
+            return ok("AUTH ERROR");
         }
         else
             return ok("ERROR");
