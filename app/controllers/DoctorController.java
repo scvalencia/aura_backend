@@ -30,7 +30,9 @@ public class DoctorController extends Controller {
         if(doctor != null)
             return ok("El doctor con número de identificación " + d.getId() + " ya existe en Aura.");
         else {
+            d.setToken(new BigInteger(130, random).toString(32).toString());
             d.save();
+            session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
             return ok(Json.toJson(d.cleverMute()));
         }
     }
@@ -125,12 +127,15 @@ public class DoctorController extends Controller {
             doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
             doctorObject.save();
             response().setHeader("auth-token", auth.auraEncrypt(doctorObject.getToken()));
+            session().put(id.toString(), auth.auraEncrypt(doctorObject.getToken()));
             return ok(Json.toJson(doctorObject.cleverMute()));
         }
         return ok(Json.toJson(result));
     }
 
     public static Result logout(long id) {
+        //TODO cambio, adicion siguiente linea
+        session().clear();
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
         if(doctorObject != null) {
             String token = request().getHeader("auth-token");
