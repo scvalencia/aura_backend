@@ -65,9 +65,7 @@ POST           /doctor/authenticate                       controllers.DoctorCont
 
 POST           /patient/authenticate                      controllers.PatientController.authenticate()
 
-GET            /search/*session                           controllers.Aura.search(session: String)
-
-GET            /info/*session                             controllers.Aura.info(session: String)
+GET            /info                                      controllers.Aura.info()
 
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)
