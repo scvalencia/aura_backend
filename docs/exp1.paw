@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>90B2834D-91EB-4CB8-AA3E-71E4F0CDB48C</UUID>
-        <nextObjectID>201</nextObjectID>
+        <nextObjectID>215</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -82,7 +82,7 @@
     <object type="LMREQUEST" id="z156">
         <attribute name="body" type="string">[{"data":{"json":"{\\"name\\":\\"Orlando Sierra\\",\\"email\\":\\"os.sierra48@gmail.com\\",\\"password\\":\\"amor\\",\\"discipline\\":\\"1\\",\\"date\\":\\"1940-02-05\\",\\"gender\\":\\"1\\",\\"id\\":\\"1010211108\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">B7D1988D-BD9C-417A-A693-8B4405020F42</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/doctor</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/doctor</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -215,7 +215,7 @@
     <object type="LMREQUEST" id="z167">
         <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"123\\",\\"name\\":\\"Urbana\\",\\"email\\":\\"dfs2@sd.com\\",\\"password\\":\\"cami\\",\\"date\\":\\"1993-09-09\\",\\"gender\\":\\"1\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">78CD5052-36E0-42E9-9F8C-2C4B9EDF0ABA</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/patient</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/patient</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -233,7 +233,7 @@
         <attribute name="order" type="int64">1</attribute>
         <attribute name="name" type="string">PatientCRUD</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z182"></relationship>
-        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z194 z167"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z167 z204 z207 z211 z194"></relationship>
         <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
         <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
         <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
@@ -249,7 +249,7 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z167"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z170">
-        <attribute name="value" type="string">XUpJQZaoOjSTSGamklNLpKQkIS</attribute>
+        <attribute name="value" type="string">PYpYRIaagTlVJaopbWkVIUnLnQ</attribute>
         <attribute name="order" type="int64">0</attribute>
         <attribute name="name" type="string">auth-token</attribute>
         <attribute name="enabled" type="bool">1</attribute>
@@ -261,7 +261,7 @@
     <object type="LMREQUEST" id="z171">
         <attribute name="body" type="string">[{"data":{"json":"{}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">A1D8B9A4-8047-46AC-91DA-87FFEB4424AB</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/doctor/54158653790</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/doctor/1010211108</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -276,7 +276,7 @@
     </object>
     <object type="LMREQUEST" id="z172">
         <attribute name="uuid" type="string">5885858E-6EE3-426E-9BF1-A1F2570169B5</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/doctor/54158653790</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/doctor/1010211108</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -288,10 +288,10 @@
         <attribute name="name" type="string">Update</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z158"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z191 z173"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z173 z191"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z173">
-        <attribute name="value" type="string">768v1TuK52jiK69wk22zv1uUkY</attribute>
+        <attribute name="value" type="string">PYpYRIaagTlVJaopbWkVIUnLnQ</attribute>
         <attribute name="order" type="int64">0</attribute>
         <attribute name="name" type="string">auth-token</attribute>
         <attribute name="enabled" type="bool">1</attribute>
@@ -417,9 +417,9 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z187"></relationship>
     </object>
     <object type="LMREQUEST" id="z187">
-        <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"54158653790\\",\\"password\\":\\"medicine\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"1010211108\\",\\"password\\":\\"amor\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">868BA101-6F02-425A-BD3A-107D90FEAE76</attribute>
-        <attribute name="url" type="string">http://localhost:9000/doctor/authenticate</attribute>
+        <attribute name="url" type="string">http://aura-app.herokuapp.com/doctor/authenticate</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -434,7 +434,7 @@
     </object>
     <object type="LMREQUEST" id="z188">
         <attribute name="uuid" type="string">BF6395D4-7F82-4E5E-860C-4687E2A0932A</attribute>
-        <attribute name="url" type="string">http://localhost:9000/doctor/logout/54158653790</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/doctor/logout/1010211108</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -445,12 +445,12 @@
         <attribute name="name" type="string">LogoutDoctor</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z185"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z189"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z189 z202"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z189">
-        <attribute name="value" type="string"></attribute>
+        <attribute name="value" type="string">PYpYRIaagTlVJaopbWkVIUnLnQ</attribute>
         <attribute name="order" type="int64">0</attribute>
-        <attribute name="name" type="string"></attribute>
+        <attribute name="name" type="string">auth-token</attribute>
         <attribute name="enabled" type="bool">1</attribute>
         <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
@@ -488,7 +488,7 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z174"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z193">
-        <attribute name="value" type="string">PAC</attribute>
+        <attribute name="value" type="string">DOC</attribute>
         <attribute name="order" type="int64">0</attribute>
         <attribute name="name" type="string">who</attribute>
         <attribute name="enabled" type="bool">1</attribute>
@@ -499,7 +499,7 @@
     </object>
     <object type="LMREQUEST" id="z194">
         <attribute name="uuid" type="string">E47C8044-F781-4B6A-BF0D-EF219EA79283</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/patient/123</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/patient/123</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -510,10 +510,10 @@
         <attribute name="name" type="string">Read</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z197 z195 z196 z193"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z195 z197 z196 z193"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z195">
-        <attribute name="value" type="string">123</attribute>
+        <attribute name="value" type="string">20042016</attribute>
         <attribute name="order" type="int64">1</attribute>
         <attribute name="name" type="string">id</attribute>
         <attribute name="enabled" type="bool">1</attribute>
@@ -523,7 +523,7 @@
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z194"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z196">
-        <attribute name="value" type="string">NUPQMOhJnmQWakQWjPXSabkRGi</attribute>
+        <attribute name="value" type="string">jkHZSiNIYYnWgSYZahYblPiGOI</attribute>
         <attribute name="order" type="int64">2</attribute>
         <attribute name="name" type="string">auth-token</attribute>
         <attribute name="enabled" type="bool">1</attribute>
@@ -560,7 +560,7 @@
     <object type="LMREQUEST" id="z199">
         <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"123\\",\\"password\\":\\"cami\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">72C7EF4D-3A87-4889-86E7-3DD36A705496</attribute>
-        <attribute name="url" type="string">http://localhost:9000/patient/authenticate</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/patient/authenticate</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -592,5 +592,161 @@
         <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z198"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z202">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z188"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z203">
+        <attribute name="value" type="string">NUPQMOhJnmQWakQWjPXSabkRGi</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">auth-token</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z204"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z204">
+        <attribute name="body" type="string">[{"data":{"json":"{\\"stress\\":true,\\"sleepHours\\":10,\\"medicines\\":[{\\"hoursAgo\\":2,\\"name\\":\\"Dolex\\"},{\\"hoursAgo\\":5,\\"name\\":\\"Loratadina\\"},{\\"hoursAgo\\":12,\\"name\\":\\"Dolex\\"},{\\"hoursAgo\\":1,\\"name\\":\\"Dolex\\"},{\\"hoursAgo\\":3,\\"name\\":\\"Loratadina\\"}],\\"foods\\":[{\\"name\\":\\"Arroz\\",\\"quantity\\":6},{\\"name\\":\\"Te\\",\\"quantity\\":2},{\\"name\\":\\"Arequipe\\",\\"quantity\\":2}],\\"sports\\":[{\\"climate\\":3,\\"intensity\\":8,\\"hydration\\":true,\\"place\\":1,\\"description\\":4},{\\"climate\\":4,\\"intensity\\":8,\\"hydration\\":false,\\"place\\":1,\\"description\\":1}],\\"symptoms\\":[{\\"symptom\\":3},{\\"symptom\\":6},{\\"symptom\\":10}],\\"intensity\\":10,\\"location\\":2,\\"regularSleep\\":false,\\"urlId\\":\\"\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="uuid" type="string">F216CD4E-6DEC-4204-AFC8-43B245246F26</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/patient/123/episode</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">CreateEpisode</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z203 z205"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z205">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z204"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z206">
+        <attribute name="value" type="string">DOC</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">who</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z207"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z207">
+        <attribute name="uuid" type="string">8AEC4DF3-EFFD-42B8-B00C-B0633EE691E7</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/patient/123/episode</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">3</attribute>
+        <attribute name="name" type="string">GetEpisodes</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z208 z206 z209 z210"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z208">
+        <attribute name="value" type="string">1010211108</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">id</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z207"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z209">
+        <attribute name="value" type="string">kGXJIZNJNNLPNVHQkQJMQSihnY</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">auth-token</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z207"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z210">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">3</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z207"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z211">
+        <attribute name="uuid" type="string">2DCCF596-2658-40DB-9579-6CBD0E552683</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/patient/123/episode/2000-09-09/2020-09-09</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">4</attribute>
+        <attribute name="name" type="string">GetEpisodesRange</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z214 z213 z212 z215"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z212">
+        <attribute name="value" type="string">PAC</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">who</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z211"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z213">
+        <attribute name="value" type="string">123</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">id</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z211"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z214">
+        <attribute name="value" type="string">NUPQMOhJnmQWakQWjPXSabkRGi</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">auth-token</attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z211"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z215">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">3</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z211"></relationship>
     </object>
 </database>

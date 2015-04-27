@@ -16,11 +16,11 @@ GET            /api/doctor/:id                            controllers.DoctorCont
 # Updates the information of a single doctor
 PUT            /api/doctor/:id                            controllers.DoctorController.update(id : Long)
 # Deletes a single doctor given the ID
-DELETE         /api/doctor/:id                            controllers.DoctorController.delete(id : Long)
+#DELETE         /api/doctor/:id                            controllers.DoctorController.delete(id : Long)
 # Gets every single doctor in the database
 #GET            /api/doctor                                controllers.DoctorController.get()
 # Adds an info link to a doctor
-POST           /api/doctor/:id/link                       controllers.DoctorController.addLink(id : Long)
+#POST           /api/doctor/:id/link                       controllers.DoctorController.addLink(id : Long)
 ########################################################################################################################
 # patient
 
@@ -33,7 +33,7 @@ PUT            /api/patient/:id                           controllers.PatientCon
 # Removes a single patient given the ID
 DELETE         /api/patient/:id                           controllers.PatientController.delete(id : Long)
 # Gets every single patient in the database
-GET            /api/patient                               controllers.PatientController.get()
+#GET            /api/patient                               controllers.PatientController.get()
 # Adds an episode to a patient
 POST           /api/patient/:id/episode                   controllers.PatientController.createEpisode(id : Long)
 # Gets the episodes of a patient
@@ -65,9 +65,7 @@ POST           /doctor/authenticate                       controllers.DoctorCont
 
 POST           /patient/authenticate                      controllers.PatientController.authenticate()
 
-GET            /search/*session                           controllers.Aura.search(session: String)
-
-GET            /info/*session                             controllers.Aura.info(session: String)
+GET            /info                                      controllers.Aura.info()
 
 # Map static resources from the /public folder to the /assets URL path
 GET            /assets/*file                              controllers.Assets.at(path="/public", file)

@@ -1,23 +1,38 @@
 $(document).ready(function(){
+var idDoctorActual;
+var tokenDoctorActual;
+var tokenDoctorActualEncriptado;
+var letras= {"0":"q", "1":"r", "2":"s", "3":"t", "4":"u", "5":"v", "6":"w", "7":"x", "8":"y", "9":"z", "A":"0", "B":"1", "C":"2", "D":"3", "E":"4", "F":"5", "G":"6", "H":"7", "I":"8", "J":"9", "K":"A", "L":"B", "M":"C", "N":"D", "O":"E", "P":"F", "Q":"G", "R":"H", "S":"I", "T":"J", "U":"K", "V":"L", "W":"M", "X":"N", "Y":"O", "Z":"P", "a":"Q", "b":"R", "c":"S", "d":"T", "e":"U", "f":"V", "g":"W", "h":"X", "i":"Y", "j":"Z", "k":"a", "l":"b", "m":"c", "n":"d", "o":"e", "p":"f", "q":"g", "r":"h", "s":"i", "t":"j", "u":"k", "v":"l", "w":"m", "x":"n", "y":"o", "z":"p"};
 var sports = ["No activity","American Football","Baseball","Basketball","Bowling","Football","Dancing","Football","Golf","Hockey","Ping-Pong","Rugby","Running","Swimming","Tennis","Volleyball","Walking","Other"];
 var climate = ["sunny.svg","partly_sunny.svg","cloudy.svg","raining.svg","thunderstorm.svg","snowing.svg"];
 var locationImg = ["sinus.svg","tension.svg","cluster_left.svg","cluster_right.svg","migraine_left.svg","migraine_right.svg"];
 var location = ["Sinus","Tension","Cluster Left","Cluster Right","Migraine Left","Migraine Right"];
 var signs =["Aura","Depression, ittitability, or excitement","Lack of restful sleep","Stuffy nose or watery eyes","Cravings","Throbbing pain on one or both sides of the head","Eye pain","Neck pain","Frequent urination","Yawning","Numbness or tingling","Nausea or vomiting","Light, noise, or smells worsen pain"];
+
 $(function() {
     $( ".datepickerFrom" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerTo" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerFromAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerToAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
+    var idToken = $('.hiddenId').html().split("--TOKEN--");
+    idDoctorActual = idToken[0];
+    tokenDoctorActual = idToken[1];
+    tokenDoctorActualEncriptado = encriptar(tokenDoctorActual);
+    $.ajax({
+             url: "/api/doctor/"+idDoctorActual,
+             type: "GET",
+             beforeSend: function(xhr){xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);},
+             success: function(data) {
+                $('.nameDr').append(data.name);
+             }
+          });
+
   });
 var idPacienteActual;
-var idDoctorActual=window.location.pathname.split("/")[2];
-$.get('/api/doctor/'+idDoctorActual,function(data) {
-
-    $('.nameDr').append(data.name);
-});
 
 
+//$('.hiddenId').append($('.hiddenId').html());
+$('.hiddenId').hide();
 $('.divName').hide();
 $('.divInfoEpisodio').hide();
 $('.divAnalysisAfuera').hide();
@@ -70,30 +85,35 @@ $('.findByID').click(function(){
         }
         else
         {
-            var path = '/api/patient/'+idPaciente;
-            $.get(
-                path,
-                function(data) {
-                    //alert(JSON.stringify(data));
-                    if (data.name==null)
-                    {
-                        $('.errorBusquedaID' ).empty();
-                        $('.errorBusquedaID' ).append("Patient not found");
-                        $('.divEpisodios').hide();
-                        $('.divAnalysis').hide();
-                    }
-                    else
-                    {
-                        $('.errorBusquedaID' ).empty();
-                        mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
-                        $('.divInfoEpisodio').show();
-                        mostrarListaepisodios(data.episodes);
-                        $('.divEpisodios').show();
-                        $('.divAnalysis').show();
-                    }
-                }
 
-            );
+            $.ajax({
+                    url: "/api/patient/"+idPaciente,
+                    type: "GET",
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+                        xhr.setRequestHeader('who', 'DOC');
+                        xhr.setRequestHeader('id', idDoctorActual);
+                    },
+                    success: function(data) {
+                        if (data.name==null)
+                        {
+                             $('.errorBusquedaID' ).empty();
+                             $('.errorBusquedaID' ).append("Patient not found");
+                             $('.divEpisodios').hide();
+                             $('.divAnalysis').hide();
+                             }
+                        else
+                        {
+                             $('.errorBusquedaID' ).empty();
+                             mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
+                             $('.divInfoEpisodio').show();
+                             mostrarListaepisodios(data.episodes);
+                             $('.divEpisodios').show();
+                             $('.divAnalysis').show();
+                        }
+                       //$('.nameDr').append(data.name);
+                    }
+                 });
         }
 	});
 
@@ -111,13 +131,19 @@ $('.btnFilter').click(function(){
     {
         $('.errorFechas').empty();
         var path = '/api/patient/'+idPacienteActual+'/episode/'+$('.datepickerFrom').val()+'/'+$('.datepickerTo').val();
-        $.get(
-            path,
-            function(data) {
-                //alert(JSON.stringify(data))
-                mostrarListaepisodios(data);
-            }
-        );
+
+        $.ajax({
+             url: "/api/patient/"+idPacienteActual+'/episode/'+$('.datepickerFrom').val()+'/'+$('.datepickerTo').val(),
+             type: "GET",
+             beforeSend: function(xhr){
+                  xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+                  xhr.setRequestHeader('who', 'DOC');
+                  xhr.setRequestHeader('id', idDoctorActual);
+             },
+             success: function(data) {
+                  mostrarListaepisodios(data);
+             }
+             });
     }
 
 	});
@@ -158,7 +184,6 @@ $('.btnFilterAnalysis').click(function(){
                         var anio = dato[0].split(" ")[0];
                         var mes = parseInt(dato[0].split(" ")[1])+1;
                         chartMes[0]=anio+"-"+mes;
-                        //alert(dato[0].replace(' ','-'));
                         chartMes[dato[1]] = dato[2];
                         for (var j = 1; j < datos.length; j++)
                         {
@@ -176,7 +201,6 @@ $('.btnFilterAnalysis').click(function(){
              function(data) {
                  if (JSON.stringify(data) != '{}')
                  {
-                    //alert(JSON.stringify(data));
                     var matrizHorasIntensidad = [];
                     for (var i = 0; i < 10; i++)
                     {
@@ -214,11 +238,21 @@ $('.btnFilterAnalysis').click(function(){
 	});
 
 $('.btn_sign_out').click(function(){
-    window.location.href="/doctor/login";
+   $.ajax({
+            url: '/doctor/logout/'+idDoctorActual,
+            type: "PUT",
+            beforeSend: function(xhr){
+                 xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+            },
+            success: function(data) {
+                 window.location.href="/";
+            }
+       });
+
 });
 
 $('.myAccountLink').click(function(){
-    window.location.href="/info/"+idDoctorActual;
+    window.location.href="/info";
 });
 
 
@@ -350,16 +384,10 @@ function mostrarSintomas(sintomasP)
 {
     $('.symptoms').empty();
     var str = '<h5>Symptoms: </h5><ul class="list-group">';
-        //alert(JSON.stringify(sintomasP));
-        //$.each(sintomasP, function(i,sintomaActual) {
-            //str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parserInt(sintomasP[i].symptom)]+'</li>';
-            //str=str+parserInt(sintomasP[i].symptom);
-        //});
     $.each(sintomasP, function(i,sintomaActual) {
            str = str+'<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">'+signs[parseInt(sintomasP[i].symptom)]+'</li>';
     });
     str = str+'</ul>';
-        //alert(str);
     $('.symptoms').append(str);
 };
 
@@ -434,24 +462,29 @@ function mostrarInfoPaciente(nombre,docID,email,fechaNacimiento,generoN)
 $('.listaEpisodios').change(function(){
     var episodioActual = $('.listaEpisodios').val();
     var path = '/api/patient/'+idPacienteActual+"/episode/"+episodioActual;
-    $.get(
-        path,
-        function(data) {
-            mostrarFecha(data.pubDate);
-            mostrarHorasSueno(data.sllepHours);
-            mostrarIntensidad(data.intensity);
-            mostrarSuenoRegular(data.regularSleep);
-            mostrarEstres(data.stress);
-            mostrarLugar(data.location);
-            mostrarComida(data.foods);
-            mostrarMedicinas(data.medicines);
-            mostrarDeportes(data.sports);
-            mostrarSintomas(data.symptoms);
-            mostrarAudio(data.urlId);
-        }
 
-
-    );
+    $.ajax({
+         url: '/api/patient/'+idPacienteActual+"/episode/"+episodioActual,
+         type: "GET",
+         beforeSend: function(xhr){
+              xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+              xhr.setRequestHeader('who', 'DOC');
+              xhr.setRequestHeader('id', idDoctorActual);
+         },
+         success: function(data) {
+              mostrarFecha(data.pubDate);
+              mostrarHorasSueno(data.sllepHours);
+              mostrarIntensidad(data.intensity);
+              mostrarSuenoRegular(data.regularSleep);
+              mostrarEstres(data.stress);
+              mostrarLugar(data.location);
+              mostrarComida(data.foods);
+              mostrarMedicinas(data.medicines);
+              mostrarDeportes(data.sports);
+              mostrarSintomas(data.symptoms);
+              mostrarAudio(data.urlId);
+         }
+    });
 });
 
 function mostrarAnalisis1(chartMeses)
@@ -629,6 +662,53 @@ function mostrarAnalisis3(datos)
 
         });
 };
+
+function  cambiarLetras(w)
+	{
+		var wr="";
+		var arr=w.split('');
+		var arrresp=[arr.length];
+		if(w!=""){
+			for( i= 0; i<arr.length;i++)
+			{
+				var a=letras[arr[i]];
+				arrresp[i]=a;
+			}
+
+			for( i= 0; i<arrresp.length;i++)
+			{
+				wr+=arrresp[i];
+			}
+
+		}
+		return wr;
+	}
+
+function moduloPalabra( w)
+	{
+		var r=w.split('');
+		var respuesta= [w.length];
+		var resp="";
+		if(w!=""){
+
+			for( i= 0; i<w.length-1;i++)
+			{
+				respuesta[i]=r[i+1];
+			}
+			respuesta[w.length-1]=r[0];
+			for( i= 0; i<respuesta.length;i++)
+			{
+				resp+=respuesta[i];
+			}
+
+		}
+		return resp;
+	}
+
+function encriptar(w) {
+    var r = cambiarLetras(w);
+    return moduloPalabra(r);
+}
 
 
 

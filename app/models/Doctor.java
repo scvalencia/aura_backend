@@ -193,7 +193,6 @@ public class Doctor extends Model {
         if (encryptedPassword == null) {
             return false;
         }
-        System.out.println(candidate);
 
         return BCrypt.checkpw(candidate, encryptedPassword);
     }
