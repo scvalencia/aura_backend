@@ -4,6 +4,10 @@ package controllers;
 import actions.CorsComposition;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.stormpath.sdk.account.Account;
+import com.stormpath.sdk.application.Application;
+import com.stormpath.sdk.client.Client;
+import com.stormpath.sdk.resource.ResourceException;
 import models.Doctor;
 import play.db.ebean.Model;
 import play.mvc.BodyParser;
@@ -22,6 +26,9 @@ public class DoctorController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
+    private static Stormpath stormpath = Stormpath.getInstance();
+    private static Client client = stormpath.getClient();
+    private static Application application = stormpath.getApplication();
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result create() throws Exception {
@@ -32,9 +39,45 @@ public class DoctorController extends Controller {
             return ok("El doctor con número de identificación " + d.getId() + " ya existe en Aura.");
         else {
             d.setToken(new BigInteger(130, random).toString(32).toString());
-            d.save();
-            session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
-            return ok(Json.toJson(d.cleverMute()));
+
+            try {
+
+                Account account = client.instantiate(Account.class);
+                //Set the account properties
+
+                String[] fullName = d.getName().split(" ");
+                String lastName = fullName[fullName.length-1];
+                String name = "";
+
+                for(int i = 0; i < fullName.length-1; i++) {
+                    name += fullName[i]+" ";
+                }
+
+                //Set the account properties
+                account.setGivenName(name.trim());
+                account.setSurname(lastName);
+                account.setUsername(d.getId() + ""); //optional, defaults to email if unset
+                account.setEmail(d.getEmail());
+                account.setPassword(d.getPassword());
+                application.createAccount(account);
+                boolean added = stormpath.addDoctorToGroup(account);
+
+                if (!added) {
+                    throw new Exception("No se pudo agregar a grupo");
+                }
+
+                d.save();
+                session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
+                return ok(Json.toJson(d.cleverMute()));
+            } catch (ResourceException ex) {
+                System.out.println(ex.getMessage());
+                System.out.println(ex.getDeveloperMessage());
+                System.out.println(ex.getMoreInfo());
+                System.out.println(ex.getStatus());
+                System.out.println(ex.getStormpathError());
+                return badRequest(ex.getMessage());
+            }
+
         }
     }
 
@@ -118,20 +161,28 @@ public class DoctorController extends Controller {
         Long id = j.path("id").asLong();
 
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
-        if(doctorObject == null) {
+        if(doctorObject != null) {
+            boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
+
+            if(authentication) {
+                Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
+                if (account != null && account.isMemberOfGroup("Doctors")) {
+                    doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
+                    doctorObject.save();
+                    response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));
+                    return ok(Json.toJson(doctorObject.cleverMute()));
+                }
+                else {
+                    return unauthorized("Usted no es un doctor");
+                }
+            }
+            else {
+                return unauthorized(Json.toJson(result));
+            }
+        }
+        else {
             return ok(Json.toJson(result));
         }
-
-        boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
-
-        if(authentication) {
-            doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
-            doctorObject.save();
-            response().setHeader("auth-token", auth.auraEncrypt(doctorObject.getToken()));
-            session().put(id.toString(), auth.auraEncrypt(doctorObject.getToken()));
-            return ok(Json.toJson(doctorObject.cleverMute()));
-        }
-        return ok(Json.toJson(result));
     }
 
     public static Result logout(long id) {

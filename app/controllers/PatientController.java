@@ -4,6 +4,7 @@ import actions.CorsComposition;
 import com.amazonaws.util.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.stormpath.sdk.resource.ResourceException;
 import models.*;
 import models.Patient;
 import org.apache.http.HttpResponse;
@@ -24,6 +25,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.stormpath.sdk.account.*;
+import com.stormpath.sdk.application.*;
+import com.stormpath.sdk.client.Client;
+
 /**
  * Created by scvalencia on 3/9/15.
  */
@@ -32,12 +37,52 @@ public class PatientController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
+    private static Stormpath stormpath = Stormpath.getInstance();
+    private static Client client = stormpath.getClient();
+    private static Application application = stormpath.getApplication();
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result create() throws Exception {
         JsonNode j = Controller.request().body().asJson();
         Patient p = Patient.bind(j);
-        p.save();
+
+        try {
+
+            Account account = client.instantiate(Account.class);
+            //Set the account properties
+
+            String[] fullName = p.getName().split(" ");
+            String lastName = fullName[fullName.length-1];
+            String name = "";
+
+            for(int i = 0; i < fullName.length-1; i++) {
+                name += fullName[i]+" ";
+            }
+
+            //Set the account properties
+            account.setGivenName(name.trim());
+            account.setSurname(lastName);
+            account.setUsername(p.getId() + ""); //optional, defaults to email if unset
+            account.setEmail(p.getEmail());
+            account.setPassword(p.getPassword());
+            application.createAccount(account);
+
+            boolean added = stormpath.addPatientToGroup(account);
+
+            if (!added) {
+                throw new Exception("No se pudo agregar a grupo");
+            }
+
+            p.save();
+        } catch (ResourceException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(ex.getDeveloperMessage());
+            System.out.println(ex.getMoreInfo());
+            System.out.println(ex.getStatus());
+            System.out.println(ex.getStormpathError());
+            return badRequest(ex.getMessage());
+        }
+
         return ok(Json.toJson(p.cleverMute()));
     }
 
@@ -459,18 +504,30 @@ public class PatientController extends Controller {
         Long id = j.path("id").asLong();
 
         Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
-        if(patientObject == null) {
+        if(patientObject != null) {
+
+            boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
+
+            if(authentication) {
+                Account account = stormpath.authenticate(id + "", patientObject.getPassword());
+                if (account != null && account.isMemberOfGroup("Patients")) {
+                    patientObject.setToken(new BigInteger(130, random).toString(32).toString());
+                    patientObject.save();
+                    response().setHeader(ETAG, auth.auraEncrypt(patientObject.getToken()));
+                    return ok(Json.toJson(patientObject.cleverMute()));
+                }
+                else {
+                    return unauthorized("Usted no es un paciente");
+                }
+            }
+            else {
+                    return unauthorized(Json.toJson(result));
+            }
+        }
+        else {
             return ok(Json.toJson(result));
         }
-        boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
 
-        if(authentication) {
-            patientObject.setToken(new BigInteger(130, random).toString(32).toString());
-            patientObject.save();
-            response().setHeader(ETAG, auth.auraEncrypt(patientObject.getToken()));
-            return ok(Json.toJson(patientObject.cleverMute()));
-        }
-        return ok(Json.toJson(result));
     }
 
     public static Result plainPatient(Long id) {

@@ -15,7 +15,10 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "9.1-901.jdbc4",
   "com.amazonaws" % "aws-java-sdk" % "1.3.11",
   "org.apache.httpcomponents" % "httpmime" % "4.3",
-  "org.apache.httpcomponents" % "httpcore" % "4.4"
+  "org.apache.httpcomponents" % "httpcore" % "4.4",
+  "com.stormpath.sdk" % "stormpath-sdk-api" % "1.0.RC4.1",
+  "com.stormpath.sdk" % "stormpath-sdk-httpclient" % "1.0.RC4.1" % "runtime",
+  "com.stormpath.sdk" % "stormpath-sdk-oauth" % "1.0.RC4.1" % "runtime"
   //"com.google.code.gson" % "gson" % "2.3",
   //"com.googlecode.json-simple" % "json-simple" % "1.1.1",
   //"org.apache.httpcomponents" % "httpclient" % "4.3.6"
