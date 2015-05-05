@@ -118,7 +118,7 @@ $(function() {
             else
             {
                 var toSend = {discipline: disciplineP, name: nameP, gender: genderP, id: idP, date: dateP, password: pass1P, email: emailP, link:linkedIn};
-                alert(JSON.stringify(toSend));
+                //alert(JSON.stringify(toSend));
                 var path = "/api/doctor";
                 $.ajax({
                     type: 'POST',
