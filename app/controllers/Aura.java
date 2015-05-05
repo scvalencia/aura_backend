@@ -39,12 +39,10 @@ public class Aura extends Controller {
     }
 
     public static Result token(String path) {
-
         return ok("");
     }
 
     public static Result login() {
-
         return ok(login.render(""));
     }
 
@@ -63,5 +61,3 @@ public class Aura extends Controller {
     }
 
 }
-
-
