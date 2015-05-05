@@ -35,24 +35,23 @@ public class DoctorController extends Controller {
         JsonNode j = Controller.request().body().asJson();
         Doctor d = Doctor.bind(j);
         Doctor doctor = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(d.getId());
-        if(doctor != null)
-            return ok("El doctor con número de identificación " + d.getId() + " ya existe en Aura.");
+        if(doctor != null) {
+            return ok("{}");
+        }
         else {
             d.setToken(new BigInteger(130, random).toString(32).toString());
 
             try {
-
                 Account account = client.instantiate(Account.class);
                 //Set the account properties
 
                 String[] fullName = d.getName().split(" ");
                 String lastName = fullName[fullName.length-1];
                 String name = "";
-
+                System.out.println("c");
                 for(int i = 0; i < fullName.length-1; i++) {
                     name += fullName[i]+" ";
                 }
-
                 //Set the account properties
                 account.setGivenName(name.trim());
                 account.setSurname(lastName);

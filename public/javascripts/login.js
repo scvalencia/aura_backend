@@ -42,7 +42,21 @@ $(function() {
     });
 
     $('.btnCreate').click(function(){
-
+            $('.errorSignUp').empty();
+            $('#firstName').css("border-color","#CCCCCC");
+            $('#firstName').css("background-color","#FFFFFF");
+            $('#lastName').css("border-color","#CCCCCC");
+            $('#lastName').css("background-color","#FFFFFF");
+            $('#email').css("border-color","#CCCCCC");
+            $('#email').css("background-color","#FFFFFF");
+            $('#id').css("border-color","#CCCCCC");
+            $('#id').css("background-color","#FFFFFF");
+            $('#password1').css("border-color","#CCCCCC");
+            $('#password1').css("background-color","#FFFFFF");
+            $('#password2').css("border-color","#CCCCCC");
+            $('#password2').css("background-color","#FFFFFF");
+            $('.datepicker').css("border-color","");
+            $('.datepicker').css("background-color","#FFFFFF");
             var firstNameP = $('#firstName').val();
             var lastNameP = $('#lastName').val();
             var nameP = firstNameP.concat(" ").concat(lastNameP);
@@ -57,45 +71,64 @@ $(function() {
 
             if (isNaN(parseInt(idP)))
             {
-                alert("ID must me a number");
+                $('#id').css("border-color","#FF0000");
+                $('#id').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("ID must me a number");
             }
             else if (firstNameP=="")
             {
-                alert("First name must not be empty");
+                $('#firstName').css("border-color","#FF0000");
+                $('#firstName').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("First name must not be empty");
             }
             else if (lastNameP=="")
             {
-                alert("Last name must not be empty");
+                $('#lastName').css("border-color","#FF0000");
+                $('#lastName').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("Last name must not be empty");
             }
             else if (emailP=="")
             {
-                alert("Email must not be empty");
+                $('#email').css("border-color","#FF0000");
+                $('#email').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("Email must not be empty");
             }
             else if (dateP=="")
             {
-                alert("Birth date must not be empty");
+                $('.datepicker').css("border-color","#FF0000");
+                $('.datepicker').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("Birth date must not be empty");
             }
             else if (pass1P=="")
             {
-                alert("Password must not be empty");
+                $('#password1').css("border-color","#FF0000");
+                $('#password1').css("background-color","#FFE5E0");
+                $('#password2').css("border-color","#FF0000");
+                $('#password2').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("Password must not be empty");
             }
             else if (!(pass1P==pass2P))
             {
-                alert("Passwords are not equal");
+                $('#password1').css("border-color","#FF0000");
+                $('#password1').css("background-color","#FFE5E0");
+                $('#password2').css("border-color","#FF0000");
+                $('#password2').css("background-color","#FFE5E0");
+                $('.errorSignUp').append("Passwords are not equal");
             }
             else
             {
                 var toSend = {discipline: disciplineP, name: nameP, gender: genderP, id: idP, date: dateP, password: pass1P, email: emailP, link:linkedIn};
-                //alert(JSON.stringify(toSend));
+                alert(JSON.stringify(toSend));
                 var path = "/api/doctor";
                 $.ajax({
                     type: 'POST',
                     url: path,
-                    data: JSON.stringify (toSend),ijs
+                    data: JSON.stringify (toSend),
                     success: function(data) {
-                    if (JSON.stringify(data)=="{}")
+                    if (data.name == null)
                     {
-                        alert("Sorry, we couldn't process your request, try again later")
+                        $('#id').css("border-color","#FF0000");
+                        $('.errorSignUp').append("Patient with id "+idP+" already exists");
                     }
                     else
                     {
