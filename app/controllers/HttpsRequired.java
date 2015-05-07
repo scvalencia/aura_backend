@@ -22,7 +22,7 @@ public class HttpsRequired extends Action<Controller> {
         System.out.println("PROD: " + Play.isProd());
         System.out.println("IS REQUEST: " + !isHttpsRequest(ctx.request()));
         if (Play.isProd() && !isHttpsRequest( ctx.request() )) {
-            return F.Promise.promise(() -> status(403, " <a href=\"http://www.w3schools.com\">Visit W3Schools</a> "));
+            return F.Promise.promise(() -> status(403, "Diríjase a https://aura-app.herokuapp.com/"));
         }
 
         // let request proceed
