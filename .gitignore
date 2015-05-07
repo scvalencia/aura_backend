@@ -15,3 +15,4 @@ dist
 /.settings
 /scripts/jmeter/venv
 /scripts/jmeter/apache-jmeter-2.12
+app/.DS_Store
