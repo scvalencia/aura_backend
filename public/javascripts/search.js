@@ -10,6 +10,7 @@ var location = ["Sinus","Tension","Cluster Left","Cluster Right","Migraine Left"
 var signs =["Aura","Depression, ittitability, or excitement","Lack of restful sleep","Stuffy nose or watery eyes","Cravings","Throbbing pain on one or both sides of the head","Eye pain","Neck pain","Frequent urination","Yawning","Numbness or tingling","Nausea or vomiting","Light, noise, or smells worsen pain"];
 
 $(function() {
+
     $( ".datepickerFrom" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerTo" ).datepicker({dateFormat: "yy-mm-dd"});
     $( ".datepickerFromAnalysis" ).datepicker({dateFormat: "yy-mm-dd"});
