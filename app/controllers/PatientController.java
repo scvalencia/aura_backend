@@ -86,7 +86,7 @@ public class PatientController extends HttpsController{
         return ok(Json.toJson(p.cleverMute()));
     }
 
-    public static Result read(long id) {
+    public static Result read(long id){
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
         ObjectNode result = Json.newObject();
         if(p == null)
@@ -96,7 +96,6 @@ public class PatientController extends HttpsController{
             String requestId = request().getHeader("id");
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
-
             if(who.equals("DOC")) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
                 if(doc != null) {
