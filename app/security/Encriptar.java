@@ -1,4 +1,4 @@
-package controllers;
+package security;
 
 /**
  * Created by scvalencia on 4/17/15.

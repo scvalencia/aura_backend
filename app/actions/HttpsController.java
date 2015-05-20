@@ -1,6 +1,5 @@
-package controllers;
+package actions;
 
-import actions.SslEnforced;
 import play.mvc.Controller;
 import play.mvc.With;
 

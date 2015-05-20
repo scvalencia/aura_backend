@@ -1,4 +1,4 @@
-package controllers;
+package security;
 
 /**
  * Created by DanielDluyz on 28/04/15.
@@ -16,8 +16,6 @@ import com.stormpath.sdk.group.Group;
 import com.stormpath.sdk.group.GroupList;
 import com.stormpath.sdk.tenant.*;
 import com.stormpath.sdk.application.*;
-import com.stormpath.sdk.application.*;
-import com.stormpath.sdk.account.*;
 import com.stormpath.sdk.authc.*;
 import com.stormpath.sdk.resource.ResourceException;
 
@@ -60,8 +58,7 @@ public class Stormpath {
         return tenant;
     }
 
-    protected boolean addPatientToGroup(Account account)
-    {
+    protected boolean addPatientToGroup(Account account) {
         DirectoryList directories = tenant.getDirectories(
                 Directories.where(
                         Directories.name().eqIgnoreCase("Aura Directory")
@@ -98,8 +95,7 @@ public class Stormpath {
         }
     }
 
-    protected boolean addDoctorToGroup(Account account)
-    {
+    protected boolean addDoctorToGroup(Account account) {
         DirectoryList directories = tenant.getDirectories(
                 Directories.where(
                         Directories.name().eqIgnoreCase("Aura Directory")
@@ -116,7 +112,6 @@ public class Stormpath {
         if( directory != null) {
             System.out.println("Href: " + directory.getHref());
         }
-
 
         GroupList groups = directory.getGroups();
         Group group = null;
@@ -136,12 +131,8 @@ public class Stormpath {
         }
     }
 
-    protected Account authenticate(String id, String rawPassword){
-
-        //Create an authentication request using the credentials
+    protected Account authenticate(String id, String rawPassword) {
         AuthenticationRequest request = new UsernamePasswordRequest(id, rawPassword);
-
-        //Now let's authenticate the account with the application:
         try {
             AuthenticationResult result = application.authenticateAccount(request);
             Account account = result.getAccount();
@@ -152,6 +143,4 @@ public class Stormpath {
 
         return null;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package controllers;
+package actions;
 
 import play.Play;
 import play.mvc.Controller;

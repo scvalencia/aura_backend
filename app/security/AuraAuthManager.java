@@ -1,8 +1,6 @@
-package controllers;
+package security;
 
-import play.mvc.With;
-
-import java.util.HashMap;
+import security.Encriptar;
 
 /**
  * Created by scvalencia on 4/17/15.
