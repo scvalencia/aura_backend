@@ -1,14 +1,7 @@
 package controllers;
 
 import actions.CorsComposition;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import models.Doctor;
-import play.*;
-import play.data.Form;
-import play.data.Form.*;
-import play.db.ebean.Model;
-import play.libs.Json;
+import actions.HttpsController;
 import play.mvc.*;
 
 import views.html.*;
@@ -33,8 +26,6 @@ public class Aura extends HttpsController {
     }
 
     public static Result unauthorizedAccess() {
-
-        //return ok(unauthorizedAccess.render(""));
         return ok();
     }
 
