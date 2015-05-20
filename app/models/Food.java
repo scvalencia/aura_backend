@@ -33,7 +33,6 @@ public class Food extends Model {
         return f;
     }
 
-
     public Long getId() {
         return id;
     }

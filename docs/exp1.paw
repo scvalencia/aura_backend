@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>90B2834D-91EB-4CB8-AA3E-71E4F0CDB48C</UUID>
-        <nextObjectID>215</nextObjectID>
+        <nextObjectID>232</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -126,9 +126,9 @@
         <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
     </object>
     <object type="LMREQUEST" id="z160">
-        <attribute name="body" type="string">[{"data":{"keyValues":[["upload","[{\\"data\\":{\\"bookmarkData\\":\\"Ym9va\\\\\\/gCAAAAAAQQMAAAAIZY67JnGClPAa6NC7THEIqTze6e7o8N11Z4htH2rgABAAIAAAUAAAABAQAAVXNlcnMAAAAKAAAAAQEAAHNjdmFsZW5jaWEAAAkAAAABAQAARG9jdW1lbnRzAAAABgAAAAEBAABNQVRMQUIAAAoAAAABAQAAQXVkaW9fRGVtbwAADAAAAAEBAABvcmlnaW5hbC53YXYYAAAAAQYAAAQAAAAUAAAAKAAAADwAAABMAAAAYAAAAAgAAAAEAwAA3GYCAAAAAAAIAAAABAMAAPgqBgAAAAAACAAAAAQDAAD5KgYAAAAAAAgAAAAEAwAA1gkJAAAAAAAIAAAABAMAANkJCQAAAAAACAAAAAQDAADqCQkAAAAAABgAAAABBgAAlAAAAKQAAAC0AAAAxAAAANQAAADkAAAACAAAAAAEAABBpqswZAAAABgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQDAAAEAAAAAAAAAAQAAAADAwAA9QEAAAwAAAABAQAATWFjaW50b3NoIEhECAAAAAQDAAAAEK6FUAAAAAgAAAAABAAAQblqCOYAAAAkAAAAAQEAAEYxMjQzNzEzLThDRjEtMzc2OS04Q0VFLTMyM0ExQzU4RDEzRBgAAAABAgAAgQAAAAEACADvFwAAAQAIAAAAAAAAAAAAAQAAAAEBAAAvAAAAAAAAAAEFAAAEAAAAAwMAAAAYACjAAAAA\\\\\\/v\\\\\\/\\\\\\/\\\\\\/wEAAAAAAAAADwAAAAQQAAB0AAAAAAAAAAUQAAD0AAAAAAAAABAQAAAkAQAAAAAAAEAQAAAUAQAAAAAAAAIgAADgAQAAAAAAABAgAABgAQAAAAAAABEgAACUAQAAAAAAABIgAAB0AQAAAAAAABMgAACEAQAAAAAAACAgAADAAQAAAAAAADAgAADsAQAAAAAAAAHAAABEAQAAAAAAABHAAAAUAAAAAAAAABLAAABUAQAAAAAAABDQAAD0AQAAAAAAAA==\\"},\\"identifier\\":\\"com.luckymarmot.FileContentDynamicValue\\"}]",true]]},"identifier":"com.luckymarmot.BodyMultipartFormDataDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"keyValues":[[["upload"],[{"data":{"bookmarkData":"Ym9va\\/gCAAAAAAQQMAAAAIViVcee\\/nC3egps6nYf6NckblSMWhjGb9p3eAyimA5XAAIAAAUAAAABAQAAVXNlcnMAAAAKAAAAAQEAAHNjdmFsZW5jaWEAAAkAAAABAQAARG9jdW1lbnRzAAAABgAAAAEBAABNQVRMQUIAAAoAAAABAQAAQXVkaW9fRGVtbwAADAAAAAEBAABtZWdhZm9uby53YXYYAAAAAQYAAAQAAAAUAAAAKAAAADwAAABMAAAAYAAAAAgAAAAEAwAA3GYCAAAAAAAIAAAABAMAAPgqBgAAAAAACAAAAAQDAAD5KgYAAAAAAAgAAAAEAwAA1gkJAAAAAAAIAAAABAMAANkJCQAAAAAACAAAAAQDAADpCQkAAAAAABgAAAABBgAAlAAAAKQAAAC0AAAAxAAAANQAAADkAAAACAAAAAAEAABBtCz9cAAAABgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQDAAAEAAAAAAAAAAQAAAADAwAA9QEAAAwAAAABAQAATWFjaW50b3NoIEhECAAAAAQDAAAAEK6FUAAAAAgAAAAABAAAQblqCOYAAAAkAAAAAQEAAEYxMjQzNzEzLThDRjEtMzc2OS04Q0VFLTMyM0ExQzU4RDEzRBgAAAABAgAAgQAAAAEACADvFwAAAQAIAAAAAAAAAAAAAQAAAAEBAAAvAAAAAAAAAAEFAAAEAAAAAwMAAAAYACjAAAAA\\/v\\/\\/\\/wEAAAAAAAAADwAAAAQQAAB0AAAAAAAAAAUQAAD0AAAAAAAAABAQAAAkAQAAAAAAAEAQAAAUAQAAAAAAAAIgAADgAQAAAAAAABAgAABgAQAAAAAAABEgAACUAQAAAAAAABIgAAB0AQAAAAAAABMgAACEAQAAAAAAACAgAADAAQAAAAAAADAgAADsAQAAAAAAAAHAAABEAQAAAAAAABHAAAAUAAAAAAAAABLAAABUAQAAAAAAABDQAAD0AQAAAAAAAA=="},"identifier":"com.luckymarmot.FileContentDynamicValue"}],true]]},"identifier":"com.luckymarmot.BodyMultipartFormDataDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">BB1C67CB-2AC0-49FC-980E-8E239D4E2E52</attribute>
-        <attribute name="url" type="string">http://aura-app.herokuapp.com/api/patient/42943746223/voice_episode</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/patient/42943746223/voice_episode</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -378,7 +378,7 @@
     </object>
     <object type="LMREQUESTGROUP" id="z181">
         <attribute name="uuid" type="string">C07E8170-DE1F-41F7-B599-C5BFB1DD6EF0</attribute>
-        <attribute name="order" type="int64">2</attribute>
+        <attribute name="order" type="int64">3</attribute>
         <attribute name="name" type="string">AuraVoiceLocal</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
@@ -419,7 +419,7 @@
     <object type="LMREQUEST" id="z187">
         <attribute name="body" type="string">[{"data":{"json":"{\\"id\\":\\"1010211108\\",\\"password\\":\\"amor\\"}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">868BA101-6F02-425A-BD3A-107D90FEAE76</attribute>
-        <attribute name="url" type="string">http://aura-app.herokuapp.com/doctor/authenticate</attribute>
+        <attribute name="url" type="string">https://aura-app.herokuapp.com/doctor/authenticate</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -499,7 +499,7 @@
     </object>
     <object type="LMREQUEST" id="z194">
         <attribute name="uuid" type="string">E47C8044-F781-4B6A-BF0D-EF219EA79283</attribute>
-        <attribute name="url" type="string">https://aura-app.herokuapp.com/api/patient/123</attribute>
+        <attribute name="url" type="string">http://aura-app.herokuapp.com/api/patient/123</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -510,7 +510,7 @@
         <attribute name="name" type="string">Read</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z195 z197 z196 z193"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z195 z196 z193 z197"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z195">
         <attribute name="value" type="string">20042016</attribute>
@@ -696,7 +696,7 @@
     </object>
     <object type="LMREQUEST" id="z211">
         <attribute name="uuid" type="string">2DCCF596-2658-40DB-9579-6CBD0E552683</attribute>
-        <attribute name="url" type="string">http://localhost:9000/api/patient/123/episode/2000-09-09/2020-09-09</attribute>
+        <attribute name="url" type="string">http://aura-app.herokuapp.com/api/patient/123/episode/2000-09-09/2020-09-09</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -707,7 +707,7 @@
         <attribute name="name" type="string">GetEpisodesRange</attribute>
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z168"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
-        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z214 z213 z212 z215"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z214 z213 z215 z212"></relationship>
     </object>
     <object type="LMKEYVALUE" id="z212">
         <attribute name="value" type="string">PAC</attribute>
@@ -748,5 +748,215 @@
         <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
         <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z211"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z216">
+        <attribute name="uuid" type="string">9E31259D-8BBC-4100-AAB1-DF21713077E2</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/paciente/registrar/1234567</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string">RegistrarPaciente</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z217"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z217">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z216"></relationship>
+    </object>
+    <object type="LMREQUESTGROUP" id="z218">
+        <attribute name="uuid" type="string">A675DF40-5CCA-474F-A6A4-3A06DDDC8347</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">AuraGroups</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM" idrefs="z223 z221 z227 z219 z226 z216 z230 z232"></relationship>
+        <relationship name="bodyparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE"></relationship>
+        <relationship name="urlparameters" type="0/0" destination="LMKEYVALUE"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z219">
+        <attribute name="uuid" type="string">7062B1AA-09D3-432A-86B4-55685C41486D</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/doctor/registrar/1505154678</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">1</attribute>
+        <attribute name="name" type="string">RegistrarDoctor</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z220"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z220">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z219"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z221">
+        <attribute name="uuid" type="string">09A1E85C-34D1-4748-8701-2D246A82C758</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/paciente</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">2</attribute>
+        <attribute name="name" type="string">DarPacientes</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z224"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z222">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z223"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z223">
+        <attribute name="uuid" type="string">133B642F-B720-4D6A-8DF9-6E3BD91CE99A</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/doctor</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">3</attribute>
+        <attribute name="name" type="string">DarDoctores</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z222"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z224">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z221"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z225">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z226"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z226">
+        <attribute name="uuid" type="string">6A4B34FE-FDC6-4C88-904B-4B0F2533CDB4</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/paciente/registrarDoctor/1234567/1505154678</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">POST</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">4</attribute>
+        <attribute name="name" type="string">RegistrarDoctorParaPaciente</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z225"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z227">
+        <attribute name="uuid" type="string">90F8C5D5-0C12-43F1-99B4-58011EAB9E17</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/paciente/doctores/1234567</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">5</attribute>
+        <attribute name="name" type="string">DarDoctoresDelPaciente</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z228"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z228">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z227"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z229">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z230"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z230">
+        <attribute name="uuid" type="string">71212AE2-A3A8-4E9E-AD8D-9CDA76C59434</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/doctor/acceso/1234567/155154678</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">6</attribute>
+        <attribute name="name" type="string">DoctorPerteneceAPaciente</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z229"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z231">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z232"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z232">
+        <attribute name="uuid" type="string">0B259C32-353B-497B-9DC6-B1FC29020DB1</attribute>
+        <attribute name="url" type="string">https://murmuring-beyond-8483.herokuapp.com/stormclau/doctor/pacientes/1505154678</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">7</attribute>
+        <attribute name="name" type="string">My API (8)</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM" idrefs="z218"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z231"></relationship>
     </object>
 </database>

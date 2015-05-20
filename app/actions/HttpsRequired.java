@@ -24,13 +24,10 @@ public class HttpsRequired extends Action<Controller> {
         if (Play.isProd() && !isHttpsRequest( ctx.request() )) {
             return F.Promise.promise(() -> status(403, "Diríjase a https://aura-app.herokuapp.com/"));
         }
-
-        // let request proceed
         return this.delegate.call(ctx);
     }
 
     private static boolean isHttpsRequest(Http.Request request) {
-        // heroku passes header on
         System.out.println("SSL HEADER: " + request.getHeader(SSL_HEADER));
         System.out.println("SSL CONTIENE: " + request.getHeader(SSL_HEADER).contains("https"));
         return request.getHeader(SSL_HEADER) != null && request.getHeader(SSL_HEADER).contains("https");

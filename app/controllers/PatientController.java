@@ -1,7 +1,11 @@
 package controllers;
 
 import actions.CorsComposition;
+import actions.HttpsController;
+import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlQuery;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stormpath.sdk.resource.ResourceException;
@@ -17,13 +21,17 @@ import org.apache.http.util.EntityUtils;
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.*;
+import security.AuraAuthManager;
+import security.StormClau;
+import security.Stormpath;
 import views.html.unauthorizedAccess;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.stormpath.sdk.account.*;
 import com.stormpath.sdk.application.*;
@@ -33,31 +41,37 @@ import com.stormpath.sdk.client.Client;
  * Created by scvalencia on 3/9/15.
  */
 @CorsComposition.Cors
-public class PatientController extends HttpsController{
+public class PatientController extends HttpsController {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
     private static Stormpath stormpath = Stormpath.getInstance();
     private static Client client = stormpath.getClient();
     private static Application application = stormpath.getApplication();
+    private static StormClau sc = new StormClau();
 
     @BodyParser.Of(BodyParser.Json.class)
-    public static Result create() throws Exception {
+    public static Result create(Long id) throws Exception {
+
         JsonNode j = Controller.request().body().asJson();
+        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
+
+        if(doctorObject == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        }
+
         Patient p = Patient.bind(j);
 
         try {
 
             Account account = client.instantiate(Account.class);
-            //Set the account properties
-
             String[] fullName = p.getName().split(" ");
             String lastName = fullName[fullName.length-1];
             String name = "";
 
-            for(int i = 0; i < fullName.length-1; i++) {
+            for(int i = 0; i < fullName.length-1; i++)
                 name += fullName[i]+" ";
-            }
 
             //Set the account properties
             account.setGivenName(name.trim());
@@ -74,19 +88,18 @@ public class PatientController extends HttpsController{
             }
 
             p.save();
+
         } catch (ResourceException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println(ex.getDeveloperMessage());
-            System.out.println(ex.getMoreInfo());
-            System.out.println(ex.getStatus());
-            System.out.println(ex.getStormpathError());
             return badRequest(ex.getMessage());
         }
+
+        sc.registerPatient(p.getId());
+        sc.registerDoctorForPatient(p.getId(), doctorObject.getId());
 
         return ok(Json.toJson(p.cleverMute()));
     }
 
-    public static Result read(long id){
+    public static Result read(long id) throws Exception {
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
         ObjectNode result = Json.newObject();
         if(p == null)
@@ -96,7 +109,7 @@ public class PatientController extends HttpsController{
             String requestId = request().getHeader("id");
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
-            if(who.equals("DOC")) {
+            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -224,7 +237,7 @@ public class PatientController extends HttpsController{
     }
 
 
-    public static Result getEpisodes(long id) {
+    public static Result getEpisodes(long id) throws JSONException {
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
         ObjectNode result = Json.newObject();
         if(p == null)
@@ -235,7 +248,7 @@ public class PatientController extends HttpsController{
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC")) {
+            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -261,7 +274,7 @@ public class PatientController extends HttpsController{
         return ok(Json.toJson(result));
     }
 
-    public static Result getEpisodesInRange(long id, String f1, String f2) {
+    public static Result getEpisodesInRange(long id, String f1, String f2) throws JSONException {
         Date date1, date2;
         date1 = parseDate(f1);
         date2 = parseDate(f2);
@@ -283,7 +296,7 @@ public class PatientController extends HttpsController{
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC")) {
+            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -319,7 +332,7 @@ public class PatientController extends HttpsController{
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC")) {
+            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -610,31 +623,6 @@ public class PatientController extends HttpsController{
         else
             return ok("ERROR");
     }
+
 }
 
-class Analysis3 {
-
-    int spot;
-    int frequency;
-
-    Analysis3(int spot, int frequency) {
-        this.spot = spot;
-        this.frequency = frequency;
-    }
-
-    public int getSpot() {
-        return spot;
-    }
-
-    public void setSpot(int spot) {
-        this.spot = spot;
-    }
-
-    public int getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
-}

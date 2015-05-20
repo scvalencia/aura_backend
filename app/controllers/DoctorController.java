@@ -2,6 +2,7 @@ package controllers;
 
 
 import actions.CorsComposition;
+import actions.HttpsController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stormpath.sdk.account.Account;
@@ -9,17 +10,22 @@ import com.stormpath.sdk.application.Application;
 import com.stormpath.sdk.client.Client;
 import com.stormpath.sdk.resource.ResourceException;
 import models.Doctor;
+import models.Episode;
+import models.Patient;
 import play.db.ebean.Model;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.libs.Json;
+import security.AuraAuthManager;
+import security.StormClau;
+import security.Stormpath;
 import views.html.unauthorizedAccess;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.UUID;
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CorsComposition.Cors
 public class DoctorController extends HttpsController {
@@ -29,6 +35,7 @@ public class DoctorController extends HttpsController {
     private static Stormpath stormpath = Stormpath.getInstance();
     private static Client client = stormpath.getClient();
     private static Application application = stormpath.getApplication();
+    private static StormClau sc = new StormClau();
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result create() throws Exception {
@@ -67,6 +74,7 @@ public class DoctorController extends HttpsController {
 
                 d.save();
                 session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
+                sc.registerDoctor(d.getId());
                 return ok(Json.toJson(d.cleverMute()));
             } catch (ResourceException ex) {
                 System.out.println(ex.getMessage());
@@ -152,6 +160,14 @@ public class DoctorController extends HttpsController {
         }
     }
 
+    public static Result getPatients(Long id) throws Exception {
+        Doctor doctor = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
+        ObjectNode result = Json.newObject();
+        if(doctor == null)
+            return ok(Json.toJson(result));
+        else return ok(Json.toJson(sc.getPatientsByDoctor(id)));
+    }
+
     @BodyParser.Of(BodyParser.Json.class)
     public static Result authenticate() {
         JsonNode j = Controller.request().body().asJson();
@@ -185,7 +201,6 @@ public class DoctorController extends HttpsController {
     }
 
     public static Result logout(long id) {
-        //TODO cambio, adicion siguiente linea
         session().clear();
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(id);
         if(doctorObject != null) {
@@ -200,5 +215,37 @@ public class DoctorController extends HttpsController {
         }
         else
             return ok("ERROR");
+    }
+
+    public static void notificate(Long doctor, Long patient, Long doctor2) {
+        // TODO
+        // Send e-mail
+    }
+
+    // ====================================================================================================================================================
+
+    public static Result sortEpisodesByIntensity(Long idP, Long idD) {
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
+
+        if(p == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        }
+
+        else {
+            List<Episode> episodes = p.getEpisodes();
+            episodes = episodes.stream().sorted((e1, e2) -> Integer.compare(e1.getIntensity(),e2.getIntensity())).collect(Collectors.toList());
+            return ok(Json.toJson(episodes));
+        }
+    }
+
+    public static Result getCriticalPatients(Long idD) {
+        // TODO
+        return null;
+    }
+
+    public static Result getPatientsByAge(Long doctor, int age) {
+        // TODO
+        return null;
     }
 }

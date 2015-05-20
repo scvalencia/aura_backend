@@ -28,7 +28,7 @@ public class Stormpath {
     private Application application;
     private Tenant tenant;
 
-    private Stormpath() {
+    public Stormpath() {
 
         ApiKey apiKey = ApiKeys.builder().setFileLocation(path).build();
         client = Clients.builder().setApiKey(apiKey).build();
@@ -46,19 +46,19 @@ public class Stormpath {
         return stormpath;
     }
 
-    protected Client getClient(){
+    public Client getClient(){
         return client;
     }
 
-    protected Application getApplication(){
+    public Application getApplication(){
         return application;
     }
 
-    protected Tenant getTenant(){
+    public Tenant getTenant(){
         return tenant;
     }
 
-    protected boolean addPatientToGroup(Account account) {
+    public boolean addPatientToGroup(Account account) {
         DirectoryList directories = tenant.getDirectories(
                 Directories.where(
                         Directories.name().eqIgnoreCase("Aura Directory")
@@ -95,7 +95,7 @@ public class Stormpath {
         }
     }
 
-    protected boolean addDoctorToGroup(Account account) {
+    public boolean addDoctorToGroup(Account account) {
         DirectoryList directories = tenant.getDirectories(
                 Directories.where(
                         Directories.name().eqIgnoreCase("Aura Directory")
@@ -131,7 +131,7 @@ public class Stormpath {
         }
     }
 
-    protected Account authenticate(String id, String rawPassword) {
+    public Account authenticate(String id, String rawPassword) {
         AuthenticationRequest request = new UsernamePasswordRequest(id, rawPassword);
         try {
             AuthenticationResult result = application.authenticateAccount(request);
