@@ -1,6 +1,7 @@
 package security;
 
 
+import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 import org.apache.http.HttpResponse;
@@ -9,6 +10,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonNode;
+import play.libs.Json;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class StormClau {
@@ -65,8 +71,8 @@ public class StormClau {
             e.printStackTrace();
         }
 
-        JSONObject value = new JSONObject(r);
-        boolean ans = Boolean.parseBoolean((String) value.get("Respuesta"));
+        com.fasterxml.jackson.databind.JsonNode value = Json.toJson(r);
+        boolean ans = value.findPath("Respuesta").asBoolean();
 
         return ans;
     }
@@ -88,7 +94,7 @@ public class StormClau {
 
     }
 
-    public JSONObject getPatientsByDoctor(Long doctor) throws JSONException {
+    public List<Long> getPatientsByDoctor(Long doctor) throws JSONException {
         String urln = url + "/stormclau/doctor/pacientes/" + doctor;
         HttpGet httpPost = new HttpGet(urln);
         String r = "";
@@ -96,11 +102,22 @@ public class StormClau {
         try {
             HttpResponse response = httpclient.execute(httpPost);
             r = EntityUtils.toString(response.getEntity());
+            System.out.println(r);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new JSONObject(r);
+        JSONArray collection = new JSONArray(r);
+        List<Long> ans = new ArrayList<Long>();
+
+
+        for(int i = 0; i < collection.length(); i++) {
+            JSONObject o = collection.getJSONObject(i);
+            Integer id = (Integer) o.get("id");
+            ans.add(id.longValue());
+        }
+
+        return ans;
     }
 }

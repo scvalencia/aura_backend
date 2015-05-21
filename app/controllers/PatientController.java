@@ -41,13 +41,13 @@ import com.stormpath.sdk.client.Client;
  * Created by scvalencia on 3/9/15.
  */
 @CorsComposition.Cors
-public class PatientController extends HttpsController {
+public class PatientController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
-    private static Stormpath stormpath = Stormpath.getInstance();
-    private static Client client = stormpath.getClient();
-    private static Application application = stormpath.getApplication();
+    //private static Stormpath stormpath = Stormpath.getInstance();
+    //private static Client client = stormpath.getClient();
+    //private static Application application = stormpath.getApplication();
     private static StormClau sc = new StormClau();
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -64,6 +64,8 @@ public class PatientController extends HttpsController {
         Patient p = Patient.bind(j);
 
         try {
+
+            /*
 
             Account account = client.instantiate(Account.class);
             String[] fullName = p.getName().split(" ");
@@ -86,6 +88,7 @@ public class PatientController extends HttpsController {
             if (!added) {
                 throw new Exception("No se pudo agregar a grupo");
             }
+            */
 
             p.save();
 
@@ -109,7 +112,7 @@ public class PatientController extends HttpsController {
             String requestId = request().getHeader("id");
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
-            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
+            if(who.equals("DOC") || sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -521,8 +524,8 @@ public class PatientController extends HttpsController {
             boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
 
             if(authentication) {
-                Account account = stormpath.authenticate(id + "", patientObject.getPassword());
-                if (account != null && account.isMemberOfGroup("Patients")) {
+                //Account account = stormpath.authenticate(id + "", patientObject.getPassword());
+                if (true) { // account != null && account.isMemberOfGroup("Patients")
                     patientObject.setToken(new BigInteger(130, random).toString(32).toString());
                     patientObject.save();
                     response().setHeader(ETAG, auth.auraEncrypt(patientObject.getToken()));
@@ -623,6 +626,5 @@ public class PatientController extends HttpsController {
         else
             return ok("ERROR");
     }
-
 }
 

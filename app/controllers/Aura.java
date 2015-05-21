@@ -7,7 +7,7 @@ import play.mvc.*;
 import views.html.*;
 
 @CorsComposition.Cors
-public class Aura extends HttpsController {
+public class Aura extends Controller {
 
 
     public static Result index() {

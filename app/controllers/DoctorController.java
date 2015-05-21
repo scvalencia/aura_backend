@@ -17,6 +17,7 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.libs.Json;
+import play.mvc.Results;
 import security.AuraAuthManager;
 import security.StormClau;
 import security.Stormpath;
@@ -24,17 +25,18 @@ import views.html.unauthorizedAccess;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CorsComposition.Cors
-public class DoctorController extends HttpsController {
+public class DoctorController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
-    private static Stormpath stormpath = Stormpath.getInstance();
-    private static Client client = stormpath.getClient();
-    private static Application application = stormpath.getApplication();
+    // static Stormpath stormpath = Stormpath.getInstance();
+    //private static Client client = stormpath.getClient();
+    //private static Application application = stormpath.getApplication();
     private static StormClau sc = new StormClau();
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -49,6 +51,7 @@ public class DoctorController extends HttpsController {
             d.setToken(new BigInteger(130, random).toString(32).toString());
 
             try {
+                /*
                 Account account = client.instantiate(Account.class);
                 //Set the account properties
 
@@ -71,6 +74,7 @@ public class DoctorController extends HttpsController {
                 if (!added) {
                     throw new Exception("No se pudo agregar a grupo");
                 }
+                */
 
                 d.save();
                 session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
@@ -165,7 +169,13 @@ public class DoctorController extends HttpsController {
         ObjectNode result = Json.newObject();
         if(doctor == null)
             return ok(Json.toJson(result));
-        else return ok(Json.toJson(sc.getPatientsByDoctor(id)));
+        List<Long> ans = sc.getPatientsByDoctor(id);
+        List<Patient> ps = new ArrayList<Patient>();
+        for(Long itm : ans) {
+            ps.add((Patient) new Model.Finder(Long.class, Patient.class).byId(itm));
+        }
+
+        return ok(Json.toJson(ps));
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -180,8 +190,8 @@ public class DoctorController extends HttpsController {
             boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
             if(authentication) {
-                Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
-                if (account != null && account.isMemberOfGroup("Doctors")) {
+                //Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
+                if (true) { // account != null && account.isMemberOfGroup("Doctors")
                     doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
                     doctorObject.save();
                     response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));
@@ -217,9 +227,10 @@ public class DoctorController extends HttpsController {
             return ok("ERROR");
     }
 
-    public static void notificate(Long doctor, Long patient, Long doctor2) {
+    public static Result notificate(Long doctor, Long doctor2) {
         // TODO
         // Send e-mail
+        return Results.TODO;
     }
 
     // ====================================================================================================================================================
@@ -240,12 +251,34 @@ public class DoctorController extends HttpsController {
     }
 
     public static Result getCriticalPatients(Long idD) {
+        List<Patient> ps = new ArrayList<Patient>();
+        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(idD);
+
+        if(doctorObject == null) {
+            ObjectNode result = Json.newObject();
+            return ok(Json.toJson(result));
+        } else {
+
+        }
+        return null;
+    }
+
+    public static Result getPatientsByAge(Long doctor, int age, String flag) {
         // TODO
         return null;
     }
 
-    public static Result getPatientsByAge(Long doctor, int age) {
-        // TODO
-        return null;
+    public static Result addPatient(long idD, long idP) {
+        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(idD);
+        Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
+
+        if(doctorObject == null)
+            return ok("El doctor no existe");
+
+        if(p == null)
+                return ok("El paciente no existe");
+
+        sc.registerDoctorForPatient(idP, idD);
+        return ok();
     }
 }

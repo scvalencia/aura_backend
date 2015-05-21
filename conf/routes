@@ -1,77 +1,124 @@
-# Home page
+########################################################################################################################
+#
+#                                               ###    ########  ####
+#                                              ## ##   ##     ##  ##
+#                                             ##   ##  ##     ##  ##
+#                                            ##     ## ########   ##
+#                                            ######### ##         ##
+#                                            ##     ## ##         ##
+#                                            ##     ## ##        ####
+#
+########################################################################################################################
+# DOCTOR
 
-GET            /                                                 controllers.Aura.index()
+# Crear un nuevo doctor con la información dada
+POST           /api/doctor                                          controllers.DoctorController.create()
 
+# Obtener la información de un doctor dado su ID
+GET            /api/doctor/:id                                      controllers.DoctorController.read(id : Long)
 
 ########################################################################################################################
-# Doctor
+# DOCTOR - PACIENTE
 
-# Creates a new doctor
-POST           /api/doctor                                       controllers.DoctorController.create()
-# Gets information on a single doctor
-GET            /api/doctor/:id                                   controllers.DoctorController.read(id : Long)
-# Updates the information of a single doctor
-PUT            /api/doctor/:id                                   controllers.DoctorController.update(id : Long)
-# Get the patients of the given doctor
-GET            /api/doctor/:id/patient                           controllers.DoctorController.getPatients(id : Long)
-# Notificar a doctor2 para revisar al paciente paciente
-POST           /api/doctor/:doctor1/patient/:idP/:doctor2        controllers.DoctorController.notificate(doctor : Long, idP : Long, doctor2 : Long)
+# Crear un nuevo paciente con la información dada, éste, se asocia al doctor indicado
+POST           /api/doctor/:id/patient                              controllers.PatientController.create(id : Long)
 
-# Filters
-# Episodes sorted by intensity
-GET            /api/doctor/:doctor1/patient/:idP/sorted          controllers.DoctorController.sortEpisodesByIntensity(idP : Long, idD : Long)
-# Most critical patients
-GET            /api/doctor/:doctor1/patient/critical             controllers.DoctorController.getCriticalPatients(doctor1 : Long)
-# Get patients by age
-GET            /api/doctor/:idD/patients/age/:age                controllers.DoctorController.getPatientsByAge(idD : Long, age : Integer)
+# Obtener la información de un paciente
+GET            /api/patient/:id                                     controllers.PatientController.read(id : Long)
 
+# Registrar el paciente con id dado al doctor dado
+POST           /api/doctor/:idD/patient/:idP                        controllers.DoctorController.addPatient(idD : Long, idP : Long)
+
+# Obtener la lista de pacientes del doctor con ID dado
+GET            /api/doctor/:id/patient                              controllers.DoctorController.getPatients(id : Long)
+
+# Enviar notificación via email a un doctor para revisar el estado de los pacientes dados por parámetro en el Json. El envio es doctor1 a doctor2
+POST           /api/doctor/:doctor1/:doctor2                        controllers.DoctorController.notificate(doctor1 : Long, doctor2 : Long)
+
+# Obtener los episodios de un paciente, dado su ID, ésta vez, de forma ordenada ascendentemente por intensidad
+GET            /api/doctor/:doctor1/patient/:idP/sorted             controllers.DoctorController.sortEpisodesByIntensity(idP : Long, doctor1 : Long)
+
+# Obtener los pacientes que han registrado episodios en el mismo día, o el día anterior
+GET            /api/doctor/:doctor1/patient/critical                controllers.DoctorController.getCriticalPatients(doctor1 : Long)
+
+# Obtener los pacientes de un doctor con el parámetro de selección de edad provisto. flag \in ['le', 'ge', 'eq'], para edad menor a, edad mayor a, o edad igual al parámetro de edad pasado
+GET            /api/doctor/:idD/patients/age/:age/flag/:flag        controllers.DoctorController.getPatientsByAge(idD : Long, age : Integer, flag : String)
 
 ########################################################################################################################
-# patient
+# PACIENTE
 
-# Cretes a new Patient with no episodes associated with the given doctor
-POST           /api/doctor/:id/patient                           controllers.PatientController.create(id : Long)
-# Gets information on a single patient
-GET            /api/patient/:id                                  controllers.PatientController.read(id : Long)
-# Updates the information of a single patient
-PUT            /api/patient/:id                                  controllers.PatientController.update(id : Long)
-# Removes a single patient given the ID
-DELETE         /api/patient/:id                                  controllers.PatientController.delete(id : Long)
-# Adds an episode to a patient
-POST           /api/patient/:id/episode                          controllers.PatientController.createEpisode(id : Long)
-# Gets the episodes of a patient
-GET            /api/patient/:id/episode                          controllers.PatientController.getEpisodes(id : Long)
-# Gets a single episode of a patient
-GET            /api/patient/:id1/episode/:id2                    controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
-# Gets the episodes of a patient in a range of dates (yyyy-mm-dd)
-GET            /api/patient/:id/episode/:f1/:f2                  controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
-# Gets the first analysis (Sleep hours) in Json format, semantics is given at the presentation layer
-GET            /api/patient/:idP/analysis1/:f1/:f2               controllers.PatientController.getAnalysisSleepHours(idP : Long, f1 : String, f2 : String)
-# Gets analysis of episodes and medicines in Json format
-GET            /api/patient/:id/analysis2/:f1/:f2                controllers.PatientController.getAnalysisIntensity(id : Long, f1 : String, f2 : String)
-# Gets analysis of episodes and food in Json format
-GET            /api/patient/:id/analysis3/:f1/:f2                controllers.PatientController.getAnalysisSpot(id : Long, f1 : String, f2 : String)
-# Authentication service for a single Patient, if credentials are correct, it should return a simple Patient Object, otherwise, it should return an empty object
-POST           /api/patient/authenticate                         controllers.PatientController.authenticate()
-# Plain old JSON of a Patient
-GET            /api/pojo_patient/:id                             controllers.PatientController.plainPatient(id : Long)
-# Creates a recorded episode, it expects an mp3 file. mp3 checking is up to the client
-POST           /api/patient/:id/voice_episode                    controllers.PatientController.createVoiceEpisode(id : Long)
+# Agregar un episodio a un paciente dado su ID
+POST           /api/patient/:id/episode                             controllers.PatientController.createEpisode(id : Long)
+
+# Obtener la lista de objetos episodio asociados a un paciente dado su ID
+GET            /api/patient/:id/episode                             controllers.PatientController.getEpisodes(id : Long)
+
+# Obtener la información de un episodio de un paciente dado el ID de ambas entidades
+GET            /api/patient/:id1/episode/:id2                       controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
+
+# Obtener los episodios de un paciente dado registrados entre un rango de fechas en el formato (yyyy-mm-dd), inclusive
+GET            /api/patient/:id/episode/:f1/:f2                     controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
+
+# Obtener la información asociada al análisis de horas sueño de un paciente dado su ID y el rango de fechas del análisis
+GET            /api/patient/:idP/analysis1/:f1/:f2                  controllers.PatientController.getAnalysisSleepHours(idP : Long, f1 : String, f2 : String)
+
+# Obtener la información asociada al análisis de intensidad del dolor de un paciente dado su ID y el rango de fechas del análisis
+GET            /api/patient/:id/analysis2/:f1/:f2                   controllers.PatientController.getAnalysisIntensity(id : Long, f1 : String, f2 : String)
+
+# Obtener la información asociada al análisis de zonas de dolor de un paciente dado su ID y el rango de fechas del análisis
+GET            /api/patient/:id/analysis3/:f1/:f2                   controllers.PatientController.getAnalysisSpot(id : Long, f1 : String, f2 : String)
+
+# Autenticar un paciente, si lascredenciales son correctas, se debe retornar el objeto , sino, un objeto vacio
+POST           /api/patient/authenticate                            controllers.PatientController.authenticate()
+
+# Registrar un episodio de audio, el formato del archivo, debe ser MP3, ésta revisión, se deja a manos del cliente
+POST           /api/patient/:id/voice_episode                       controllers.PatientController.createVoiceEpisode(id : Long)
+
+########################################################################################################################
+#
+#        ##      ## ######## ########        ###    ##    ## ########        ###    ##     ## ######## ##     ##
+#        ##  ##  ## ##       ##     ##      ## ##   ###   ## ##     ##      ## ##   ##     ##    ##    ##     ##
+#        ##  ##  ## ##       ##     ##     ##   ##  ####  ## ##     ##     ##   ##  ##     ##    ##    ##     ##
+#        ##  ##  ## ######   ########     ##     ## ## ## ## ##     ##    ##     ## ##     ##    ##    #########
+#        ##  ##  ## ##       ##     ##    ######### ##  #### ##     ##    ######### ##     ##    ##    ##     ##
+#        ##  ##  ## ##       ##     ##    ##     ## ##   ### ##     ##    ##     ## ##     ##    ##    ##     ##
+#         ###  ###  ######## ########     ##     ## ##    ## ########     ##     ##  #######     ##    ##     ##
+#
 ########################################################################################################################
 
+# Página principal de la aplicación web, sin embargo, se redirige a la vista del login
+GET            /                                                    controllers.Aura.index()
 
-GET            /doctor/login                                     controllers.Aura.login()
+# Vista que provee las funcionalidades de registro e inicio de sesión de un doctor
+GET            /doctor/login                                        controllers.Aura.login()
 
-PUT            /patient/logout/:id                               controllers.PatientController.logout(id : Long)
+# Vista queprovee información acerca de la información sobre Aura
+GET            /info                                                controllers.Aura.info()
 
-PUT            /doctor/logout/:id                                controllers.DoctorController.logout(id : Long)
+# Vista y lógica del cierre de sesión de un paciente
+PUT            /patient/logout/:id                                  controllers.PatientController.logout(id : Long)
 
-POST           /doctor/authenticate                              controllers.DoctorController.authenticate()
+# Vista y lógica del cierre de sesión de un doctor
+PUT            /doctor/logout/:id                                   controllers.DoctorController.logout(id : Long)
 
-POST           /patient/authenticate                             controllers.PatientController.authenticate()
+# Validar la información de un doctor, es decir, las credenciales de inicio de sesión
+POST           /doctor/authenticate                                 controllers.DoctorController.authenticate()
 
-GET            /info                                             controllers.Aura.info()
+# Validar la información de un paciente, es decir, las credenciales de inicio de sesión
+POST           /patient/authenticate                                controllers.PatientController.authenticate()
 
-# Map static resources from the /public folder to the /assets URL path
-GET            /assets/*file                                     controllers.Assets.at(path="/public", file)
-OPTIONS        /*path                                            controllers.Aura.token(path: String)
+########################################################################################################################
+#
+#                                               ###    ##     ## ##     ##
+#                                              ## ##   ##     ##  ##   ##
+#                                             ##   ##  ##     ##   ## ##
+#                                            ##     ## ##     ##    ###
+#                                            ######### ##     ##   ## ##
+#                                            ##     ## ##     ##  ##   ##
+#                                            ##     ##  #######  ##     ##
+#
+########################################################################################################################
+
+GET            /assets/*file                                        controllers.Assets.at(path="/public", file)
+
+OPTIONS        /*path                                               controllers.Aura.token(path: String)
