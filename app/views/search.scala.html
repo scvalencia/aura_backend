@@ -26,7 +26,7 @@
 <div class="container">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->activator run
+            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -73,7 +73,7 @@
                             </span>
                         </div><!-- /input-group -->
                         <br>
-                        <select multiple id="selectPatient" style="height: 450px; width: 250px; border-radius: 5px;" class="listaPacientes">
+                        <select multiple id="selectPatient" style="height: 450px; width: 250px; border-radius: 5px; font-size: 16px;" class="listaPacientes">
                         </select>
                     </div>
                     <div class ="divName">
@@ -99,7 +99,7 @@
         <div class="col-md-6 column">
             <div class="col-md-12 column">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active episodeLi"><a class="episode">Episode</a></li>
+                    <li role="presentation" class="active episodeLi"><a class="episode">Episodes</a></li>
                     <li role="presentation" class="analysisLi"><a class="analysis">Analysis</a></li>
                 </ul>
             </div>
@@ -108,20 +108,100 @@
                     <div class ="divEpisodiosAfuera">
                         <div class ="divEpisodios">
                             <h1></h1>
-                        <div class="col-md-4 column">
-                            <select multiple id="select1" style="height: 150px; width: 150px;" class="listaEpisodios">
+                        <div class="col-md-5 column">
+                            <select multiple id="select1" style="height: 320px; width: 200px;" class="listaEpisodios">
                             </select>
                         </div>
-                        <div class="col-md-8 column">
-                            <h6>Filter Episodes By Period</h6>
-                            <div class="col-md-4 column">FROM</div>
-                            <div class="col-md-8 column"><input type="text" class="datepickerFrom"></div>
-                            <div class="col-md-12 column"><h5></h5></div>
-                            <div class="col-md-4 column">TO</div>
-                            <div class="col-md-8 column"><input type="text" class="datepickerTo"></div>
-                            <div class="col-md-12 column"><h5></h5></div>
-                            <div class="col-md-8 column"><h5 class="errorFechas" style="color:red;"></h5></div>
-                            <div class="col-md-4 column"><button type="button" class="btn btn-success btnFilter">Filter</button></div>
+                        <div class="col-md-7 column">
+                            <div class="col-md-12 column">
+                                <h5>Filter Episodes By Variables</h5>
+                                <div class="col-md-6 column">Intensity</div>
+                                <div class="col-md-6 column" style = "font-size:20px;">
+                                    <select style="width: 100px;" class="filterIntensity">
+                                        <option value="-1">All</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 column">Sleep Time</div>
+                                <div class="col-md-6 column" style = "font-size:20px;">
+                                    <select style="width: 100px;" class="filterSleep">
+                                        <option value="-1">All</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8 or more</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 column">Stress</div>
+                                <div class="col-md-6 column" style = "font-size:20px;">
+                                    <select style="width: 100px;" class="filterStress">
+                                        <option value="-1">All</option>
+                                        <option value="0">False</option>
+                                        <option value="1">True</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 column">Symptom</div>
+
+                                <div class="col-md-6 column" style = "font-size:20px;">
+                                    <select style="width: 100px;" class="filterSymptom">
+                                        <option value="-1">All</option>
+                                        <option value="0">Aura</option>
+                                        <option value="1">Depression, ittitability, or excitement</option>
+                                        <option value="1">Lack of restful sleep</option>
+                                        <option value="1">Stuffy nose or watery eyes</option>
+                                        <option value="1">Cravings</option>
+                                        <option value="1">Throbbing pain on one or both sides of the head</option>
+                                        <option value="1">Eye pain</option>
+                                        <option value="1">Neck pain</option>
+                                        <option value="1">Frequent urination</option>
+                                        <option value="1">Yawning</option>
+                                        <option value="1">Numbness or tingling</option>
+                                        <option value="1">Nausea or vomiting</option>
+                                        <option value="1">Nausea or vomiting</option>
+                                        <option value="1">Light, noise, or smells worsen pain</option>
+                                        <option value="1">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 column">Place</div>
+                                <div class="col-md-6 column" style = "font-size:20px;">
+                                    <select style="width: 100px;" class="filterPlace">
+                                        <option value="-1">All</option>
+                                        <option value="0">Sinus</option>
+                                        <option value="1">Cluster Left</option>
+                                        <option value="2">Cluster Right</option>
+                                        <option value="3">Migraine Left</option>
+                                        <option value="4">Migraine Right</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 column"><h5></h5></div>
+                                <div class="col-md-9 column"><h5 class="errorFechas" style="color:red;"></h5></div>
+                                <div class="col-md-3 column"><button type="button" class="btn btn-success btnFilterPro">Filter</button></div>
+                            </div>
+
+                            <div class="col-md-12 column">
+                                <h5>Filter Episodes By Period</h5>
+                                <div class="col-md-5 column"><input type="text" class="datepickerFrom" style = "width:100px;"></div>
+                                <div class="col-md-2 column" style = "font-size:20px;">  &#8594;</div>
+                                <div class="col-md-5 column"><input type="text" class="datepickerTo" style = "width:100px;"></div>
+                                <div class="col-md-12 column"><h5></h5></div>
+                                <div class="col-md-9 column"><h5 class="errorFechas" style="color:red;"></h5></div>
+                                <div class="col-md-3 column"><button type="button" class="btn btn-success btnFilter">Filter</button></div>
+                            </div>
+
                         </div>
                         <div class="col-md-12 column divInfoEpisodio">
                             <div class="row clearfix">

@@ -39,10 +39,10 @@ POST           /api/doctor/:doctor1/:doctor2                        controllers.
 GET            /api/doctor/:doctor1/patient/:idP/sorted             controllers.DoctorController.sortEpisodesByIntensity(idP : Long, doctor1 : Long)
 
 # Obtener los pacientes que han registrado episodios en el mismo día, o el día anterior
-GET            /api/doctor/:doctor1/patient/critical                controllers.DoctorController.getCriticalPatients(doctor1 : Long)
+#GET            /api/doctor/:doctor1/patient/critical                controllers.DoctorController.getCriticalPatients(doctor1 : Long)
 
 # Obtener los pacientes de un doctor con el parámetro de selección de edad provisto. flag \in ['le', 'ge', 'eq'], para edad menor a, edad mayor a, o edad igual al parámetro de edad pasado
-GET            /api/doctor/:idD/patients/age/:age/flag/:flag        controllers.DoctorController.getPatientsByAge(idD : Long, age : Integer, flag : String)
+#GET            /api/doctor/:idD/patients/age/:age/flag/:flag        controllers.DoctorController.getPatientsByAge(idD : Long, age : Integer, flag : String)
 
 ########################################################################################################################
 # PACIENTE

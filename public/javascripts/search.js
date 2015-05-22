@@ -9,7 +9,7 @@ $(document).ready(function(){
     var climate = ["sunny.svg","partly_sunny.svg","cloudy.svg","raining.svg","thunderstorm.svg","snowing.svg"];
     var locationImg = ["sinus.svg","tension.svg","cluster_left.svg","cluster_right.svg","migraine_left.svg","migraine_right.svg"];
     var location = ["Sinus","Tension","Cluster Left","Cluster Right","Migraine Left","Migraine Right"];
-    var signs =["Aura","Depression, ittitability, or excitement","Lack of restful sleep","Stuffy nose or watery eyes","Cravings","Throbbing pain on one or both sides of the head","Eye pain","Neck pain","Frequent urination","Yawning","Numbness or tingling","Nausea or vomiting","Light, noise, or smells worsen pain"];
+    var signs =["Aura","Depression, ittitability, or excitement","Lack of restful sleep","Stuffy nose or watery eyes","Cravings","Throbbing pain on one or both sides of the head","Eye pain","Neck pain","Frequent urination","Yawning","Numbness or tingling","Nausea or vomiting","Light, noise, or smells worsen pain", "Other"];
 
     $(function() {
 
@@ -87,48 +87,7 @@ $(document).ready(function(){
         $('.divEpisodiosAfuera').show();
     });
 
-    $('.findByID').click(function(){
-        $('.infoPaciente').empty();
-        $('.nombrePaciente').empty();
-        var idPaciente = parseInt($('.idPacienteTxt').val());
-        if (isNaN(idPaciente))
-        {
-            $('.errorBusquedaID' ).empty();
-            $('.errorBusquedaID' ).append("Patient's ID must be a number");
-        }
-        else
-        {
 
-            $.ajax({
-                url: "/api/patient/"+idPaciente,
-                type: "GET",
-                beforeSend: function(xhr){
-                    xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
-                    xhr.setRequestHeader('who', 'DOC');
-                    xhr.setRequestHeader('id', idDoctorActual);
-                },
-                success: function(data) {
-                    if (data.name==null)
-                    {
-                        $('.errorBusquedaID' ).empty();
-                        $('.errorBusquedaID' ).append("Patient not found");
-                        $('.divEpisodios').hide();
-                        $('.divAnalysis').hide();
-                    }
-                    else
-                    {
-                        $('.errorBusquedaID' ).empty();
-                        mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
-                        $('.divInfoEpisodio').show();
-                        mostrarListaepisodios(data.episodes);
-                        $('.divEpisodios').show();
-                        $('.divAnalysis').show();
-                    }
-                    //$('.nameDr').append(data.name);
-                }
-            });
-        }
-    });
 
     $('.btnFilter').click(function(){
         var dateFrom = $( ".datepickerFrom" ).datepicker( "getDate" );
@@ -160,6 +119,30 @@ $(document).ready(function(){
         }
 
     });
+
+
+    $('.btnFilter').click(function(){
+        var intensityFilter = $( ".filterIntensity" ).val();
+        var sleepFilter = $( ".filterSleep" ).val();
+        var stressFilter = $( ".filterStress" ).val();
+        var SymptomFilter = $( ".filterSymptom" ).val();
+        var placeFilter = $( ".filterPlace" ).val();
+
+        var jsonFilter = {intensity: intensityFilter, timeslept: sleepFilter, stress: stressFilter, symptom: SymptomFilter, place: placeFilter};
+        $('.errorFechas').empty();
+            $.ajax({
+                url: "/api/doctor/:doctor/patient/"+idPacienteActual+"/filter",
+                type: "GET",
+                data: JSON.stringify(jsonFilter),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function(dataR) {
+                    mostrarListaepisodios(dataR);
+                }
+            });
+
+    });
+
 
     $('.btnFilterAnalysis').click(function(){
         var dateFrom = $( ".datepickerFromAnalysis" ).datepicker( "getDate" );
@@ -679,23 +662,21 @@ $(document).ready(function(){
     function mostrarListaPacientes()
     {
         $('.listaPacientes').empty();
-        alert(JSON.stringify(informacionPacientes));
         $.each(informacionPacientes, function(i,pacienteActualI){
             var r = pacienteActualI.id + "-" + pacienteActualI.name;
             var select = "";
             if (i==0)
             {
                 select ='selected="selected"';
-                mostrarInfoPaciente(pacienteActualI);
+                mostrarListaPaciente(pacienteActualI);
             }
             $('.listaPacientes').append('<option value="'+informacionPacientes[i].id+'" '+select+'>'+r+'</option>');
         });
     };
 
-    function mostrarInfoPaciente(pacienteActualI)
+    function mostrarListaPaciente(pacienteActualI)
         {
             $('.errorBusquedaID' ).empty();
-            alert(JSON.stringify(pacienteActualI));
             mostrarInfoPaciente(pacienteActualI.name ,pacienteActualI.id, pacienteActualI.email, pacienteActualI.date, pacienteActualI.gender);
             $('.divInfoEpisodio').show();
             mostrarListaepisodios(pacienteActualI.episodes);
@@ -704,14 +685,85 @@ $(document).ready(function(){
         };
 
     $('.listaPacientes').change(function(){
+        $('.idPacienteTxt').val('');
         var pacienteActualId = $('.listaPacientes').val();
+        idPacienteActual = pacienteActualId;
 
         $.each(informacionPacientes, function(i,pacienteActualI){
             if(pacienteActualI.id == pacienteActualId)
             {
-                mostrarInfoPaciente(pacienteActualI);
+                $('.errorBusquedaID' ).empty();
+                mostrarInfoPaciente(pacienteActualI.name ,pacienteActualI.id, pacienteActualI.email, pacienteActualI.date, pacienteActualI.gender);
+                $('.divInfoEpisodio').show();
+                mostrarListaepisodios(pacienteActualI.episodes);
+                $('.divEpisodios').show();
+                $('.divAnalysis').show();
             }
         });
+    });
+
+    $('.findByID').click(function(){
+
+        $('.infoPaciente').empty();
+        $('.nombrePaciente').empty();
+        $('.listaPacientes').empty();
+
+        var pacienteActualId = parseInt($('.idPacienteTxt').val());
+
+        $.each(informacionPacientes, function(i,pacienteActualI){
+            var r = pacienteActualI.id + "-" + pacienteActualI.name;
+            var select = "";
+            if(pacienteActualI.id == pacienteActualId)
+            {
+                select ='selected="selected"';
+                $('.errorBusquedaID' ).empty();
+                mostrarInfoPaciente(pacienteActualI.name ,pacienteActualI.id, pacienteActualI.email, pacienteActualI.date, pacienteActualI.gender);
+                $('.divInfoEpisodio').show();
+                mostrarListaepisodios(pacienteActualI.episodes);
+                $('.divEpisodios').show();
+                $('.divAnalysis').show();
+            }
+
+            $('.listaPacientes').append('<option value="'+pacienteActualI.id+'" '+select+'>'+r+'</option>');
+        });
+
+        /*if (isNaN(idPaciente))
+        {
+            $('.errorBusquedaID' ).empty();
+            $('.errorBusquedaID' ).append("Patient's ID must be a number");
+        }
+        else
+        {
+
+            $.ajax({
+                url: "/api/patient/"+idPaciente,
+                type: "GET",
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader('auth-token', tokenDoctorActualEncriptado);
+                    xhr.setRequestHeader('who', 'DOC');
+                    xhr.setRequestHeader('id', idDoctorActual);
+                },
+                success: function(data) {
+                    if (data.name==null)
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        $('.errorBusquedaID' ).append("Patient not found");
+                        $('.divEpisodios').hide();
+                        $('.divAnalysis').hide();
+                    }
+                    else
+                    {
+                        $('.errorBusquedaID' ).empty();
+                        mostrarInfoPaciente(data.name ,data.id, data.email, data.date, data.gender);
+                        $('.divInfoEpisodio').show();
+                        mostrarListaepisodios(data.episodes);
+                        $('.divEpisodios').show();
+                        $('.divAnalysis').show();
+                    }
+                    //$('.nameDr').append(data.name);
+                }
+            });
+        }*/
     });
 
 
