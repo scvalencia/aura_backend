@@ -52,6 +52,8 @@ public class StormClau {
 
         try {
             HttpResponse response = httpclient.execute(httpPost);
+            String r = EntityUtils.toString(response.getEntity());
+            System.out.println(r);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -95,18 +97,20 @@ public class StormClau {
     }
 
     public List<Long> getPatientsByDoctor(Long doctor) throws JSONException {
-        String urln = url + "/stormclau/doctor/pacientes/" + doctor;
+        String urln = url + "stormclau/doctor/pacientes/" + doctor;
         HttpGet httpPost = new HttpGet(urln);
         String r = "";
 
         try {
             HttpResponse response = httpclient.execute(httpPost);
             r = EntityUtils.toString(response.getEntity());
-            System.out.println(r);
+            System.out.println(urln);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
+        for(int i = 0; i < 100; i++) System.out.println(r);
 
         JSONArray collection = new JSONArray(r);
         List<Long> ans = new ArrayList<Long>();

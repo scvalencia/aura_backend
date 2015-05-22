@@ -1,0 +1,170 @@
+@(doctorM: models.Doctor, doctorR: models.Doctor, patients: List[models.Patient])
+<!DOCTYPE html>
+
+<head>
+    <title>Find Patient</title>
+    <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/jquery-ui.min.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/email.css")">
+        <!--bootstrap css-->
+    <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    <script src="@routes.Assets.at("javascripts/email.js")" type="text/javascript"></script>
+    <script type="text/javascript"src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+
+        <!--[if gte mso 9]>
+    <style>
+        .column-top {
+        mso-line-height-rule: exactly !important;
+        }
+    </style>
+    <![endif]-->
+    <meta name="robots" content="noindex,nofollow" />
+    <meta property="og:title" content="My First Campaign" />
+</head>
+<body style="margin: 0;mso-line-height-rule: exactly;padding: 0;min-width: 100%;background-color: #f5f5f5">
+    <center class="wrapper" style="display: table;table-layout: fixed;width: 100%;min-width: 620px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;background-color: #f5f5f5">
+        <table class="gmail" style="border-collapse: collapse;border-spacing: 0;width: 650px;min-width: 650px"><tbody><tr><td style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px">&nbsp;</td></tr></tbody></table>
+        <table class="preheader centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto">
+            <tbody><tr>
+                <td style="padding: 0;vertical-align: top">
+                    <table style="border-collapse: collapse;border-spacing: 0;width: 602px">
+                        <tbody><tr>
+
+
+                        </tr>
+                        </tbody></table>
+                </td>
+            </tr>
+            </tbody></table>
+        <table class="header centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;width: 602px">
+            <tbody><tr><td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e4e4e4;width: 1px">&nbsp;</td></tr>
+                <tr><td class="logo" style="padding: 32px 0;vertical-align: top;mso-line-height-rule: at-least"><div class="logo-center" style="font-size: 26px;font-weight: 700;letter-spacing: -0.02em;line-height: 32px;color: #41637e;font-family: sans-serif;text-align: center" align="center" id="emb-email-header"><img style="border: 0;-ms-interpolation-mode: bicubic;display: block;Margin-left: auto;Margin-right: auto;max-width: 214px" src="https://raw.githubusercontent.com/ISIS2503-2015-01/Grupo-4/master/public/images/logo_blanco.png" alt="" width="143" height="143" /></div></td></tr>
+            </tbody></table>
+
+        <table class="border" style="border-collapse: collapse;border-spacing: 0;font-size: 1px;line-height: 1px;background-color: #e4e4e4;Margin-left: auto;Margin-right: auto" width="602">
+            <tbody><tr><td style="padding: 0;vertical-align: top">&#8203;</td></tr>
+            </tbody></table>
+
+        <table class="centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto">
+            <tbody><tr>
+                <td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e4e4e4;width: 1px">&#8203;</td>
+                <td style="padding: 0;vertical-align: top">
+                    <table class="one-col" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;width: 600px;background-color: #ffffff;font-size: 14px;table-layout: fixed">
+                        <tbody><tr>
+                            <td class="column" style="padding: 0;vertical-align: top;text-align: left">
+                                <div><div class="column-top" style="font-size: 32px;line-height: 32px">&nbsp;</div></div>
+                                <table class="contents" style="border-collapse: collapse;border-spacing: 0;table-layout: fixed;width: 100%">
+                                    <tbody><tr>
+                                        <td class="padded" style="padding: 0;vertical-align: top;padding-left: 32px;padding-right: 32px;word-break: break-word;word-wrap: break-word">
+
+                                            <h1 style="Margin-top: 0;color: #565656;font-weight: 700;font-size: 36px;Margin-bottom: 18px;font-family: sans-serif;line-height: 42px">
+                                                @if(doctorR.getGender()==0) {
+                                                    Dr
+                                                } else {
+                                                    Dra
+                                                }
+                                                @doctorR.getName()
+                                            </h1>
+                                            <p style="Margin-top: 0;color: #565656;font-family: Georgia,serif;font-size: 16px;line-height: 25px;Margin-bottom: 25px">
+                                            @if(doctorM.getGender()==0) {
+                                                El doctor
+                                            } else {
+                                                La doctora
+                                            }
+                                            @doctorM.getName(), desea su concepto sobre los siguientes pacientes.Usted ya cuenta con el acceso a la informaci&#243;n de los pacientes listados a contiuaci&#243;n. Por favor, comun&#237;quese con la doctora al email:
+                                            <a style="text-decoration: underline;transition: all .2s;color: #3076b0" data-emb-href-display="@doctorM.getEmail()" href="mailto:@doctorM.getEmail()">@doctorM.getEmail()</a>
+                                            para comunicarle su concepto.
+                                            </p>
+                                            <ul style="Margin-top: 0;padding-left: 0;color: #565656;font-family: Georgia,serif;font-size: 16px;line-height: 25px;Margin-left: 18px;Margin-bottom: 25px" class="lista">
+                                                @for(p <- patients) {
+                                                    <li>@p.getName() (@p.getId())</li>
+                                                }
+                                            </ul>
+
+
+                                            <p style="Margin-top: 0;color: #565656;font-family: Georgia,serif;font-size: 16px;line-height: 25px;Margin-bottom: 25px">Gracias.</p>
+                                            <p style="Margin-top: 0;color: #565656;font-family: Georgia,serif;font-size: 16px;line-height: 25px;Margin-bottom: 25px;text-align: center">
+                                                <a style="text-decoration: underline;transition: all .2s;color: #3076b0" data-emb-href-display="aura-app.herokuapp.com/" href="https://aura-app.herokuapp.com/">https://aura-app.herokuapp.com</a>
+                                            </p>
+                                            <p style="Margin-top: 0;color: #565656;font-family: Georgia,serif;font-size: 16px;line-height: 25px;Margin-bottom: 24px">&nbsp;</p>
+
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
+
+                                <div class="column-bottom" style="font-size: 8px;line-height: 8px">&nbsp;</div>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                </td>
+                <td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e4e4e4;width: 1px">&#8203;</td>
+            </tr>
+            </tbody></table>
+
+        <table class="border" style="border-collapse: collapse;border-spacing: 0;font-size: 1px;line-height: 1px;background-color: #e4e4e4;Margin-left: auto;Margin-right: auto" width="602">
+            <tbody><tr><td style="padding: 0;vertical-align: top">&#8203;</td></tr>
+            </tbody></table>
+
+        <div class="spacer" style="font-size: 1px;line-height: 32px;width: 100%">&nbsp;</div>
+        <table class="footer centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;width: 602px">
+            <tbody><tr>
+                <td class="social" style="padding: 0;vertical-align: top;padding-top: 32px;padding-bottom: 22px" align="center">
+                    <table style="border-collapse: collapse;border-spacing: 0">
+                        <tbody><tr>
+                            <td class="social-link" style="padding: 0;vertical-align: top">
+
+                            </td>
+
+                            <td class="social-link" style="padding: 0;vertical-align: top">
+
+                            </td>
+
+                            <td class="social-link" style="padding: 0;vertical-align: top">
+                                <table style="border-collapse: collapse;border-spacing: 0">
+                                    <tbody><tr>
+
+                                    </tbody></table>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                </td>
+            </tr>
+                <tr><td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e4e4e4;width: 1px">&nbsp;</td></tr>
+                <tr>
+                    <td style="padding: 0;vertical-align: top">
+                        <table style="border-collapse: collapse;border-spacing: 0">
+                            <tbody><tr>
+                                <td class="address" style="padding: 0;vertical-align: top;width: 250px;padding-top: 32px;padding-bottom: 64px">
+                                    <table class="contents" style="border-collapse: collapse;border-spacing: 0;table-layout: fixed;width: 100%">
+                                        <tbody><tr>
+                                            <td class="padded" style="padding: 0;vertical-align: top;padding-left: 0;padding-right: 10px;word-break: break-word;word-wrap: break-word;text-align: left;font-size: 12px;line-height: 20px;color: #999;font-family: Georgia,serif">
+
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                </td>
+                                <td class="subscription" style="padding: 0;vertical-align: top;width: 350px;padding-top: 32px;padding-bottom: 64px">
+                                    <table class="contents" style="border-collapse: collapse;border-spacing: 0;table-layout: fixed;width: 100%">
+                                        <tbody><tr>
+                                            <td class="padded" style="padding: 0;vertical-align: top;padding-left: 10px;padding-right: 0;word-break: break-word;word-wrap: break-word;font-size: 12px;line-height: 20px;color: #999;font-family: Georgia,serif;text-align: right">
+
+                                                <div>
+                                                    <span class="block">
+
+                                                    </span>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody></table>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                    </td>
+                </tr>
+            </tbody></table>
+    </center>
+
+</body></html>

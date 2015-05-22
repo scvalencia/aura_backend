@@ -18,7 +18,9 @@ libraryDependencies ++= Seq(
   "org.apache.httpcomponents" % "httpcore" % "4.4",
   "com.stormpath.sdk" % "stormpath-sdk-api" % "1.0.RC4.1",
   "com.stormpath.sdk" % "stormpath-sdk-httpclient" % "1.0.RC4.1" % "runtime",
-  "com.stormpath.sdk" % "stormpath-sdk-oauth" % "1.0.RC4.1" % "runtime"
+  "com.stormpath.sdk" % "stormpath-sdk-oauth" % "1.0.RC4.1" % "runtime",
+  "com.typesafe.play" %% "play-mailer" % "2.4.1",
+  "org.apache.commons" % "commons-email" % "1.3"
   //"com.google.code.gson" % "gson" % "2.3",
   //"com.googlecode.json-simple" % "json-simple" % "1.1.1",
   //"org.apache.httpcomponents" % "httpclient" % "4.3.6"

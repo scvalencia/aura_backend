@@ -12,22 +12,34 @@ import com.stormpath.sdk.resource.ResourceException;
 import models.Doctor;
 import models.Episode;
 import models.Patient;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import play.db.ebean.Model;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.libs.Json;
 import play.mvc.Results;
+import scala.collection.JavaConverters;
 import security.AuraAuthManager;
 import security.StormClau;
 import security.Stormpath;
+import views.html.MailBody;
 import views.html.unauthorizedAccess;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import play.libs.mailer.Email;
+import play.libs.mailer.Email;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 
 @CorsComposition.Cors
 public class DoctorController extends Controller {
@@ -227,10 +239,50 @@ public class DoctorController extends Controller {
             return ok("ERROR");
     }
 
-    public static Result notificate(Long doctor, Long doctor2) {
-        // TODO
-        // Send e-mail
-        return Results.TODO;
+    public static Result notificate(Long doctor, Long doctor2) throws EmailException {
+
+        Doctor doctorFrom = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(doctor);
+        Doctor doctorTo = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(doctor2);
+
+        if(doctorFrom != null && doctorTo != null) {
+
+            JsonNode j = Controller.request().body().asJson();
+            List<Patient> ans = new ArrayList<Patient>();
+
+            for(Object o : j.findPath("patients")) {
+                Long patientId = Long.parseLong(o.toString());
+                Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(patientId);
+
+                if(p != null) {
+                    ans.add(p);
+                    sc.registerDoctorForPatient(p.getId(), doctorTo.getId());
+                }
+            }
+
+            String host = "smtp.gmail.com";
+            String port = "587";
+            String mailFrom = "aura201510@gmail.com";
+            String password = "clave123456789";
+
+            // outgoing message information
+            String mailTo = doctorTo.getEmail();
+            String subject = "Aura notification";
+
+            // message contains HTML markups
+            String body = views.html.MailBody.render(doctorFrom, doctorTo, ans).body();
+
+            try {
+                sendHtmlEmail(host, port, mailFrom, password, mailTo,
+                        subject, body);
+                System.out.println("Email sent.");
+                return ok("Email enviado");
+            } catch (Exception ex) {
+                System.out.println("Failed to sent email.");
+                ex.printStackTrace();
+                return ok("Error");
+            }
+        }
+        return Results.ok("Doctores no encontrados");
     }
 
     // ====================================================================================================================================================
@@ -248,6 +300,47 @@ public class DoctorController extends Controller {
             episodes = episodes.stream().sorted((e1, e2) -> Integer.compare(e1.getIntensity(),e2.getIntensity())).collect(Collectors.toList());
             return ok(Json.toJson(episodes));
         }
+    }
+
+    public static void sendHtmlEmail(String host, String port,
+                                     final String userName, final String password, String toAddress,
+                                     String subject, String message) throws AddressException,
+            MessagingException {
+
+        // sets SMTP server properties
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // creates a new session with an authenticator
+        Authenticator auth = new Authenticator() {
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        };
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        });
+
+        // creates a new e-mail message
+        Message msg = new MimeMessage(session);
+
+        msg.setFrom(new InternetAddress(userName));
+        InternetAddress[] toAddresses = { new InternetAddress(toAddress) };
+        msg.setRecipients(Message.RecipientType.TO, toAddresses);
+        msg.setSubject(subject);
+        msg.setSentDate(new Date());
+        // set plain text message
+        msg.setContent(message, "text/html");
+
+        // sends the e-mail
+        Transport.send(msg);
+
     }
 
     public static Result getCriticalPatients(Long idD) {

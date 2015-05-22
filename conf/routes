@@ -53,6 +53,9 @@ POST           /api/patient/:id/episode                             controllers.
 # Obtener la lista de objetos episodio asociados a un paciente dado su ID
 GET            /api/patient/:id/episode                             controllers.PatientController.getEpisodes(id : Long)
 
+# Actualizar la información de un paciente
+PUT            /api/patient/:id                                     controllers.PatientController.update(id : Long)
+
 # Obtener la información de un episodio de un paciente dado el ID de ambas entidades
 GET            /api/patient/:id1/episode/:id2                       controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
 
