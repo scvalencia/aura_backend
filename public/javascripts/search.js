@@ -260,21 +260,20 @@ $(document).ready(function(){
     });
 
     $('.share').click(function(){
-        /*var jsonFilter = {intensity: intensityFilter, timeslept: sleepFilter, stress: stressFilter, symptom: SymptomFilter, place: placeFilter};
+        var jsonFilter = {"patients": [idPacienteActual]};
         //alert(JSON.stringify(jsonFilter));
         $('.errorFechas').empty();
         $.ajax({
-            url: "/api/doctor/"+idDoctorActual+"/"+1072664872,
+            url: "/api/doctor/"+idDoctorActual+"/"+$('.idDoctorShareTxt').val(),
             type: "POST",
             data: JSON.stringify(jsonFilter),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function(dataR) {
-                //alert(JSON.stringify(dataR));
-                console.log(JSON.stringify(dataR));
-                mostrarListaepisodios(dataR);
+
             }
-        });*/
+        });
+        alert("The patient was shared successfully");
     });
     function mostrarIntensidad(inte)
     {
