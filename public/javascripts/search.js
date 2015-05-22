@@ -144,6 +144,10 @@ $(document).ready(function(){
     });
 
 
+
+    
+
+
     $('.btnFilterAnalysis').click(function(){
         var dateFrom = $( ".datepickerFromAnalysis" ).datepicker( "getDate" );
         var dateTo = $( ".datepickerToAnalysis" ).datepicker( "getDate" );

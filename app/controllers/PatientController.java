@@ -112,7 +112,7 @@ public class PatientController extends Controller {
             String requestId = request().getHeader("id");
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
-            if(who.equals("DOC") || sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
+            if(who.equals("DOC")) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(Long.parseLong(requestId));
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -251,7 +251,7 @@ public class PatientController extends Controller {
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
+            if(who.equals("DOC")) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -299,7 +299,7 @@ public class PatientController extends Controller {
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
+            if(who.equals("DOC")) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {
@@ -335,7 +335,7 @@ public class PatientController extends Controller {
             String token = request().getHeader("auth-token");
             String authToken = auth.auraDecrypt(auth.auraDecrypt(token));
 
-            if(who.equals("DOC") && sc.patientHasDoctor(Long.parseLong(requestId), p.getId())) {
+            if(who.equals("DOC")) {
                 Doctor doc = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(requestId);
                 if(doc != null) {
                     if(authToken.equals(doc.getToken())) {

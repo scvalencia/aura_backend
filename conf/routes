@@ -12,73 +12,67 @@
 # DOCTOR
 
 # Crear un nuevo doctor con la información dada
-POST           /api/doctor                                          controllers.DoctorController.create()
+POST           /api/doctor                                     controllers.DoctorController.create()
 
 # Obtener la información de un doctor dado su ID
-GET            /api/doctor/:id                                      controllers.DoctorController.read(id : Long)
+GET            /api/doctor/:id                                 controllers.DoctorController.read(id : Long)
 
 ########################################################################################################################
 # DOCTOR - PACIENTE
 
 # Crear un nuevo paciente con la información dada, éste, se asocia al doctor indicado
-POST           /api/doctor/:id/patient                              controllers.PatientController.create(id : Long)
+POST           /api/doctor/:id/patient                         controllers.PatientController.create(id : Long)
 
 # Obtener la información de un paciente
-GET            /api/patient/:id                                     controllers.PatientController.read(id : Long)
+GET            /api/patient/:id                                controllers.PatientController.read(id : Long)
 
 # Registrar el paciente con id dado al doctor dado
-POST           /api/doctor/:idD/patient/:idP                        controllers.DoctorController.addPatient(idD : Long, idP : Long)
+POST           /api/doctor/:idD/patient/:idP                   controllers.DoctorController.addPatient(idD : Long, idP : Long)
 
 # Obtener la lista de pacientes del doctor con ID dado
-GET            /api/doctor/:id/patient                              controllers.DoctorController.getPatients(id : Long)
+GET            /api/doctor/:id/patient                         controllers.DoctorController.getPatients(id : Long)
 
 # Enviar notificación via email a un doctor para revisar el estado de los pacientes dados por parámetro en el Json. El envio es doctor1 a doctor2
-POST           /api/doctor/:doctor1/:doctor2                        controllers.DoctorController.notificate(doctor1 : Long, doctor2 : Long)
+POST           /api/doctor/:doctor1/:doctor2                   controllers.DoctorController.notificate(doctor1 : Long, doctor2 : Long)
 
 # Obtener los episodios de un paciente, dado su ID, ésta vez, de forma ordenada ascendentemente por intensidad
-GET            /api/doctor/:doctor1/patient/:idP/sorted             controllers.DoctorController.sortEpisodesByIntensity(idP : Long, doctor1 : Long)
+GET            /api/doctor/:doctor1/patient/:idP/sorted        controllers.DoctorController.sortEpisodesByIntensity(idP : Long, doctor1 : Long)
 
-# Obtener los pacientes que han registrado episodios en el mismo día, o el día anterior
-#GET            /api/doctor/:doctor1/patient/critical                controllers.DoctorController.getCriticalPatients(doctor1 : Long)
-
-# Obtener los pacientes de un doctor con el parámetro de selección de edad provisto. flag \in ['le', 'ge', 'eq'], para edad menor a, edad mayor a, o edad igual al parámetro de edad pasado
-#GET            /api/doctor/:idD/patients/age/:age/flag/:flag        controllers.DoctorController.getPatientsByAge(idD : Long, age : Integer, flag : String)
+# Filtrar información de un paciente dado el Json dado
+POST           /api/doctor/:doctor/patient/:id/filter          controllers.DoctorController.filter(doctor : Long, id : Long)
 
 ########################################################################################################################
 # PACIENTE
 
 # Agregar un episodio a un paciente dado su ID
-POST           /api/patient/:id/episode                             controllers.PatientController.createEpisode(id : Long)
+POST           /api/patient/:id/episode                        controllers.PatientController.createEpisode(id : Long)
 
 # Obtener la lista de objetos episodio asociados a un paciente dado su ID
-GET            /api/patient/:id/episode                             controllers.PatientController.getEpisodes(id : Long)
+GET            /api/patient/:id/episode                        controllers.PatientController.getEpisodes(id : Long)
 
 # Actualizar la información de un paciente
-PUT            /api/patient/:id                                     controllers.PatientController.update(id : Long)
+PUT            /api/patient/:id                                controllers.PatientController.update(id : Long)
 
 # Obtener la información de un episodio de un paciente dado el ID de ambas entidades
-GET            /api/patient/:id1/episode/:id2                       controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
+GET            /api/patient/:id1/episode/:id2                  controllers.PatientController.getEpisode(id1 : Long, id2 : Long)
 
 # Obtener los episodios de un paciente dado registrados entre un rango de fechas en el formato (yyyy-mm-dd), inclusive
-GET            /api/patient/:id/episode/:f1/:f2                     controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
+GET            /api/patient/:id/episode/:f1/:f2                controllers.PatientController.getEpisodesInRange(id : Long, f1 : String, f2 : String)
 
 # Obtener la información asociada al análisis de horas sueño de un paciente dado su ID y el rango de fechas del análisis
-GET            /api/patient/:idP/analysis1/:f1/:f2                  controllers.PatientController.getAnalysisSleepHours(idP : Long, f1 : String, f2 : String)
+GET            /api/patient/:idP/analysis1/:f1/:f2             controllers.PatientController.getAnalysisSleepHours(idP : Long, f1 : String, f2 : String)
 
 # Obtener la información asociada al análisis de intensidad del dolor de un paciente dado su ID y el rango de fechas del análisis
-GET            /api/patient/:id/analysis2/:f1/:f2                   controllers.PatientController.getAnalysisIntensity(id : Long, f1 : String, f2 : String)
+GET            /api/patient/:id/analysis2/:f1/:f2              controllers.PatientController.getAnalysisIntensity(id : Long, f1 : String, f2 : String)
 
 # Obtener la información asociada al análisis de zonas de dolor de un paciente dado su ID y el rango de fechas del análisis
-GET            /api/patient/:id/analysis3/:f1/:f2                   controllers.PatientController.getAnalysisSpot(id : Long, f1 : String, f2 : String)
+GET            /api/patient/:id/analysis3/:f1/:f2              controllers.PatientController.getAnalysisSpot(id : Long, f1 : String, f2 : String)
 
 # Autenticar un paciente, si lascredenciales son correctas, se debe retornar el objeto , sino, un objeto vacio
-POST           /api/patient/authenticate                            controllers.PatientController.authenticate()
+POST           /api/patient/authenticate                       controllers.PatientController.authenticate()
 
 # Registrar un episodio de audio, el formato del archivo, debe ser MP3, ésta revisión, se deja a manos del cliente
-POST           /api/patient/:id/voice_episode                       controllers.PatientController.createVoiceEpisode(id : Long)
-
-# Filtrar información de un paciente dado el Json dado
-POST           /api/doctor/:doctor/patient/:id/filter               controllers.DoctorController.filter(doctor : Long, id : Long)
+POST           /api/patient/:id/voice_episode                  controllers.PatientController.createVoiceEpisode(id : Long)
 
 ########################################################################################################################
 #
@@ -93,25 +87,25 @@ POST           /api/doctor/:doctor/patient/:id/filter               controllers.
 ########################################################################################################################
 
 # Página principal de la aplicación web, sin embargo, se redirige a la vista del login
-GET            /                                                    controllers.Aura.index()
+GET            /                                               controllers.Aura.index()
 
 # Vista que provee las funcionalidades de registro e inicio de sesión de un doctor
-GET            /doctor/login                                        controllers.Aura.login()
+GET            /doctor/login                                   controllers.Aura.login()
 
 # Vista queprovee información acerca de la información sobre Aura
-GET            /info                                                controllers.Aura.info()
+GET            /info                                           controllers.Aura.info()
 
 # Vista y lógica del cierre de sesión de un paciente
-PUT            /patient/logout/:id                                  controllers.PatientController.logout(id : Long)
+PUT            /patient/logout/:id                             controllers.PatientController.logout(id : Long)
 
 # Vista y lógica del cierre de sesión de un doctor
-PUT            /doctor/logout/:id                                   controllers.DoctorController.logout(id : Long)
+PUT            /doctor/logout/:id                              controllers.DoctorController.logout(id : Long)
 
 # Validar la información de un doctor, es decir, las credenciales de inicio de sesión
-POST           /doctor/authenticate                                 controllers.DoctorController.authenticate()
+POST           /doctor/authenticate                            controllers.DoctorController.authenticate()
 
 # Validar la información de un paciente, es decir, las credenciales de inicio de sesión
-POST           /patient/authenticate                                controllers.PatientController.authenticate()
+POST           /patient/authenticate                           controllers.PatientController.authenticate()
 
 ########################################################################################################################
 #
@@ -125,6 +119,6 @@ POST           /patient/authenticate                                controllers.
 #
 ########################################################################################################################
 
-GET            /assets/*file                                        controllers.Assets.at(path="/public", file)
+GET            /assets/*file                                   controllers.Assets.at(path="/public", file)
 
-OPTIONS        /*path                                               controllers.Aura.token(path: String)
+OPTIONS        /*path                                          controllers.Aura.token(path: String)
