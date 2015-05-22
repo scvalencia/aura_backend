@@ -48,13 +48,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
 @CorsComposition.Cors
-public class DoctorController extends Controller {
+public class DoctorController extends HttpsController {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
-    // static Stormpath stormpath = Stormpath.getInstance();
-    //private static Client client = stormpath.getClient();
-    //private static Application application = stormpath.getApplication();
+    static Stormpath stormpath = Stormpath.getInstance();
+    private static Client client = stormpath.getClient();
+    private static Application application = stormpath.getApplication();
     private static StormClau sc = new StormClau();
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -69,7 +69,7 @@ public class DoctorController extends Controller {
             d.setToken(new BigInteger(130, random).toString(32).toString());
 
             try {
-                /*
+
                 Account account = client.instantiate(Account.class);
                 //Set the account properties
 
@@ -92,7 +92,7 @@ public class DoctorController extends Controller {
                 if (!added) {
                     throw new Exception("No se pudo agregar a grupo");
                 }
-                */
+
 
                 d.save();
                 session().put(d.getId().toString(), auth.auraEncrypt(d.getToken()));
@@ -208,8 +208,8 @@ public class DoctorController extends Controller {
             boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
             if(authentication) {
-                //Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
-                if (true) { // account != null && account.isMemberOfGroup("Doctors")
+                Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
+                if (account != null && account.isMemberOfGroup("Doctors")) { // account != null && account.isMemberOfGroup("Doctors")
                     doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
                     doctorObject.save();
                     response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));

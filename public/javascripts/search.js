@@ -276,7 +276,7 @@ $(document).ready(function(){
 
         alert("The patient was shared successfully");
     });
-    
+
     function mostrarIntensidad(inte)
     {
         var colorI = "green";
