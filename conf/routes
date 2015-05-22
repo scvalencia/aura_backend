@@ -77,6 +77,9 @@ POST           /api/patient/authenticate                            controllers.
 # Registrar un episodio de audio, el formato del archivo, debe ser MP3, ésta revisión, se deja a manos del cliente
 POST           /api/patient/:id/voice_episode                       controllers.PatientController.createVoiceEpisode(id : Long)
 
+# Filtrar información de un paciente dado el Json dado
+POST           /api/doctor/:doctor/patient/:id/filter               controllers.DoctorController.filter(doctor : Long, id : Long)
+
 ########################################################################################################################
 #
 #        ##      ## ######## ########        ###    ##    ## ########        ###    ##     ## ######## ##     ##

@@ -4,6 +4,7 @@ package security;
 import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -28,6 +29,8 @@ public class StormClau {
 
         try {
             HttpResponse response = httpclient.execute(httpPost);
+            HttpEntity e = response.getEntity();
+            EntityUtils.consume(e);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -97,13 +100,15 @@ public class StormClau {
     }
 
     public List<Long> getPatientsByDoctor(Long doctor) throws JSONException {
-        String urln = url + "stormclau/doctor/pacientes/" + doctor;
+        String urln = url + "stormclau/doctor/pacientes/" + doctor.toString();
         HttpGet httpPost = new HttpGet(urln);
         String r = "";
 
         try {
             HttpResponse response = httpclient.execute(httpPost);
-            r = EntityUtils.toString(response.getEntity());
+            HttpEntity e = response.getEntity();
+            r = EntityUtils.toString(e);
+            EntityUtils.consume(e);
             System.out.println(urln);
         }
         catch (Exception e) {

@@ -3,6 +3,7 @@ package controllers;
 
 import actions.CorsComposition;
 import actions.HttpsController;
+import com.amazonaws.util.json.JSONException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stormpath.sdk.account.Account;
@@ -343,24 +344,6 @@ public class DoctorController extends Controller {
 
     }
 
-    public static Result getCriticalPatients(Long idD) {
-        List<Patient> ps = new ArrayList<Patient>();
-        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(idD);
-
-        if(doctorObject == null) {
-            ObjectNode result = Json.newObject();
-            return ok(Json.toJson(result));
-        } else {
-
-        }
-        return null;
-    }
-
-    public static Result getPatientsByAge(Long doctor, int age, String flag) {
-        // TODO
-        return null;
-    }
-
     public static Result addPatient(long idD, long idP) {
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(idD);
         Patient p = (Patient) new Model.Finder(Long.class, Patient.class).byId(idP);
@@ -373,5 +356,59 @@ public class DoctorController extends Controller {
 
         sc.registerDoctorForPatient(idP, idD);
         return ok();
+    }
+
+    public static Result filter(Long doctor, Long id) throws JSONException {
+        Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(doctor);
+        JsonNode j = Controller.request().body().asJson();
+
+        if(doctorObject != null) {
+
+        if(true) {
+            Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
+            if(patientObject != null) {
+                List<Episode> es = patientObject.getEpisodes();
+
+                int intensity = j.findPath("intensity").asInt();
+                int timeslept = j.findPath("timeslept").asInt();
+                int stress = j.findPath("stress").asInt();
+                int symptomp = j.findPath("symptom").asInt();
+                int place = j.findPath("place").asInt();
+
+                for(Episode e : es) {
+                    if(intensity != -1)
+                        if(e.getIntensity() >= intensity) {
+                            es.add(e);
+                            continue;
+                        }
+                    if(timeslept != -1)
+                        if(e.getSllepHours() <= timeslept) {
+                            es.add(e);
+                            continue;
+                        }
+                    if(stress != -1) {
+                        boolean value = stress == 1 ? true : false;
+                        if(e.isStress() == value)
+                            es.add(e);
+                    }
+                    if(symptomp != -1)
+                        if(e.getSymptoms().contains(symptomp)) {
+                            es.add(e);
+                            continue;
+                        }
+                    if(place != -1)
+                        if(e.getLocation() == place) {
+                            es.add(e);
+                            continue;
+                        }
+                }
+
+               return ok(Json.toJson(es));
+            }
+        }
+        }
+
+        return ok();
+
     }
 }
