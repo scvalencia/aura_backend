@@ -53,6 +53,7 @@ $(document).ready(function(){
     $('#container1').hide();
     $('#container2').hide();
     $('#container3').hide();
+    $('.sharePatient').hide();
 
 //mostrarListaepisodios(episodes);
     $('.divEpisodios').hide();
@@ -258,7 +259,23 @@ $(document).ready(function(){
         window.location.href="/info";
     });
 
-
+    $('.share').click(function(){
+        /*var jsonFilter = {intensity: intensityFilter, timeslept: sleepFilter, stress: stressFilter, symptom: SymptomFilter, place: placeFilter};
+        //alert(JSON.stringify(jsonFilter));
+        $('.errorFechas').empty();
+        $.ajax({
+            url: "/api/doctor/"+idDoctorActual+"/"+1072664872,
+            type: "POST",
+            data: JSON.stringify(jsonFilter),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(dataR) {
+                //alert(JSON.stringify(dataR));
+                console.log(JSON.stringify(dataR));
+                mostrarListaepisodios(dataR);
+            }
+        });*/
+    });
     function mostrarIntensidad(inte)
     {
         var colorI = "green";
@@ -452,6 +469,7 @@ $(document).ready(function(){
         $('.infoPaciente').empty();
         $('.nombrePaciente').empty();
         $('.nombrePaciente').append('<h3>'+nombre+'</h3>');
+
         $('.infoPaciente').append('<h4>ID: '+docID+'</h4>');
         $('.infoPaciente').append('<h4>Email: '+email+'</h4>');
         $('.infoPaciente').append('<h4>Birth date: '+fechaNacimiento+'</h4>');
@@ -459,6 +477,7 @@ $(document).ready(function(){
         if (generoN == 1)
             genero='F';
         $('.infoPaciente').append('<h4>Gender: '+genero+'</h4>');
+        $('.sharePatient').show();
     };
 
 

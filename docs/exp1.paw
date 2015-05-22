@@ -878,7 +878,7 @@
         <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z235"></relationship>
     </object>
     <object type="LMREQUEST" id="z237">
-        <attribute name="body" type="string">[{"data":{"json":"{\\"patients\\":[123,210515327]}"},"identifier":"com.luckymarmot.JSONDynamicValue"}]</attribute>
+        <attribute name="body" type="string">["{\\n  \\"patients\\": [\\n    123,\\n    210515327\\n  ]\\n}"]</attribute>
         <attribute name="uuid" type="string">08EDC351-30E7-4CF0-BDA5-18AB2302DB65</attribute>
         <attribute name="url" type="string">http://localhost:9000/api/doctor/2105156789/1072664872</attribute>
         <attribute name="storecookies" type="bool">1</attribute>

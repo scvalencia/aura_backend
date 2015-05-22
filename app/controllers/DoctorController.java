@@ -414,7 +414,13 @@ public class DoctorController extends Controller {
                                                     .eq("episodes.symptoms.symptom", symptom).eq("episodes.location", place).findList();
              */
 
-            return ok(Json.toJson(es));
+            List<Episode> ans = new ArrayList<Episode>();
+
+            for(int i = 0; i < es.size(); i++)
+                if(patientObject.getEpisodes().contains(es.get(i)))
+                    ans.add(es.get(i));
+
+            return ok(Json.toJson(ans));
         }
 
         return ok();
