@@ -261,8 +261,8 @@ public class DoctorController extends Controller {
 
             String host = "smtp.gmail.com";
             String port = "587";
-            String mailFrom = "aura201510@gmail.com";
-            String password = "clave123456789";
+            String mailFrom = "sc.valencia606@gmail.com";
+            String password = "camila123";
 
             // outgoing message information
             String mailTo = doctorTo.getEmail();
