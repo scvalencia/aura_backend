@@ -864,7 +864,7 @@
     </object>
     <object type="LMREQUEST" id="z236">
         <attribute name="uuid" type="string">2E163352-3E2C-4729-B687-8A6AD383AE0F</attribute>
-        <attribute name="url" type="string">https://localhost:9443/api/doctor/1072664872/patient</attribute>
+        <attribute name="url" type="string">http://localhost:9000/api/doctor/112233/patient</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>

@@ -4,10 +4,11 @@
 
 <html>
 <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <title>Info</title>
-    <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")" type="text/javascript"></script>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/jquery-ui.min.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/info.css")"
     <!--bootstrap css-->
     <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
@@ -15,6 +16,8 @@
     <script src="@routes.Assets.at("javascripts/info.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/login.js")" type="text/javascript"></script>
     <script type="text/javascript"src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
 </head>
 <body>
 <div class="hiddenId">@session</div>
@@ -59,35 +62,13 @@
             <h1></h1>
         </div>
         <div class="col-md-7 column" style="background-color:white; border-radius: 4px; border: 1px solid #dfdfdf; height:90px;">
-            <div class="row clearfix">
-                <h4>&nbsp&nbsp&nbspChange Password:</h4>
-                <div class="col-md-5 column">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">Old Password</span>
-                        <input type="password" class="form-control" placeholder="old" aria-describedby="basic-addon1">
-                    </div>
-                </div>
-                <div class="col-md-5 column">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">New Password</span>
-                        <input type="password" class="form-control" placeholder="new" aria-describedby="basic-addon1">
-                    </div>
-                </div>
-                <div class="col-md-2 column">
-                    <div class="row clearfix">
-                        <div class="col-md-5 column"><button class="btn btn-default" type="button">Change</button></div>
-                    </div>
-                </div>
-                <div class="col-md-7 column"><h5 class="error" style="color:red;">Wrong Password</h5></div>
-            </div>
-            <h6>&nbsp</h6>
             <div class="row clearfix" style="background-color:white; border-radius: 4px; border: 1px solid #dfdfdf; padding-left:30px;">
                 <!--Sign up div-->
                 <div class="col-md-12 column">
                     <!--Sign up text div-->
                     <div class="row clearfix">
                         <div class="col-md-12 column">
-                            <h4>Update info</h4>
+                            <h4>Add patient</h4>
                         </div>
                     </div>
                     <!--Nombre completo div-->
@@ -96,69 +77,54 @@
                         <!--Nombre div-->
                         <div class="col-md-6 column">
                             <h5>First Name</h5>
-                            <input type="text" placeholder="Enter First Name" class="form-control first" aria-describedby="basic-addon1">
+                            <input type="text" placeholder="Enter First Name" class="form-control firstP" aria-describedby="basic-addon1">
                         </div>
                         <!--Apellido div-->
                         <div class="col-md-6 column">
                             <h5>Last Name</h5>
-                            <input type="text" placeholder="Enter Last Name" class="form-control last" aria-describedby="basic-addon1">
+                            <input type="text" placeholder="Enter Last Name" class="form-control lastP" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <!--Email div-->
                     <div class="row clearfix">
                         <div class="col-md-12 column">
                             <h5>Email</h5>
-                            <input type="email" placeholder="Enter Email" class="form-control email" aria-describedby="basic-addon1">
+                            <input type="email" placeholder="Enter Email" class="form-control emailP" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="row clearfix">
                         <!--ID Number div-->
                         <div class="col-md-6 column">
                             <h5>ID Number</h5>
-                            <input type="text" placeholder="Enter ID Number" class="form-control id" aria-describedby="basic-addon1">
+                            <input type="text" placeholder="Enter ID Number" class="form-control idP" aria-describedby="basic-addon1">
                         </div>
                         <!--Speciality div-->
                         <div class="col-md-6 column">
-                            <h5>Speciality</h5>
-                            <select class="selectpicker">
-                                <option value="cardiologist">Cardiologist</option>
-                                <option value="radiologist">Radiologist</option>
-                            </select>
+                            <h5>Birth Date</h5>
+                            <input type="text" class="datepicker">
                         </div>
                     </div>
                     <div class="row clearfix">
                         <!--Fecha nacimiento div-->
                         <div class="col-md-6 column">
-                            <h5>Birth Date</h5>
-                            <input type="text" class="datepicker">
-                        </div>
-                        <!--Genero div-->
-                        <div class="col-md-6 column">
                             <h5>Gender</h5>
                             <div class="col-md-6 column">
-                                <h7><input type="radio" name="sex" value="male" checked>Male</h7>
+                                <h7><input type="radio" name="sex" value="0" checked>Male</h7>
                             </div>
                             <div class="col-md-6 column">
-                                <h7><input type="radio" name="sex" value="female"> Female</h7>
+                                <h7><input type="radio" name="sex" value="1"> Female</h7>
                             </div>
                         </div>
-                    </div>
-                    <!--Password div-->
-                    <div class="row clearfix">
-                        <div class="col-md-12 column">
-                            <h5>Password</h5>
-                            <input type="password" placeholder="Enter Password" class="form-control" aria-describedby="basic-addon1">
-                            <h5>Confirm Password</h5>
-                            <input type="text" placeholder="Re enter ID Number" class="form-control" aria-describedby="basic-addon1">
+                        <!--Genero div-->
+                        <div class="col-md-4 column">
+                            <h1></h1>
+                        </div>
+                        <div class="col-md-2 column">
+                            <button type="button" class="btn btn-info createPatient">Create</button>
                         </div>
                     </div>
+
                     <br>
-                    <!--Buttom Sign up div-->
-                    <div class="row clearfix">
-                        <div class="col-md-12 column">
-                            <button type="button" class="btn btn-info">Update</button>
-                        </div>
-                    </div>
                     <h6>&nbsp</h6>
                 </div>
             </div>

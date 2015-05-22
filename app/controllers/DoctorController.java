@@ -4,12 +4,17 @@ package controllers;
 import actions.CorsComposition;
 import actions.HttpsController;
 import com.amazonaws.util.json.JSONException;
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Query;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.stormpath.sdk.account.Account;
 import com.stormpath.sdk.application.Application;
 import com.stormpath.sdk.client.Client;
 import com.stormpath.sdk.resource.ResourceException;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import models.Doctor;
 import models.Episode;
 import models.Patient;
@@ -362,50 +367,54 @@ public class DoctorController extends Controller {
         Doctor doctorObject = (Doctor) new Model.Finder(Long.class, Doctor.class).byId(doctor);
         JsonNode j = Controller.request().body().asJson();
 
+        System.out.println(j);
+
         if(doctorObject != null) {
-
-        if(true) {
             Patient patientObject = (Patient) new Model.Finder(Long.class, Patient.class).byId(id);
-            if(patientObject != null) {
-                List<Episode> es = patientObject.getEpisodes();
 
-                int intensity = j.findPath("intensity").asInt();
-                int timeslept = j.findPath("timeslept").asInt();
-                int stress = j.findPath("stress").asInt();
-                int symptomp = j.findPath("symptom").asInt();
-                int place = j.findPath("place").asInt();
+            int intensity = j.findPath("intensity").asInt();
+            int timeslept = j.findPath("timeslept").asInt();
+            int stress = j.findPath("stress").asInt();
+            int symptom = j.findPath("symptom").asInt();
+            int place = j.findPath("place").asInt();
 
-                for(Episode e : es) {
-                    if(intensity != -1)
-                        if(e.getIntensity() >= intensity) {
-                            es.add(e);
-                            continue;
-                        }
-                    if(timeslept != -1)
-                        if(e.getSllepHours() <= timeslept) {
-                            es.add(e);
-                            continue;
-                        }
-                    if(stress != -1) {
-                        boolean value = stress == 1 ? true : false;
-                        if(e.isStress() == value)
-                            es.add(e);
-                    }
-                    if(symptomp != -1)
-                        if(e.getSymptoms().contains(symptomp)) {
-                            es.add(e);
-                            continue;
-                        }
-                    if(place != -1)
-                        if(e.getLocation() == place) {
-                            es.add(e);
-                            continue;
-                        }
-                }
+            boolean realStress = stress == 1 ? Boolean.TRUE : Boolean.FALSE;
 
-               return ok(Json.toJson(es));
+            List<Episode> es = new ArrayList<Episode>();
+
+            if(intensity == -1 && timeslept == -1 && stress == -1 && symptom == -1 && place == -1)
+                return ok(Json.toJson(es));
+
+            else if(intensity == -1 && timeslept == -1 && stress == -1 && symptom == -1) {
+                es = Episode.find.where().eq("location", place).findList();
             }
-        }
+
+            else if(intensity == -1 && timeslept == -1 && stress == -1) {
+                es = Episode.find.where().eq("location", place).eq("symptoms.symptom", symptom).findList();
+            }
+
+            else if(intensity == -1 && timeslept == -1) {
+                es = Episode.find.where().eq("location", place).eq("symptoms.symptom", symptom).eq("stress", realStress).findList();
+            }
+
+            else if(intensity == -1) {
+                es = Episode.find.where().eq("location", place).eq("symptoms.symptom", symptom).
+                        eq("stress", realStress).le("sleepHours", timeslept).findList();
+            }
+
+            else {
+                es = Episode.find.where().ge("intensity", intensity).findList();
+
+            }
+
+            /*
+            eq("episodes.intensity", intensity)
+                                            .eq("episodes.sleepHours", timeslept)
+                                                .eq("episodes.stress", stress == 1 ? Boolean.TRUE : Boolean.FALSE)
+                                                    .eq("episodes.symptoms.symptom", symptom).eq("episodes.location", place).findList();
+             */
+
+            return ok(Json.toJson(es));
         }
 
         return ok();

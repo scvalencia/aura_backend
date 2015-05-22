@@ -57,6 +57,46 @@ $('.findPatientLink').click(function(){
 });
 
 
+$('.createPatient').click(function(){
+
+    var firstNameP = $('.firstP').val();
+    var lastNameP = $('.lastP').val();
+    var nameP = firstNameP.concat(" ").concat(lastNameP);
+    var emailP = $('.emailP').val();
+    var idP = parseInt($('.idP').val());
+    var pass1P = $('.idP').val();
+    var dateP = $('.datepicker').val();
+    var genderP = parseInt($('input[name="sex"]:checked').val());
+
+    var toSend = {name: nameP, gender: genderP, id: idP, date: dateP, password: pass1P, email: emailP};
+    //alert(JSON.stringify(toSend));
+    var path = "/api/doctor/"+idDoctorActual+"/patient";
+    alert(path);
+    alert(JSON.stringify(toSend));
+    $.ajax({
+          type: 'POST',
+          url: path,
+          data: JSON.stringify (toSend),
+          success: function(data) {
+          if (data.name == null)
+          {
+                        $('#id').css("border-color","#FF0000");
+                        $('.errorSignUp').append("Patient with id "+idP+" already exists");
+          }
+          else
+          {
+                        window.location.href="/";
+          }
+          },
+          contentType: "application/json",
+          dataType: 'json'
+          });
+
+
+    window.location.href="/";
+
+});
+
 function  cambiarLetras(w)
 	{
 		//alert(w);

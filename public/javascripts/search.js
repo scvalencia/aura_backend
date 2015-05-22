@@ -121,7 +121,7 @@ $(document).ready(function(){
     });
 
 
-    $('.btnFilter').click(function(){
+    $('.btnFilterPro').click(function(){
         var intensityFilter = $( ".filterIntensity" ).val();
         var sleepFilter = $( ".filterSleep" ).val();
         var stressFilter = $( ".filterStress" ).val();
@@ -129,14 +129,17 @@ $(document).ready(function(){
         var placeFilter = $( ".filterPlace" ).val();
 
         var jsonFilter = {intensity: intensityFilter, timeslept: sleepFilter, stress: stressFilter, symptom: SymptomFilter, place: placeFilter};
+        //alert(JSON.stringify(jsonFilter));
         $('.errorFechas').empty();
             $.ajax({
-                url: "/api/doctor/:doctor/patient/"+idPacienteActual+"/filter",
-                type: "GET",
+                url: "/api/doctor/"+idDoctorActual+"/patient/"+idPacienteActual+"/filter",
+                type: "POST",
                 data: JSON.stringify(jsonFilter),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function(dataR) {
+                    //alert(JSON.stringify(dataR));
+                    console.log(JSON.stringify(dataR));
                     mostrarListaepisodios(dataR);
                 }
             });
@@ -145,7 +148,7 @@ $(document).ready(function(){
 
 
 
-    
+
 
 
     $('.btnFilterAnalysis').click(function(){
