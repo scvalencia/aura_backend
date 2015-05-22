@@ -43,6 +43,8 @@ public class StormClau {
 
         try {
             HttpResponse response = httpclient.execute(httpPost);
+            HttpEntity e = response.getEntity();
+            EntityUtils.consume(e);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -56,6 +58,8 @@ public class StormClau {
         try {
             HttpResponse response = httpclient.execute(httpPost);
             String r = EntityUtils.toString(response.getEntity());
+            HttpEntity e = response.getEntity();
+            EntityUtils.consume(e);
             System.out.println(r);
         }
         catch (Exception e) {
@@ -71,6 +75,8 @@ public class StormClau {
         try {
             HttpResponse response = httpclient.execute(httpPost);
             r = EntityUtils.toString(response.getEntity());
+            HttpEntity e = response.getEntity();
+            EntityUtils.consume(e);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -90,6 +96,8 @@ public class StormClau {
         try {
             HttpResponse response = httpclient.execute(httpPost);
             r = EntityUtils.toString(response.getEntity());
+            HttpEntity e = response.getEntity();
+            EntityUtils.consume(e);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +117,7 @@ public class StormClau {
             HttpEntity e = response.getEntity();
             r = EntityUtils.toString(e);
             EntityUtils.consume(e);
-            System.out.println(urln);
+            System.out.println(r);
         }
         catch (Exception e) {
             e.printStackTrace();

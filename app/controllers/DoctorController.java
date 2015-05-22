@@ -48,7 +48,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
 @CorsComposition.Cors
-public class DoctorController extends HttpsController {
+public class DoctorController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
@@ -70,7 +70,7 @@ public class DoctorController extends HttpsController {
 
             try {
 
-                Account account = client.instantiate(Account.class);
+                //Account account = client.instantiate(Account.class);
                 //Set the account properties
 
                 String[] fullName = d.getName().split(" ");
@@ -81,6 +81,7 @@ public class DoctorController extends HttpsController {
                     name += fullName[i]+" ";
                 }
                 //Set the account properties
+                /*
                 account.setGivenName(name.trim());
                 account.setSurname(lastName);
                 account.setUsername(d.getId() + ""); //optional, defaults to email if unset
@@ -92,6 +93,7 @@ public class DoctorController extends HttpsController {
                 if (!added) {
                     throw new Exception("No se pudo agregar a grupo");
                 }
+                */
 
 
                 d.save();
@@ -208,8 +210,8 @@ public class DoctorController extends HttpsController {
             boolean authentication = Doctor.checkPassword(password, doctorObject.getPassword());
 
             if(authentication) {
-                Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
-                if (account != null && account.isMemberOfGroup("Doctors")) { // account != null && account.isMemberOfGroup("Doctors")
+                //Account account = stormpath.authenticate(id + "", doctorObject.getPassword());
+                if (true) { // account != null && account.isMemberOfGroup("Doctors")
                     doctorObject.setToken(new BigInteger(130, random).toString(32).toString());
                     doctorObject.save();
                     response().setHeader(ETAG, auth.auraEncrypt(doctorObject.getToken()));

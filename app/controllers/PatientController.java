@@ -41,7 +41,7 @@ import com.stormpath.sdk.client.Client;
  * Created by scvalencia on 3/9/15.
  */
 @CorsComposition.Cors
-public class PatientController extends HttpsController {
+public class PatientController extends Controller {
 
     private static SecureRandom random = new SecureRandom();
     private static AuraAuthManager auth = new AuraAuthManager("CAESAR_CIPHER");
@@ -66,7 +66,7 @@ public class PatientController extends HttpsController {
         try {
 
 
-            Account account = client.instantiate(Account.class);
+            //Account account = client.instantiate(Account.class);
             String[] fullName = p.getName().split(" ");
             String lastName = fullName[fullName.length-1];
             String name = "";
@@ -75,6 +75,7 @@ public class PatientController extends HttpsController {
                 name += fullName[i]+" ";
 
             //Set the account properties
+            /*
             account.setGivenName(name.trim());
             account.setSurname(lastName);
             account.setUsername(p.getId() + ""); //optional, defaults to email if unset
@@ -86,7 +87,7 @@ public class PatientController extends HttpsController {
 
             if (!added) {
                 throw new Exception("No se pudo agregar a grupo");
-            }
+            }*/
 
 
             p.save();
@@ -523,8 +524,8 @@ public class PatientController extends HttpsController {
             boolean authentication = Patient.checkPassword(password, patientObject.getPassword());
 
             if(authentication) {
-                Account account = stormpath.authenticate(id + "", patientObject.getPassword());
-                if (account != null && account.isMemberOfGroup("Patients")) { // account != null && account.isMemberOfGroup("Patients")
+               // Account account = stormpath.authenticate(id + "", patientObject.getPassword());
+                if (true) { // account != null && account.isMemberOfGroup("Patients")
                     patientObject.setToken(new BigInteger(130, random).toString(32).toString());
                     patientObject.save();
                     response().setHeader(ETAG, auth.auraEncrypt(patientObject.getToken()));
